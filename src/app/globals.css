@@ -1,1 +1,46 @@
 @import "tailwindcss";
+
+@theme {
+	--color-forest: var(--forest);
+	--color-forest-deep: var(--forest-deep);
+	--color-olive: var(--olive);
+	--color-beige: var(--beige);
+	--color-offwhite: var(--offwhite);
+	--color-stone: var(--stone);
+	--color-gold: var(--gold);
+}
+
+:root {
+	--forest: #1f3a2e;
+	--forest-deep: #14261e;
+	--olive: #5a6b3b;
+	--beige: #f0e8d8;
+	--offwhite: #faf7f1;
+	--stone: #8a8577;
+	--gold: #b8935a;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background:
+		radial-gradient(circle at top left, rgba(90, 107, 59, 0.05), transparent 30%),
+		radial-gradient(circle at top right, rgba(184, 147, 90, 0.06), transparent 26%),
+		var(--offwhite);
+	color: var(--forest-deep);
+	font-family: var(--font-inter), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: var(--font-cormorant), serif;
+}
+
+::selection {
+	background: rgba(184, 147, 90, 0.25);
+}
