@@ -36,7 +36,7 @@ export default function StayPage() {
                   </span>
                 ))}
               </div>
-              <Link href="/contact" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
+              <Link href="/contact" className="mt-8 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
                 Book Now
               </Link>
             </div>

@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { bookingEngineUrl, siteNavItems } from "@/lib/site-data";
+import { MapIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
+import { bookingEngineUrl } from "@/lib/booking-engine";
+import { siteNavItems } from "@/lib/site-data";
 
 export function SiteFooter() {
   return (
@@ -21,7 +23,7 @@ export function SiteFooter() {
           <ul className="mt-5 space-y-3 text-base text-forest-deep/80">
             {siteNavItems.map((item) => (
               <li key={item.label}>
-                <Link href={item.href} target="_blank" rel="noopener noreferrer" className="transition hover:text-gold">
+                <Link href={item.href} className="transition hover:text-gold">
                   {item.label}
                 </Link>
               </li>
@@ -32,20 +34,23 @@ export function SiteFooter() {
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Contact</p>
           <ul className="mt-5 space-y-3 text-base text-forest-deep/80">
-            <li><a href="tel:+919607323737" target="_blank" rel="noopener noreferrer" className="transition hover:text-gold">+91 96073 23737</a></li>
-            <li><a href="tel:02312654742" target="_blank" rel="noopener noreferrer" className="transition hover:text-gold">0231 – 2654742</a></li>
-            <li><a href="mailto:info@hotelpavillion.co.in" target="_blank" rel="noopener noreferrer" className="transition hover:text-gold">info@hotelpavillion.co.in</a></li>
+            <li className="flex items-center gap-2"><PhoneIcon className="h-4 w-4 shrink-0 text-gold" /><a href="tel:+919607323737" className="transition hover:text-gold">+91 96073 23737</a></li>
+            <li className="flex items-center gap-2"><PhoneIcon className="h-4 w-4 shrink-0 text-gold" /><a href="tel:02312654742" className="transition hover:text-gold">0231 – 2654742</a></li>
+            <li className="flex items-center gap-2"><MapIcon className="h-4 w-4 shrink-0 text-gold" /><a href="mailto:info@hotelpavillion.co.in" className="transition hover:text-gold">info@hotelpavillion.co.in</a></li>
             <li>Shahupuri, Kolhapur – 416 001</li>
           </ul>
 
           <div className="mt-6 flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.25em]">
-            <a href="https://wa.me/919607323737" target="_blank" rel="noopener noreferrer" className="rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
-              WhatsApp
+            <a href="https://wa.me/919607323737" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
+              <WhatsAppIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">WhatsApp</span>
             </a>
-            <a href="https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur" target="_blank" rel="noopener noreferrer" className="rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
+            <a href="https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
+              <MapIcon className="h-4 w-4" />
               Directions
             </a>
-            <a href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
+            <a href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-forest-deep/15 px-4 py-2 text-forest-deep transition hover:border-gold hover:text-gold">
+              <MapIcon className="h-4 w-4" />
               Book Now
             </a>
           </div>

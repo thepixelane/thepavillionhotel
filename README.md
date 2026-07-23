@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Production CMS
+
+This repo is set up for a single production Sanity.io environment.
+
+1. Copy `.env.example` to `.env.local`.
+2. Set `NEXT_PUBLIC_SITE_URL`, `SANITY_PROJECT_ID`, `SANITY_DATASET=production`, and `SANITY_API_VERSION`.
+3. Run `npm run studio` to open Sanity Studio locally.
+4. Deploy the Next.js app to Vercel with the same production env vars.
+
+The Studio schema lives under `sanity/`, and the app-level Sanity client lives in `src/lib/sanity.ts`.
+
 ## Getting Started
 
 First, run the development server:

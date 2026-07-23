@@ -31,7 +31,7 @@ export default function DiningPage() {
                   </span>
                 ))}
               </div>
-              <Link href="tel:+919607323737" target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
+              <Link href="tel:+919607323737" className="mt-7 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
                 Reserve a Table
               </Link>
             </div>

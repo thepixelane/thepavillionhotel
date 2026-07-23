@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { bookingEngineUrl, diningVenues, galleryImages, rooms } from "@/lib/site-data";
+import { bookingEngineUrl } from "@/lib/booking-engine";
+import { diningVenues, galleryImages, rooms } from "@/lib/site-data";
 
 export default function Home() {
   return (
@@ -29,10 +30,10 @@ export default function Home() {
               and refined dining.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/stay" target="_blank" rel="noopener noreferrer" className="rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
+              <Link href="/stay" className="rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
                 Explore Stay
               </Link>
-              <Link href="/events" target="_blank" rel="noopener noreferrer" className="rounded-full border border-offwhite/60 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
+              <Link href="/events" className="rounded-full border border-offwhite/60 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
                 Plan an Event
               </Link>
               <Link href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-gold/60 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-gold transition hover:bg-gold hover:text-offwhite">
@@ -58,7 +59,7 @@ export default function Home() {
           ["Events", "Five venues, tabbed details, and enquiry support.", "/events"],
           ["Dining", "Pakhtoon and Areca Café with quick reservation access.", "/dining"],
         ].map(([title, description, href]) => (
-          <Link key={title} href={href} target="_blank" rel="noopener noreferrer" className="rounded-[2rem] bg-offwhite p-8 shadow-[0_20px_60px_rgba(20,38,30,0.08)] transition hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(20,38,30,0.12)]">
+          <Link key={title} href={href} className="rounded-[2rem] bg-offwhite p-8 shadow-[0_20px_60px_rgba(20,38,30,0.08)] transition hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(20,38,30,0.12)]">
             <p className="text-[11px] uppercase tracking-[0.35em] text-gold">{title}</p>
             <h3 className="mt-3 text-3xl text-forest-deep">{title}</h3>
             <p className="mt-4 text-sm leading-7 text-stone-600">{description}</p>
@@ -86,7 +87,7 @@ export default function Home() {
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Stay Preview</p>
           <div className="mt-6 grid gap-4">
             {rooms.map((room) => (
-              <Link key={room.name} href="/stay" target="_blank" rel="noopener noreferrer" className="rounded-3xl border border-beige bg-beige/40 p-5 transition hover:bg-beige">
+              <Link key={room.name} href="/stay" className="rounded-3xl border border-beige bg-beige/40 p-5 transition hover:bg-beige">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <h3 className="text-2xl text-forest-deep">{room.name}</h3>
@@ -103,7 +104,7 @@ export default function Home() {
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Gallery Preview</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {galleryImages.slice(0, 4).map((image) => (
-              <Link key={image.caption} href="/gallery" target="_blank" rel="noopener noreferrer" className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-forest-deep">
+              <Link key={image.caption} href="/gallery" className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-forest-deep">
                 <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1024px) 100vw, 25vw" className="object-cover transition duration-700 hover:scale-105" />
               </Link>
             ))}
@@ -118,10 +119,10 @@ export default function Home() {
           The estate includes Bahar Lawns, Madhusudan Hall, Conference Hall, Areca Lawns, and the Gazebo.
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
-          <Link href="/events" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
+          <Link href="/events" className="inline-flex rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
             Explore Venues
           </Link>
-          <Link href="/contact" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full border border-offwhite/30 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
+          <Link href="/contact" className="inline-flex rounded-full border border-offwhite/30 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
             Contact & Book
           </Link>
         </div>

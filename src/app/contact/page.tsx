@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { bookingEngineUrl } from "@/lib/site-data";
+import { WhatsAppIcon } from "@/components/action-icons";
+import { bookingEngineUrl } from "@/lib/booking-engine";
 
 export default function ContactPage() {
   return (
@@ -23,8 +24,10 @@ export default function ContactPage() {
                 <p className="text-[11px] uppercase tracking-[0.35em] text-gold">{label}</p>
                 <p className="mt-2 text-base text-forest-deep">{value}</p>
               </div>
-              <Link href={href} target="_blank" rel="noopener noreferrer" className="text-[11px] uppercase tracking-[0.3em] text-olive transition hover:text-gold">
-                Open
+              <Link href={href} target={label === "WhatsApp" ? "_blank" : undefined} rel={label === "WhatsApp" ? "noopener noreferrer" : undefined} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-olive transition hover:text-gold">
+                {label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
+                <span className="hidden sm:inline">Open</span>
+                <span className="sm:hidden">Go</span>
               </Link>
             </div>
           ))}
@@ -45,10 +48,10 @@ export default function ContactPage() {
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full bg-forest px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
+          <Link href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold">
             Book Now
           </Link>
-          <Link href="https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full border border-forest/15 px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:border-gold hover:text-gold">
+          <Link href="https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-forest/15 px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:border-gold hover:text-gold">
             Directions
           </Link>
         </div>

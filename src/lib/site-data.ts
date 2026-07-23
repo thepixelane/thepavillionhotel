@@ -1,5 +1,3 @@
-export const bookingEngineUrl = "https://www.hotelpavillion.co.in/";
-
 export const siteNavItems = [
   { label: "Home", href: "/" },
   { label: "Stay", href: "/stay" },

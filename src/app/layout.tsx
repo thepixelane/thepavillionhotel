@@ -4,6 +4,7 @@ import "./globals.css";
 import { QuickActions } from "@/components/quick-actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { siteUrl } from "@/lib/public-env";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.hotelpavillion.co.in"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "The Pavillion Hotel | Kolhapur",
     template: "%s | The Pavillion Hotel",

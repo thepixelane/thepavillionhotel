@@ -75,8 +75,6 @@ export function VenueTabs({ venues }: VenueTabsProps) {
 
           <a
             href="#contact"
-            target="_blank"
-            rel="noopener noreferrer"
             className="mt-7 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold hover:text-offwhite"
           >
             Enquire Now
