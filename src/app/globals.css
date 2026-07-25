@@ -1,23 +1,55 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode: `dark:` variant applies when `.dark` is on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Brand hues (fixed in both themes) and light-mode defaults for the semantic
+ * tokens live inside @theme so Tailwind generates matching utilities
+ * (bg-bg, text-fg, bg-surface, border-line, etc.).
+ */
 @theme {
-	--color-forest: var(--forest);
-	--color-forest-deep: var(--forest-deep);
-	--color-olive: var(--olive);
-	--color-beige: var(--beige);
-	--color-offwhite: var(--offwhite);
-	--color-stone: var(--stone);
-	--color-gold: var(--gold);
+	--color-forest: #1f3a2e;
+	--color-forest-deep: #14261e;
+	--color-olive: #5a6b3b;
+	--color-beige: #f0e8d8;
+	--color-offwhite: #faf7f1;
+	--color-stone: #8a8577;
+	--color-gold: #b8935a;
+
+	/* Semantic (light) */
+	--color-bg: #faf7f1;
+	--color-fg: #14261e;
+	--color-fg-muted: #6b6a5f;
+	--color-surface: #ffffff;
+	--color-surface-2: #f0e8d8;
+	--color-line: rgba(20, 38, 30, 0.10);
 }
 
+/*
+ * Dark-mode overrides. Redeclaring --color-* under .dark cascades to every
+ * Tailwind utility that reads these tokens (bg-bg, text-fg, bg-surface, …).
+ */
+.dark {
+	--color-bg: #0d1a14;
+	--color-fg: #f0ebde;
+	--color-fg-muted: #a9a397;
+	--color-surface: #16261e;
+	--color-surface-2: #1c3226;
+	--color-line: rgba(240, 235, 222, 0.10);
+
+	color-scheme: dark;
+}
+
+/* Ancillary vars used directly in CSS (not through Tailwind utilities). */
 :root {
-	--forest: #1f3a2e;
-	--forest-deep: #14261e;
-	--olive: #5a6b3b;
-	--beige: #f0e8d8;
-	--offwhite: #faf7f1;
-	--stone: #8a8577;
-	--gold: #b8935a;
+	--header-bg: rgba(250, 247, 241, 0.82);
+	--ring: rgba(184, 147, 90, 0.55);
+}
+
+.dark {
+	--header-bg: rgba(13, 26, 20, 0.78);
+	--ring: rgba(184, 147, 90, 0.65);
 }
 
 html {
@@ -26,11 +58,15 @@ html {
 
 body {
 	background:
-		radial-gradient(circle at top left, rgba(90, 107, 59, 0.05), transparent 30%),
-		radial-gradient(circle at top right, rgba(184, 147, 90, 0.06), transparent 26%),
-		var(--offwhite);
-	color: var(--forest-deep);
+		radial-gradient(circle at top left, color-mix(in oklab, var(--color-olive) 8%, transparent), transparent 30%),
+		radial-gradient(circle at top right, color-mix(in oklab, var(--color-gold) 10%, transparent), transparent 26%),
+		var(--color-bg);
+	color: var(--color-fg);
 	font-family: var(--font-inter), sans-serif;
+	transition: background-color 200ms ease, color 200ms ease;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
 }
 
 h1,
@@ -39,8 +75,26 @@ h3,
 h4,
 h5 {
 	font-family: var(--font-cormorant), serif;
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
 }
 
 ::selection {
-	background: rgba(184, 147, 90, 0.25);
+	background: color-mix(in oklab, var(--color-gold) 30%, transparent);
+	color: var(--color-fg);
 }
+
+/* Consistent focus ring for keyboard users. */
+:where(a, button, input, select, textarea):focus-visible {
+	outline: 2px solid var(--ring);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* Subtle scrollbar in dark mode. */
+.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
+.dark ::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-gold) 40%, transparent); border-radius: 999px; }
+.dark ::-webkit-scrollbar-track { background: transparent; }

@@ -1,99 +1,164 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
-import { bookingEngineUrl } from "@/lib/booking-engine";
-import { diningVenues, galleryImages, rooms } from "@/lib/site-data";
+import { bookingEngineUrl as defaultBookingUrl } from "@/lib/booking-engine";
+import {
+  getDiningVenues,
+  getGalleryImages,
+  getRooms,
+  getSiteSettings,
+  heroImageUrl,
+} from "@/lib/sanity-content";
 
-export default function Home() {
+const FALLBACK_HERO =
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=85";
+
+export default async function Home() {
+  const [settings, rooms, diningVenues, gallery] = await Promise.all([
+    getSiteSettings(),
+    getRooms(),
+    getDiningVenues(),
+    getGalleryImages(),
+  ]);
+
+  const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
+  const heroSrc = heroImageUrl(settings) ?? FALLBACK_HERO;
+  const galleryPreview = gallery.slice(0, 4);
+
   return (
-    <main className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-      <section className="relative isolate overflow-hidden rounded-[2rem] bg-forest-deep text-offwhite shadow-[0_20px_60px_rgba(20,38,30,0.18)]">
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
+      {/* HERO */}
+      <section className="relative isolate overflow-hidden rounded-3xl bg-forest-deep text-offwhite shadow-[0_20px_60px_rgba(20,38,30,0.18)] sm:rounded-4xl">
         <Image
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=85"
+          src={heroSrc}
           alt="The Pavillion Hotel property in a resort-style setting"
           fill
           priority
           sizes="100vw"
           className="object-cover opacity-45"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/25 via-forest-deep/45 to-forest-deep/68" />
-        <div className="relative flex min-h-[76svh] items-center px-6 py-20 lg:px-14">
+        <div className="absolute inset-0 bg-linear-to-b from-forest-deep/30 via-forest-deep/50 to-forest-deep/75" />
+        <div className="relative flex min-h-[64svh] items-center px-5 py-14 sm:min-h-[70svh] sm:px-8 sm:py-20 lg:min-h-[80svh] lg:px-14 lg:py-24">
           <div className="max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.45em] text-gold/90">
-              Boutique Hotel · Kolhapur · Since 1995
+            <p className="text-[10px] uppercase tracking-[0.4em] text-gold/90 sm:text-[11px] sm:tracking-[0.45em]">
+              Boutique Hotel Â· Kolhapur Â· Since 1995
             </p>
-            <h1 className="mt-5 max-w-2xl text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
+            <h1 className="mt-4 max-w-2xl text-4xl leading-[1.02] sm:mt-5 sm:text-6xl lg:text-7xl">
               Escape the ordinary,
               <span className="block text-gold">rediscover the calm</span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-8 text-offwhite/80 sm:text-lg">
-              A boutique retreat in Kolhapur wrapped in gardens, gazebos, rooms, celebrations,
-              and refined dining.
+            <p className="mt-5 max-w-xl text-sm leading-7 text-offwhite/80 sm:mt-6 sm:text-base sm:leading-8 lg:text-lg">
+              {settings?.description ??
+                "A boutique retreat in Kolhapur wrapped in gardens, gazebos, rooms, celebrations, and refined dining."}
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/stay" className="rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
+            <div className="mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
+              <Link href="/stay" className="rounded-full bg-offwhite px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
                 Explore Stay
               </Link>
-              <Link href="/events" className="rounded-full border border-offwhite/60 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
+              <Link href="/events" className="rounded-full border border-offwhite/60 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-offwhite transition hover:border-gold hover:text-gold sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
                 Plan an Event
               </Link>
-              <Link href={bookingEngineUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-gold/60 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-gold transition hover:bg-gold hover:text-offwhite">
+              <Link href={bookingUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-gold/60 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
                 Book Now
               </Link>
             </div>
+
+            <dl className="mt-10 hidden max-w-lg grid-cols-3 gap-4 border-t border-offwhite/15 pt-6 sm:mt-12 sm:grid">
+              {[
+                ["Est.", "1995"],
+                ["Rooms", `${rooms.length || 3} Categories`],
+                ["Venues", "5 Spaces"],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="text-[10px] uppercase tracking-[0.3em] text-gold/80">{label}</dt>
+                  <dd className="mt-2 font-serif text-2xl text-offwhite">{value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl py-20 lg:py-24">
-        <p className="mb-4 text-[11px] uppercase tracking-[0.4em] text-gold">Welcome</p>
-        <h2 className="text-4xl text-forest-deep sm:text-5xl">A quiet retreat in the heart of Kolhapur</h2>
-        <p className="mt-6 text-base leading-8 text-stone-600 sm:text-lg">
+      {/* WELCOME */}
+      <section className="mx-auto max-w-3xl px-1 py-16 text-center sm:py-20 lg:py-24">
+        <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Welcome</p>
+        <div className="mx-auto mt-4 h-px w-12 bg-gold/60" aria-hidden="true" />
+        <h2 className="mt-6 text-3xl leading-tight text-fg sm:text-4xl lg:text-5xl">
+          {settings?.tagline ?? "A quiet retreat in the heart of Kolhapur"}
+        </h2>
+        <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-fg-muted sm:mt-6 sm:text-lg">
           Tucked away in Shahupuri, The Pavillion brings together lush lawns, mature trees, and
           calm hospitality.
         </p>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-3">
+      {/* TEASERS (numbered editorial cards) */}
+      <section className="grid gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-8">
         {[
-          ["Stay", "Three room categories with photo galleries and booking paths.", "/stay"],
-          ["Events", "Five venues, tabbed details, and enquiry support.", "/events"],
-          ["Dining", "Pakhtoon and Areca Café with quick reservation access.", "/dining"],
-        ].map(([title, description, href]) => (
-          <Link key={title} href={href} className="rounded-[2rem] bg-offwhite p-8 shadow-[0_20px_60px_rgba(20,38,30,0.08)] transition hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(20,38,30,0.12)]">
-            <p className="text-[11px] uppercase tracking-[0.35em] text-gold">{title}</p>
-            <h3 className="mt-3 text-3xl text-forest-deep">{title}</h3>
-            <p className="mt-4 text-sm leading-7 text-stone-600">{description}</p>
+          ["01", "Stay", "Three room categories with photo galleries and booking paths.", "/stay"],
+          ["02", "Events", "Five venues, tabbed details, and enquiry support.", "/events"],
+          ["03", "Dining", "Pakhtoon and Areca CafÃ© with quick reservation access.", "/dining"],
+        ].map(([num, title, description, href]) => (
+          <Link
+            key={title}
+            href={href}
+            className="group flex flex-col rounded-3xl border border-line bg-surface p-6 shadow-[0_20px_60px_rgba(20,38,30,0.08)] transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-[0_26px_70px_rgba(20,38,30,0.12)] sm:p-8"
+          >
+            <div className="flex items-baseline justify-between">
+              <span className="font-serif text-4xl text-gold/40 sm:text-5xl">{num}</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] text-gold transition group-hover:translate-x-1">â†’</span>
+            </div>
+            <h3 className="mt-6 text-2xl text-fg sm:mt-8 sm:text-3xl">{title}</h3>
+            <p className="mt-3 text-sm leading-7 text-fg-muted">{description}</p>
           </Link>
         ))}
       </section>
 
-      <section className="mt-20 grid gap-8 lg:grid-cols-2">
+      {/* DINING PREVIEW */}
+      <section className="mt-16 grid gap-6 sm:mt-20 sm:gap-8 lg:grid-cols-2">
         {diningVenues.map((place) => (
-          <article key={place.name} className="overflow-hidden bg-offwhite shadow-[0_20px_60px_rgba(20,38,30,0.08)]">
-            <div className="relative h-[24rem]">
-              <Image src={place.image} alt={place.name} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+          <article
+            key={place.name}
+            className="group overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_60px_rgba(20,38,30,0.08)] transition hover:-translate-y-1 hover:border-gold/50"
+          >
+            <div className="relative h-56 sm:h-72 lg:h-96">
+              {place.image ? (
+                <Image
+                  src={place.image}
+                  alt={place.imageAlt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+              ) : null}
             </div>
-            <div className="p-7">
+            <div className="p-6 sm:p-7">
               <p className="text-[11px] uppercase tracking-[0.35em] text-gold">Signature Dining</p>
-              <h3 className="mt-2 text-3xl text-forest-deep">{place.name}</h3>
-              <p className="mt-4 text-sm leading-7 text-stone-600">{place.intro}</p>
+              <h3 className="mt-2 text-2xl text-fg sm:text-3xl">{place.name}</h3>
+              <p className="mt-4 text-sm leading-7 text-fg-muted">{place.intro}</p>
             </div>
           </article>
         ))}
       </section>
 
-      <section className="mt-20 grid gap-8 lg:grid-cols-2">
+      {/* STAY + GALLERY PREVIEW */}
+      <section className="mt-16 grid gap-8 sm:mt-20 lg:grid-cols-2 lg:gap-10">
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Stay Preview</p>
           <div className="mt-6 grid gap-4">
             {rooms.map((room) => (
-              <Link key={room.name} href="/stay" className="rounded-3xl border border-beige bg-beige/40 p-5 transition hover:bg-beige">
+              <Link
+                key={room.name}
+                href="/stay"
+                className="group rounded-3xl border border-line bg-surface-2 p-5 transition hover:border-gold/50 hover:bg-surface sm:p-6"
+              >
                 <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-2xl text-forest-deep">{room.name}</h3>
-                    <p className="mt-2 text-sm text-stone-600">{room.description}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-xl text-fg sm:text-2xl">{room.name}</h3>
+                    <p className="mt-2 line-clamp-2 text-sm text-fg-muted">{room.description}</p>
                   </div>
-                  <span className="text-[11px] uppercase tracking-[0.3em] text-gold">View</span>
+                  <span className="shrink-0 text-[11px] uppercase tracking-[0.3em] text-gold transition group-hover:translate-x-1">
+                    View â†’
+                  </span>
                 </div>
               </Link>
             ))}
@@ -102,27 +167,48 @@ export default function Home() {
 
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Gallery Preview</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {galleryImages.slice(0, 4).map((image) => (
-              <Link key={image.caption} href="/gallery" className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-forest-deep">
-                <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1024px) 100vw, 25vw" className="object-cover transition duration-700 hover:scale-105" />
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            {galleryPreview.map((image) => (
+              <Link
+                key={image.caption}
+                href="/gallery"
+                className="group relative aspect-4/3 overflow-hidden rounded-2xl bg-forest-deep"
+              >
+                {image.src ? (
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                ) : null}
               </Link>
             ))}
           </div>
+          <Link
+            href="/gallery"
+            className="mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:opacity-80"
+          >
+            View full gallery <span aria-hidden="true">â†’</span>
+          </Link>
         </div>
       </section>
 
-      <section className="mt-20 rounded-[2rem] bg-forest-deep p-8 text-offwhite lg:p-12">
+      {/* EVENTS CTA */}
+      <section className="mt-16 rounded-3xl bg-forest-deep p-6 text-offwhite sm:mt-20 sm:rounded-4xl sm:p-8 lg:p-12">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold/90">Events</p>
-        <h2 className="mt-4 text-4xl sm:text-5xl">Weddings, conferences, and private gatherings</h2>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-offwhite/75">
+        <h2 className="mt-4 text-3xl leading-tight sm:text-4xl lg:text-5xl">
+          Weddings, conferences, and private gatherings
+        </h2>
+        <p className="mt-5 max-w-2xl text-sm leading-7 text-offwhite/75 sm:text-base sm:leading-8">
           The estate includes Bahar Lawns, Madhusudan Hall, Conference Hall, Areca Lawns, and the Gazebo.
         </p>
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Link href="/events" className="inline-flex rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-forest-deep transition hover:bg-gold hover:text-offwhite">
+        <div className="mt-7 flex flex-wrap gap-3 sm:mt-8 sm:gap-4">
+          <Link href="/events" className="inline-flex rounded-full bg-offwhite px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
             Explore Venues
           </Link>
-          <Link href="/contact" className="inline-flex rounded-full border border-offwhite/30 px-6 py-3 text-[11px] uppercase tracking-[0.35em] text-offwhite transition hover:border-gold hover:text-gold">
+          <Link href="/contact" className="inline-flex rounded-full border border-offwhite/30 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-offwhite transition hover:border-gold hover:text-gold sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
             Contact & Book
           </Link>
         </div>

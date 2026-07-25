@@ -1,0 +1,400 @@
+# Project Instructions
+
+## Project Overview
+
+Project Name: The Pavillion Hotel Website
+
+This is a premium hotel marketing website built using Next.js 15. The objective is to create a fast, modern, elegant, SEO-friendly experience that encourages direct bookings and event enquiries.
+
+This is NOT an e-commerce platform or booking application.
+
+The actual booking process is handled by an external PMS/Booking Engine (STAAH / AxisRooms). Our application is responsible only for presenting hotel information, collecting enquiries, and redirecting users to the booking engine.
+
+---
+
+# Tech Stack
+
+- Next.js 15 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- Sanity CMS
+- next-sanity
+- GROQ
+- Vercel
+- Framer Motion
+- React Hook Form
+- Zod
+
+---
+
+# Development Principles
+
+Always prefer:
+
+- Server Components whenever possible
+- Client Components only when interaction is required
+- Type-safe code
+- Reusable components
+- Clean architecture
+- Mobile-first development
+- Accessibility
+- Performance over unnecessary animations
+
+Avoid:
+
+- Large client-side bundles
+- Heavy third-party libraries
+- Inline styles
+- Hardcoded content
+- Duplicate components
+- Business logic inside UI components
+
+---
+
+# Design Philosophy
+
+The website should feel
+
+- Premium
+- Elegant
+- Natural
+- Boutique Resort Style
+
+Focus on
+
+- White space
+- Large imagery
+- Clean typography
+- Minimal text
+- Smooth interactions
+- Fast loading
+
+Never create cluttered layouts.
+
+---
+
+# Styling Rules
+
+Use
+
+- Tailwind CSS
+- Design tokens
+- Consistent spacing
+- Responsive typography
+
+Do NOT
+
+- Use random colors
+- Hardcode spacing
+- Create custom CSS unless absolutely necessary
+
+---
+
+# Components
+
+Components must be
+
+- Small
+- Reusable
+- Typed
+- Independent
+
+Every reusable UI should live under
+
+/components
+
+Examples
+
+Button
+
+Card
+
+Section
+
+Hero
+
+Gallery
+
+Navbar
+
+Footer
+
+CTA
+
+Form
+
+---
+
+# Folder Structure
+
+src/
+
+    app/
+
+    components/
+
+    lib/
+
+    hooks/
+
+    types/
+
+    sanity/
+
+    styles/
+
+Keep business logic inside lib.
+
+---
+
+# Data
+
+All editable content must come from Sanity CMS.
+
+Never hardcode
+
+- Room names
+- Descriptions
+- Amenities
+- Images
+- Contact details
+- Social links
+- Gallery items
+
+Temporary placeholder content is acceptable during development but must be easy to replace.
+
+---
+
+# Images
+
+Always use
+
+Next.js Image component
+
+Images should
+
+- Lazy load
+- Use WebP
+- Use AVIF where available
+- Preserve aspect ratio
+
+Never use HTML img tags unless absolutely necessary.
+
+---
+
+# Animations
+
+Animations should be subtle.
+
+Allowed
+
+- Fade
+- Slide
+- Small scale
+- Hover transitions
+
+Avoid
+
+- Long animations
+- Heavy parallax
+- Auto-playing effects
+- Large videos
+
+Performance always takes priority.
+
+---
+
+# Forms
+
+Forms must
+
+- Use React Hook Form
+- Validate using Zod
+- Be reusable
+
+Create generic form components whenever possible.
+
+---
+
+# Booking Integration
+
+Do NOT build booking functionality.
+
+Booking flow:
+
+Website
+
+↓
+
+Generate booking URL
+
+↓
+
+Redirect user
+
+↓
+
+External PMS completes booking
+
+Never embed booking pages inside iframes.
+
+---
+
+# SEO
+
+Every page must support
+
+- Metadata
+- Open Graph
+- Twitter Cards
+- Canonical URL
+- Structured Data
+- Sitemap
+- Robots.txt
+
+Always use semantic HTML.
+
+---
+
+# Performance Goals
+
+Desktop Lighthouse
+
+>=95
+
+Mobile Lighthouse
+
+>=90
+
+Optimize
+
+- Images
+- Fonts
+- JavaScript
+- CSS
+- Rendering
+
+---
+
+# Accessibility
+
+Ensure
+
+- Keyboard navigation
+- ARIA labels
+- Proper heading hierarchy
+- Contrast compliance
+- Focus states
+
+---
+
+# Coding Standards
+
+Use
+
+- TypeScript strict mode
+- Interfaces where appropriate
+- Meaningful variable names
+
+Avoid
+
+- any
+- Magic numbers
+- Deep nesting
+- Large files
+
+Keep components under approximately 200 lines whenever practical.
+
+---
+
+# Git Workflow
+
+Main branches
+
+main
+
+develop
+
+Feature branches
+
+feature/home
+
+feature/stay
+
+feature/events
+
+feature/gallery
+
+feature/contact
+
+feature/blog
+
+Never commit directly to main.
+
+Always create Pull Requests.
+
+---
+
+# Commit Convention
+
+Use Conventional Commits.
+
+Examples
+
+feat(home): add hero section
+
+fix(gallery): resolve image layout
+
+refactor(navbar): simplify mobile menu
+
+style(button): update hover animation
+
+docs: update README
+
+---
+
+# Placeholder Content
+
+Until client assets are received:
+
+Use
+
+- Lorem Ipsum
+- Placeholder hotel images
+- Dummy room information
+- Temporary logo
+
+Build layouts to make replacement easy without changing code.
+
+Do not tightly couple layouts to placeholder assets.
+
+---
+
+# Code Generation Guidelines
+
+When generating code:
+
+- Follow existing project structure.
+- Reuse existing components before creating new ones.
+- Prefer composition over duplication.
+- Keep components modular.
+- Generate production-ready TypeScript.
+- Avoid unnecessary dependencies.
+- Explain architectural decisions when introducing new patterns.
+
+---
+
+# Expected Quality
+
+Every generated code suggestion should be
+
+- Production-ready
+- Type-safe
+- Readable
+- Reusable
+- Well-structured
+- Easy to maintain
+
+Assume this project will be maintained and extended for several years.

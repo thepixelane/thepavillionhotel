@@ -1,18 +1,23 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { rooms } from "@/lib/site-data";
 
 type BookingStep = "details" | "availability" | "review";
 
-type RoomName = (typeof rooms)[number]["name"];
+export type BookingRoom = {
+  name: string;
+  description: string;
+  amenities: readonly string[];
+  nightlyRate?: number;
+  capacity?: number;
+};
 
 type BookingState = {
   checkIn: string;
   checkOut: string;
   adults: string;
   children: string;
-  roomType: RoomName | "";
+  roomType: string;
   specialRequests: string;
 };
 
@@ -25,11 +30,8 @@ const initialState: BookingState = {
   specialRequests: "",
 };
 
-const inventory = {
-  "Deluxe Room": 4,
-  "Executive Room": 3,
-  "The Suite": 2,
-} as const;
+// Fallback inventory when Sanity doesn't yet expose a per-room count.
+const DEFAULT_AVAILABLE = 3;
 
 function getGuestCount(adults: string, children: string) {
   return Number(adults) + Number(children);
@@ -47,24 +49,17 @@ function getNightCount(checkIn: string, checkOut: string) {
   return Number.isFinite(nights) && nights > 0 ? nights : 1;
 }
 
-function getRecommendedRooms(guestCount: number) {
+function getRecommendedRooms(rooms: readonly BookingRoom[], guestCount: number) {
   return rooms
     .map((room) => {
-      const capacity =
-        room.name === "The Suite"
-          ? 4
-          : room.name === "Executive Room"
-            ? 3
-            : 2;
-
-      const baseAvailable = inventory[room.name];
+      const capacity = room.capacity ?? 2;
       const fitsGuests = guestCount <= capacity;
-      const availableCount = fitsGuests ? baseAvailable : Math.max(0, baseAvailable - 1);
+      const availableCount = fitsGuests ? DEFAULT_AVAILABLE : Math.max(0, DEFAULT_AVAILABLE - 1);
 
       return {
         ...room,
         capacity,
-        nightlyRate: room.nightlyRate,
+        nightlyRate: room.nightlyRate ?? 0,
         availableCount,
         isAvailable: availableCount > 0,
         fitsGuests,
@@ -73,10 +68,14 @@ function getRecommendedRooms(guestCount: number) {
     .filter((room) => room.isAvailable);
 }
 
-export function StayBookingFlow() {
+type StayBookingFlowProps = {
+  rooms: readonly BookingRoom[];
+};
+
+export function StayBookingFlow({ rooms }: StayBookingFlowProps) {
   const [step, setStep] = useState<BookingStep>("details");
   const [formState, setFormState] = useState<BookingState>(initialState);
-  const [requestedRoom, setRequestedRoom] = useState<RoomName | "">("");
+  const [requestedRoom, setRequestedRoom] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
 
   const guestCount = getGuestCount(formState.adults, formState.children);
@@ -87,8 +86,8 @@ export function StayBookingFlow() {
       return [];
     }
 
-    return getRecommendedRooms(guestCount);
-  }, [guestCount, step]);
+    return getRecommendedRooms(rooms, guestCount);
+  }, [rooms, guestCount, step]);
 
   const selectedRoom = useMemo(
     () => availableRooms.find((room) => room.name === requestedRoom) ?? null,
@@ -124,7 +123,7 @@ export function StayBookingFlow() {
     setSubmitted(false);
   };
 
-  const handleRoomSelection = (roomName: RoomName) => {
+  const handleRoomSelection = (roomName: string) => {
     setRequestedRoom(roomName);
     setFormState((current) => ({
       ...current,
@@ -145,12 +144,12 @@ export function StayBookingFlow() {
   };
 
   return (
-    <section className="rounded-[2rem] bg-forest-deep p-7 text-offwhite shadow-[0_20px_60px_rgba(20,38,30,0.18)] lg:p-10">
+    <section className="rounded-3xl bg-forest-deep p-5 text-offwhite shadow-[0_20px_60px_rgba(20,38,30,0.18)] sm:rounded-4xl sm:p-7 lg:p-10">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold/90">Book Your Stay</p>
-          <h2 className="mt-4 text-4xl sm:text-5xl">Booking flow</h2>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-offwhite/75">
+          <h2 className="mt-3 text-3xl leading-tight sm:mt-4 sm:text-4xl lg:text-5xl">Booking flow</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-offwhite/75 sm:mt-4">
             Enter your dates and guest count, view room availability with pricing, select a room, and add any special request.
           </p>
         </div>
@@ -164,7 +163,7 @@ export function StayBookingFlow() {
         </button>
       </div>
 
-      <div className="mt-8 grid gap-3 text-[11px] uppercase tracking-[0.3em] sm:grid-cols-3">
+      <div className="mt-6 grid gap-2 text-[10px] uppercase tracking-[0.28em] sm:mt-8 sm:grid-cols-3 sm:gap-3 sm:text-[11px] sm:tracking-[0.3em]">
         {stepItems.map((item) => (
           <div
             key={item.label}
@@ -176,7 +175,7 @@ export function StayBookingFlow() {
       </div>
 
       {step === "details" ? (
-        <form className="mt-8 grid gap-4 lg:grid-cols-2" onSubmit={handleFetchAvailability}>
+        <form className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2" onSubmit={handleFetchAvailability}>
           <label className="grid gap-2 text-[11px] uppercase tracking-[0.3em] text-gold/90">
             Check-in
             <input
@@ -233,10 +232,10 @@ export function StayBookingFlow() {
             </select>
           </label>
 
-          <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
+          <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
             <button
               type="submit"
-              className="inline-flex rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite"
+              className="inline-flex rounded-full bg-offwhite px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6"
             >
               Fetch Availability
             </button>
@@ -248,7 +247,7 @@ export function StayBookingFlow() {
       ) : null}
 
       {step !== "details" ? (
-        <div className="mt-8 rounded-[2rem] bg-white/5 p-6">
+        <div className="mt-6 rounded-3xl bg-white/5 p-5 sm:mt-8 sm:p-6">
           <div className="grid gap-3 text-sm text-offwhite/80 sm:grid-cols-3">
             <div>
               <p className="text-[11px] uppercase tracking-[0.3em] text-gold/90">Dates</p>
@@ -269,15 +268,15 @@ export function StayBookingFlow() {
       ) : null}
 
       {step !== "details" ? (
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold/90">Availability</p>
-          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {availableRooms.map((room) => (
               <button
                 key={room.name}
                 type="button"
                 onClick={() => handleRoomSelection(room.name)}
-                className={`rounded-[1.75rem] border p-5 text-left transition ${
+                className={`rounded-3xl border p-5 text-left transition ${
                   requestedRoom === room.name
                     ? "border-gold bg-white/10"
                     : "border-offwhite/10 bg-white/5 hover:border-gold/60 hover:bg-white/8"
@@ -315,8 +314,8 @@ export function StayBookingFlow() {
       ) : null}
 
       {step === "review" && selectedRoom ? (
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-          <div className="rounded-[1.75rem] bg-white/5 p-6">
+        <div className="mt-6 grid gap-5 sm:mt-8 sm:gap-6 lg:grid-cols-[1fr_0.9fr]">
+          <div className="rounded-3xl bg-white/5 p-5 sm:p-6">
             <p className="text-[11px] uppercase tracking-[0.4em] text-gold/90">Add Request</p>
             <label className="mt-4 grid gap-2 text-[11px] uppercase tracking-[0.3em] text-gold/90">
               Special requests
@@ -332,15 +331,15 @@ export function StayBookingFlow() {
             <button
               type="button"
               onClick={handleFinalizeBooking}
-              className="mt-6 inline-flex rounded-full bg-offwhite px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite"
+              className="mt-6 inline-flex rounded-full bg-offwhite px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6"
             >
               Continue to Booking Summary
             </button>
           </div>
 
-          <aside className="rounded-[1.75rem] border border-offwhite/10 bg-white/5 p-6">
+          <aside className="rounded-3xl border border-offwhite/10 bg-white/5 p-5 sm:p-6">
             <p className="text-[11px] uppercase tracking-[0.4em] text-gold/90">Booking Summary</p>
-            <h3 className="mt-3 text-3xl text-offwhite">{selectedRoom.name}</h3>
+            <h3 className="mt-3 text-2xl text-offwhite sm:text-3xl">{selectedRoom.name}</h3>
             <div className="mt-4 space-y-3 text-sm text-offwhite/75">
               <p>{formState.checkIn} to {formState.checkOut}</p>
               <p>{guestCount} guests total · {nightCount} night{nightCount > 1 ? "s" : ""}</p>

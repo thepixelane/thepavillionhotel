@@ -1,0 +1,19 @@
+User Workflows
+
+1. Content Creation: The hotel management will create new content (images and text) or modify existing content in the admin panel.
+2. Booking a Stay: User will come to website and book a stay by selecting the desired dates, number of guests, availability and pricing.
+3. Booking Engine: STAAH will be used as the booking engine for the website. The hotel management will have access to the STAAH dashboard to manage bookings and availability.
+4. Stay Pricing: The hotel management will be able to set and manage pricing for different room types and dates through the STAAH dashboard.
+5. Payment Gateway: Razorpay will be used as the payment gateway for the website. The hotel management will have access to the Razorpay dashboard to manage payments and transactions.
+6. Payment Management: The hotel management will be able to view and manage payments, refunds, and transaction history through the Razorpay dashboard.
+7. Reporting and Analytics: The hotel management will have access to reporting and analytics tools in both the STAAH and Razorpay dashboards to monitor bookings, revenue, and other key metrics.
+8. Booking Confirmation: Once a booking is made, the hotel management will receive a confirmation email with the booking details. The hotel management can also view and manage bookings through the STAAH dashboard. Also the user will receive a confirmation email with the booking details and can view their booking history through the website.
+9. Enquiry of Dining and other Services: The user will reach out to hotel via mobile number, whatsapp or email for any enquiry regarding dining and other services. The hotel management will be able to manage and respond to these enquiries through their preferred communication channels.
+10. FAQ: The hotel management will be able to manage and update the FAQ section on the website through the admin panel. This will allow them to provide users with relevant information and address common questions or concerns.
+11. Email Enquiry handling: The hotel management will be able to view email enquiries directly on their email ID or the admin panel. Which one is preferred?
+
+STAAH Setup: ₹10,000 to ₹15,000 (One-time)
+STAAH Subscription: ~$100 / month
+
+Razorpay Domestic: 2% + 18% GST per transaction
+Razorpay Premium/Int'l: 3% + 18% GST per transaction(Example: On a ₹10,000 booking via UPI, net payout received is ₹9,764 after a total fee deduction of ₹236).

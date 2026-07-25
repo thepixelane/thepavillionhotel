@@ -16,7 +16,7 @@ export function QuickActions() {
             href={href}
             aria-label={label}
             title={label}
-            className="group grid h-14 w-14 place-items-center rounded-2xl bg-offwhite text-forest-deep shadow-[0_14px_35px_rgba(20,38,30,0.18)] transition hover:-translate-x-1 hover:bg-gold hover:text-offwhite"
+            className="group grid h-14 w-14 place-items-center rounded-2xl border border-line bg-surface text-fg shadow-[0_14px_35px_rgba(20,38,30,0.18)] transition hover:-translate-x-1 hover:border-gold hover:bg-gold hover:text-offwhite"
           >
             <Icon className="h-5 w-5 transition group-hover:scale-110" />
           </Link>

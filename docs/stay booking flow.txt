@@ -1,0 +1,148 @@
+Here is a complete, production-ready technical architecture brief and documentation ready to share with your lead developer. You can copy and paste the markdown text below directly into your project management tool (Jira, Notion, GitHub, or Slack). [1, 2, 3]
+------------------------------
+## Headless Hotel Architecture & Custom Checkout Documentation## 1. System Overview
+We are building a custom, design-forward checkout experience for a boutique hotel. To ensure complete UI freedom and maximum website performance, we are using a Headless Jamstack Architecture.
+
+* Frontend Framework: Next.js (App Router, hosted on Vercel/similar Cloud Platform)
+* Content Management System: Sanity CMS (Headless data warehouse for static content: text, images, room configurations)
+* Booking Engine: STAAH Max (Utilizing the Metachannel / ChannelConnect API for real-time inventory, rates, and booking creation)
+* Payment Gateway: Indian Payment Aggregator (Razorpay / Cashfree) supporting UPI Apps (Intent/QR), Domestic and International Debit/Credit Cards.
+
+------------------------------
+## 2. Core Operational Rules (Non-Negotiable)
+
+   1. Server-Side API Communication Only: Under no circumstances should client-side (browser) code make direct fetch requests to the STAAH API or the Payment Gateway’s private administrative endpoints. All communication must run through secured Next.js Server Actions or API Route Handlers to protect private API keys.
+   2. Webhook-Driven Business Logic: Never confirm a reservation or trigger a STAAH booking push based on client-side state, router query strings, or client-side redirects. Only trust cryptographically signed, asynchronous Webhooks coming directly backend-to-backend from the Payment Gateway.
+
+------------------------------
+## 3. Data Flow & Communication Map
+
+  [ Sanity CMS ] -----(GROQ / Static Content Fetch)-----> [ Next.js Frontend Components ]
+                                                                     |
+  [ STAAH Engine ] <---(JSON Live Inventory / Rates API)---------- [ Next.js API Routes ]
+                                                                     |
+         |                                                           v
+  [ STAAH Engine ] <---(Secure Booking Push REST API)----- [ Next.js Webhook Handler ]
+                                                                     ^
+                                                                     |
+                                                         (Verified Webhook Signal)
+                                                                     |
+                                                           [ Payment Gateway ]
+
+------------------------------
+## 4. End-to-End Execution Lifecycles## Phase 1: Availability Check
+
+   1. The guest triggers a date/guest count query on the custom custom UI.
+   2. Next.js triggers an internal backend route (/api/hotel/availability).
+   3. The server runs an upstream POST or GET call to the STAAH Metachannel API.
+   4. STAAH returns a raw JSON array containing room IDs, dynamic rates, room descriptions, and remaining inventory.
+   5. Next.js maps this JSON data straight into native React components matching our design system.
+
+## Phase 2: Checkout & Order Creation
+
+   1. The guest completes the customer details form on our UI and clicks "Pay Now".
+   2. Next.js catches this on a server-side route handler (/api/checkout/create-order).
+   3. The server calculates the exact expected amount down to the absolute lowest denomination (Paise for INR, e.g., ₹15,000 = 1500000).
+   4. Our server calls the Payment Gateway API to register an Order ID, locking the exact amount into their ledger. The Gateway returns a unique order_id.
+
+## Phase 3: Payment Intent & Handshake
+
+   1. Next.js passes only the order_id down to the browser.
+   2. The UI initializes the Payment Gateway's frontend SDK modal (e.g., Razorpay Standard Checkout or Cashfree JS SDK).
+   3. The modal exposes the native UPI application hooks (GPay, PhonePe, Paytm Intent options via deep-linking) and Card inputs.
+   4. The guest completes authorization on their phone.
+
+## Phase 4: Webhook & Strict Verification (Anti-Fraud Pipeline)
+
+   1. Upon successful authorization, the Payment Gateway bypasses the browser entirely and fires an asynchronous POST request to our public webhook handler (/api/webhooks/payment).
+   2. Our Next.js backend intercepts the payload. It must perform two explicit checks:
+   * Signature Verification: Re-hash the raw incoming request payload utilizing our private, environment-stored WEBHOOK_SECRET string. Compare this dynamically generated string against the x-razorpay-signature or x-cashfree-signature header. If they mismatch, terminate the stream immediately.
+      * Amount Validation: Pull the original transaction ledger matching that specific order_id. Ensure payload.amount_paid === expected_amount.
+   3. If both pass, our server dispatches the payload to the STAAH Booking Push API containing room criteria and guest data.
+   4. STAAH stores the record, updates global OTA inventory channels, and passes a confirmation_id to our server, which allows Next.js to render a successful checkout response.
+
+------------------------------
+## 5. Reference Implementation (Next.js App Router Webhook Route)
+This standard template demonstrates how to execute Webhook Signature Verification and structural price checks using the Edge/Node.js runtime inside Next.js (/app/api/webhooks/payment/route.ts).
+
+import { NextResponse } from 'next/server';import crypto from 'crypto';
+// Simulated DB Retrieval functionasync function getOrderDetailsFromDatabase(orderId: string) {
+  // Replace this with your actual Database query (Prisma, Supabase, Mongoose etc.)
+  return { expectedAmountInPaise: 1500000, status: 'PENDING' };
+}
+// Simulated STAAH Booking Push functionasync function pushBookingToSTAAH(bookingPayload: any) {
+  // Call STAAH Reservation API here
+  return { success: true, confirmationId: 'STAAH-XYZ123' };
+}
+export async function POST(request: Request) {
+  try {
+    const rawBody = await request.text();
+    const signature = request.headers.get('x-razorpay-signature'); // Adapt according to the selected PG provider
+    const webhookSecret = process.env.PAYMENT_WEBHOOK_SECRET;
+
+    if (!signature || !webhookSecret) {
+      return NextResponse.json({ error: 'Missing security tokens' }, { status: 400 });
+    }
+
+    // 1. Verify Cryptographic Integrity (Signature Check)
+    const expectedSignature = crypto
+      .createHmac('sha256', webhookSecret)
+      .update(rawBody)
+      .digest('hex');
+
+    if (signature !== expectedSignature) {
+      console.error('CRITICAL: Fraudulent payload signature detected!');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+
+    const payload = JSON.parse(rawBody);
+    const orderId = payload.payload.payment.entity.order_id;
+    const amountPaid = payload.payload.payment.entity.amount; // Sent in lowest denomination (Paise)
+
+    // 2. Fetch Original Order Data to Verify Exact Price
+    const originalOrder = await getOrderDetailsFromDatabase(orderId);
+    if (!originalOrder || originalOrder.status !== 'PENDING') {
+      return NextResponse.json({ error: 'Order not found or already processed' }, { status: 404 });
+    }
+
+    // 3. Strict Amount Validation Check
+    if (amountPaid !== originalOrder.expectedAmountInPaise) {
+      console.error(`CRITICAL: Amount tampering detected! Expected ${originalOrder.expectedAmountInPaise}, received ${amountPaid}`);
+      return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 });
+    }
+
+    // 4. Secure Handshake with STAAH
+    const staahResponse = await pushBookingToSTAAH(payload.payload.payment.entity);
+
+    if (staahResponse.success) {
+       // Update internal DB status to SUCCESS and save confirmationId
+       return NextResponse.json({ status: 'BOOKING_CONFIRMED', confirmationId: staahResponse.confirmationId });
+    } else {
+       return NextResponse.json({ error: 'STAAH integration error' }, { status: 500 });
+    }
+
+  } catch (error) {
+    console.error('Webhook processing failure:', error);
+    return NextResponse.json({ error: 'Internal system failure' }, { status: 500 });
+  }
+}
+
+------------------------------
+## 6. Required Environment Variables (.env)
+Ensure these secrets are never exposed on client-side compilation blocks (do not prefix them with NEXT_PUBLIC_).
+
+# Gateway Credentials
+PAYMENT_GATEWAY_KEY_ID="your_gateway_production_id"
+PAYMENT_GATEWAY_KEY_SECRET="your_gateway_production_secret"
+PAYMENT_WEBHOOK_SECRET="your_cryptographic_webhook_signing_token"
+# STAAH Core Engine Access
+STAAH_METACHANNEL_API_URL="https://staah.net"
+STAAH_API_AUTH_TOKEN="your_authenticated_bearer_or_xml_access_key"
+
+------------------------------
+Once your technical team reviews this, they will likely need to acquire the API Swagger documentation / Postman collections directly from STAAH and your chosen payment gateway provider.
+Would you like me to prepare a list of technical setup questions that your developer needs to ask the STAAH onboarding manager to get these exact API keys?
+
+[1] [https://integrately.com](https://integrately.com/blog/notion-tips)
+[2] [https://davidscheibel.medium.com](https://davidscheibel.medium.com/github-pushing-and-updating-a-project-repo-b66ca13aad7c)
+[3] [https://bika.ai](https://bika.ai/template/agent-requirements-document-writer)
