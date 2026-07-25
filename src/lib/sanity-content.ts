@@ -188,19 +188,28 @@ export async function getRooms(): Promise<Room[]> {
       imageAlts: room.images.map(() => room.name),
     }));
   }
-  return data.map((room) => ({
-    name: room.name,
-    description: room.description,
-    details: room.details ?? [],
-    amenities: room.amenities ?? [],
-    nightlyRate: room.nightlyRate,
-    capacity: room.capacity,
-    images:
-      (room.images ?? [])
-        .map((img) => imageUrl(img, 1400))
-        .filter((url): url is string => Boolean(url)),
-    imageAlts: (room.images ?? []).map((img) => img.alt ?? room.name),
-  }));
+  return data.map((room) => {
+    const sanityImages = (room.images ?? [])
+      .map((img) => imageUrl(img, 1400))
+      .filter((url): url is string => Boolean(url));
+    const staticRoom = staticRooms.find(
+      (r) => r.name.toLowerCase() === room.name?.toLowerCase()
+    );
+    const fallbackImages = staticRoom ? [...staticRoom.images] : [];
+    const resolvedImages = sanityImages.length > 0 ? sanityImages : fallbackImages;
+    return {
+      name: room.name,
+      description: room.description,
+      details: room.details ?? [],
+      amenities: room.amenities ?? [],
+      nightlyRate: room.nightlyRate,
+      capacity: room.capacity,
+      images: resolvedImages,
+      imageAlts: sanityImages.length > 0
+        ? (room.images ?? []).map((img) => img.alt ?? room.name)
+        : resolvedImages.map(() => room.name),
+    };
+  });
 }
 
 export async function getVenues(): Promise<Venue[]> {
@@ -224,15 +233,21 @@ export async function getVenues(): Promise<Venue[]> {
       imageAlt: venue.name,
     }));
   }
-  return data.map((venue) => ({
-    name: venue.name,
-    capacity: venue.capacity,
-    description: venue.description,
-    suitableFor: venue.suitableFor ?? [],
-    facilities: venue.facilities ?? [],
-    image: imageUrl(venue.image, 1400) ?? "",
-    imageAlt: altOf(venue.image) || venue.name,
-  }));
+  return data.map((venue) => {
+    const sanityImage = imageUrl(venue.image, 1400);
+    const staticVenue = staticVenues.find(
+      (v) => v.name.toLowerCase() === venue.name?.toLowerCase()
+    );
+    return {
+      name: venue.name,
+      capacity: venue.capacity,
+      description: venue.description,
+      suitableFor: venue.suitableFor ?? [],
+      facilities: venue.facilities ?? [],
+      image: sanityImage ?? staticVenue?.image ?? "",
+      imageAlt: altOf(venue.image) || venue.name,
+    };
+  });
 }
 
 export async function getDiningVenues(): Promise<DiningVenue[]> {
@@ -254,14 +269,20 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
       imageAlt: place.name,
     }));
   }
-  return data.map((place) => ({
-    name: place.name,
-    intro: place.intro,
-    timing: place.timing,
-    dishes: place.dishes ?? [],
-    image: imageUrl(place.image, 1400) ?? "",
-    imageAlt: altOf(place.image) || place.name,
-  }));
+  return data.map((place) => {
+    const sanityImage = imageUrl(place.image, 1400);
+    const staticPlace = staticDiningVenues.find(
+      (d) => d.name.toLowerCase() === place.name?.toLowerCase()
+    );
+    return {
+      name: place.name,
+      intro: place.intro,
+      timing: place.timing,
+      dishes: place.dishes ?? [],
+      image: sanityImage ?? staticPlace?.image ?? "",
+      imageAlt: altOf(place.image) || place.name,
+    };
+  });
 }
 
 export async function getGalleryImages(): Promise<GalleryImage[]> {

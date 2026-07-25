@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- White background -->
+  <rect width="512" height="512" rx="80" fill="white"/>
+
+  <!-- Pavilion roof peak -->
+  <polyline
+    points="80,210 256,90 432,210"
+    stroke="#75B726" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Left wing lines -->
+  <line x1="80" y1="210" x2="38" y2="222" stroke="#75B726" stroke-width="16" stroke-linecap="round"/>
+  <line x1="100" y1="228" x2="50" y2="242" stroke="#75B726" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Right wing lines -->
+  <line x1="432" y1="210" x2="474" y2="222" stroke="#75B726" stroke-width="16" stroke-linecap="round"/>
+  <line x1="412" y1="228" x2="462" y2="242" stroke="#75B726" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- "The" text -->
+  <text
+    x="256" y="295"
+    text-anchor="middle"
+    font-family="Georgia, serif"
+    font-size="62"
+    font-style="italic"
+    fill="#75B726"
+    letter-spacing="4"
+  >The</text>
+
+  <!-- "Pavillion" text -->
+  <text
+    x="256" y="385"
+    text-anchor="middle"
+    font-family="Georgia, serif"
+    font-size="88"
+    font-style="italic"
+    font-weight="600"
+    fill="#75B726"
+    letter-spacing="1"
+  >Pavillion</text>
+
+  <!-- Bottom lines -->
+  <line x1="48" y1="420" x2="464" y2="420" stroke="#75B726" stroke-width="14" stroke-linecap="round"/>
+  <line x1="80" y1="445" x2="432" y2="445" stroke="#75B726" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import { QuickActions } from "@/components/quick-actions";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { siteUrl } from "@/lib/public-env";
 
 const inter = Inter({
@@ -62,12 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
         <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <SiteHeader />
         {children}
-        <SiteFooter />
-        <QuickActions />
       </body>
     </html>
   );
