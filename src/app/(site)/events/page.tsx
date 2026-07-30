@@ -37,12 +37,17 @@ export default async function EventsPage() {
         <form className="grid gap-3 sm:grid-cols-2">
           <input className="rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-1" placeholder="Full name" />
           <input className="rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-1" placeholder="Phone" />
-          <select className="rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none focus:border-gold sm:col-span-2">
-            <option>Wedding / Event</option>
-            <option>Corporate Meeting</option>
-            <option>Private Dinner</option>
-            <option>General Enquiry</option>
-          </select>
+
+          <div className="relative sm:col-span-2">
+            <select className="w-full appearance-none rounded-2xl border border-offwhite/20 bg-white/10 px-4 py-3 pr-11 text-sm text-offwhite outline-none transition focus:border-gold focus:bg-white/15">
+              <option className="bg-forest-deep text-offwhite">Wedding / Event</option>
+              <option className="bg-forest-deep text-offwhite">Corporate Meeting</option>
+              <option className="bg-forest-deep text-offwhite">Private Dinner</option>
+              <option className="bg-forest-deep text-offwhite">General Enquiry</option>
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-gold/85">▾</span>
+          </div>
+
           <textarea className="min-h-28 rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-2" placeholder="Share your date, capacity, and requirements" />
           <button type="submit" className="inline-flex rounded-full bg-offwhite px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:col-span-2">
             Enquire Now
