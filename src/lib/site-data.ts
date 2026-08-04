@@ -4,6 +4,7 @@ export const siteNavItems = [
   { label: "Events", href: "/events" },
   { label: "Dining", href: "/dining" },
   { label: "Gallery", href: "/gallery" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 

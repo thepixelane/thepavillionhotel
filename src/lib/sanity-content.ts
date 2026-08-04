@@ -9,6 +9,13 @@ import {
   venues as staticVenues,
 } from "@/lib/site-data";
 
+type QueryParams = Record<string, unknown>;
+
+const FALLBACK_BLOG_IMAGE =
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85";
+const FALLBACK_TESTIMONIAL_IMAGE =
+  "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&q=80";
+
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
 /* -------------------------------------------------------------------------- */
@@ -74,6 +81,73 @@ export type GalleryImage = {
   alt: string;
 };
 
+type PortableTextSpan = {
+  _type: "span";
+  text?: string;
+};
+
+type PortableTextBlock = {
+  _type?: string;
+  _key?: string;
+  style?: string;
+  children?: PortableTextSpan[];
+};
+
+export type BlogAuthor = {
+  name: string;
+  slug?: string;
+  image?: string;
+};
+
+export type BlogCategory = {
+  title: string;
+  slug: string;
+  description?: string;
+  postCount?: number;
+};
+
+export type BlogTag = {
+  title: string;
+  slug: string;
+};
+
+export type BlogPost = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImage: string;
+  coverImageAlt: string;
+  categories: BlogCategory[];
+  tags: BlogTag[];
+  author?: BlogAuthor;
+  publishedAt?: string;
+  featured: boolean;
+  status?: "draft" | "published";
+  estimatedReadTime?: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  body: PortableTextBlock[];
+};
+
+export type BlogPostsResult = {
+  posts: BlogPost[];
+  total: number;
+};
+
+export type Testimonial = {
+  guestName: string;
+  rating: number;
+  review: string;
+  source: "google" | "booking" | "direct";
+  sourceUrl?: string;
+  reviewDate?: string;
+  featured: boolean;
+  image?: string;
+  imageAlt: string;
+};
+
 /* -------------------------------------------------------------------------- */
 /*  GROQ queries                                                              */
 /* -------------------------------------------------------------------------- */
@@ -127,6 +201,143 @@ const galleryQuery = groq`*[_type == "galleryImage"] | order(order asc, _created
   image
 }`;
 
+const blogPostsQuery = groq`*[
+  _type == "post" &&
+  defined(slug.current) &&
+  (!defined(status) || status == "published") &&
+  ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
+  ($tagSlug == null || $tagSlug in tags[]->slug.current)
+] | order(featured desc, publishedAt desc)[$offset...$end]{
+  title,
+  "slug": slug.current,
+  excerpt,
+  mainImage,
+  categories[]->{
+    title,
+    "slug": slug.current,
+    description
+  },
+  tags[]->{
+    title,
+    "slug": slug.current
+  },
+  author->{
+    name,
+    "slug": slug.current,
+    image
+  },
+  publishedAt,
+  featured,
+  status,
+  estimatedReadTime,
+  "seoTitle": seo.title,
+  "seoDescription": seo.description,
+  "canonicalUrl": seo.canonicalUrl,
+  "ogImage": seo.ogImage,
+  body
+}`;
+
+const blogPostCountQuery = groq`count(*[
+  _type == "post" &&
+  defined(slug.current) &&
+  (!defined(status) || status == "published") &&
+  ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
+  ($tagSlug == null || $tagSlug in tags[]->slug.current)
+])`;
+
+const blogPostBySlugQuery = groq`*[
+  _type == "post" &&
+  slug.current == $slug &&
+  (!defined(status) || status == "published")
+][0]{
+  title,
+  "slug": slug.current,
+  excerpt,
+  mainImage,
+  categories[]->{
+    title,
+    "slug": slug.current,
+    description
+  },
+  tags[]->{
+    title,
+    "slug": slug.current
+  },
+  author->{
+    name,
+    "slug": slug.current,
+    image
+  },
+  publishedAt,
+  featured,
+  status,
+  estimatedReadTime,
+  "seoTitle": seo.title,
+  "seoDescription": seo.description,
+  "canonicalUrl": seo.canonicalUrl,
+  "ogImage": seo.ogImage,
+  body
+}`;
+
+const blogCategoriesQuery = groq`*[_type == "category" && defined(slug.current)] | order(title asc){
+  title,
+  "slug": slug.current,
+  description,
+  "postCount": count(*[
+    _type == "post" &&
+    references(^._id) &&
+    defined(slug.current) &&
+    (!defined(status) || status == "published")
+  ])
+}`;
+
+const relatedPostsQuery = groq`*[
+  _type == "post" &&
+  defined(slug.current) &&
+  slug.current != $slug &&
+  (!defined(status) || status == "published") &&
+  count((categories[]->slug.current)[@ in $categorySlugs]) > 0
+] | order(publishedAt desc)[0...$limit]{
+  title,
+  "slug": slug.current,
+  excerpt,
+  mainImage,
+  categories[]->{
+    title,
+    "slug": slug.current,
+    description
+  },
+  tags[]->{
+    title,
+    "slug": slug.current
+  },
+  author->{
+    name,
+    "slug": slug.current,
+    image
+  },
+  publishedAt,
+  featured,
+  status,
+  estimatedReadTime,
+  "seoTitle": seo.title,
+  "seoDescription": seo.description,
+  "canonicalUrl": seo.canonicalUrl,
+  "ogImage": seo.ogImage,
+  body
+}`;
+
+const featuredTestimonialsQuery = groq`*[_type == "testimonial" && featured == true] | order(order asc, reviewDate desc)[0...6]{
+  guestName,
+  rating,
+  review,
+  source,
+  sourceUrl,
+  reviewDate,
+  featured,
+  guestImage
+}`;
+
 /* -------------------------------------------------------------------------- */
 /*  Fetch helpers                                                             */
 /* -------------------------------------------------------------------------- */
@@ -135,10 +346,14 @@ const galleryQuery = groq`*[_type == "galleryImage"] | order(order asc, _created
 // hammering the Sanity API on every request.
 const REVALIDATE = 60 * 60;
 
-async function safeFetch<T>(query: string): Promise<T | null> {
+async function safeFetch<T>(
+  query: string,
+  params: QueryParams = {},
+  revalidate = REVALIDATE
+): Promise<T | null> {
   if (!client) return null;
   try {
-    return await client.fetch<T>(query, {}, { next: { revalidate: REVALIDATE } });
+    return await client.fetch<T>(query, params, { next: { revalidate } });
   } catch (error) {
     console.warn("[sanity] fetch failed, falling back to static data:", error);
     return null;
@@ -156,6 +371,77 @@ function imageUrl(source: SanityImageSource | undefined, width = 1600): string |
 
 function altOf(source: unknown): string {
   return (source as { alt?: string } | undefined)?.alt ?? "";
+}
+
+function plainTextFromBody(body: PortableTextBlock[] = []): string {
+  return body
+    .filter((block) => block._type === "block")
+    .map((block) => (block.children ?? []).map((child) => child.text ?? "").join(""))
+    .join(" ")
+    .trim();
+}
+
+function readTimeFromBody(body: PortableTextBlock[] = []): number {
+  const words = plainTextFromBody(body).split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 225));
+}
+
+type RawBlogPost = {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  mainImage?: SanityImage & { alt?: string };
+  categories?: { title: string; slug: string; description?: string }[];
+  tags?: { title: string; slug: string }[];
+  author?: {
+    name: string;
+    slug?: string;
+    image?: SanityImage & { alt?: string };
+  };
+  publishedAt?: string;
+  featured?: boolean;
+  status?: "draft" | "published";
+  estimatedReadTime?: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  canonicalUrl?: string;
+  ogImage?: SanityImage & { alt?: string };
+  body?: PortableTextBlock[];
+};
+
+function normalizeBlogPost(raw: RawBlogPost): BlogPost {
+  const body = raw.body ?? [];
+  const bodyPlain = plainTextFromBody(body);
+  const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_BLOG_IMAGE;
+  return {
+    title: raw.title,
+    slug: raw.slug,
+    excerpt: raw.excerpt?.trim() || bodyPlain.slice(0, 180),
+    coverImage,
+    coverImageAlt: altOf(raw.mainImage) || raw.title,
+    categories: (raw.categories ?? []).map((category) => ({
+      title: category.title,
+      slug: category.slug,
+      description: category.description,
+    })),
+    tags: (raw.tags ?? []).map((tag) => ({ title: tag.title, slug: tag.slug })),
+    author: raw.author
+      ? {
+          name: raw.author.name,
+          slug: raw.author.slug,
+          image: imageUrl(raw.author.image, 320) ?? undefined,
+        }
+      : undefined,
+    publishedAt: raw.publishedAt,
+    featured: Boolean(raw.featured),
+    status: raw.status,
+    estimatedReadTime: raw.estimatedReadTime ?? readTimeFromBody(body),
+    seoTitle: raw.seoTitle,
+    seoDescription: raw.seoDescription,
+    canonicalUrl: raw.canonicalUrl,
+    ogImage: imageUrl(raw.ogImage, 1600) ?? coverImage,
+    body,
+  };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -305,4 +591,82 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
 
 export function heroImageUrl(settings: SiteSettings | null): string | null {
   return settings?.heroImage ? imageUrl(settings.heroImage, 1800) : null;
+}
+
+export async function getBlogPosts(options?: {
+  categorySlug?: string;
+  tagSlug?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<BlogPostsResult> {
+  const limit = options?.limit ?? 12;
+  const offset = options?.offset ?? 0;
+  const params = {
+    categorySlug: options?.categorySlug ?? null,
+    tagSlug: options?.tagSlug ?? null,
+    offset,
+    end: offset + limit,
+  };
+
+  const [rows, total] = await Promise.all([
+    safeFetch<RawBlogPost[]>(blogPostsQuery, params),
+    safeFetch<number>(blogPostCountQuery, params),
+  ]);
+
+  return {
+    posts: (rows ?? []).map(normalizeBlogPost),
+    total: total ?? 0,
+  };
+}
+
+export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
+  const { posts } = await getBlogPosts({ limit, offset: 0 });
+  return posts;
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const post = await safeFetch<RawBlogPost | null>(blogPostBySlugQuery, { slug });
+  return post ? normalizeBlogPost(post) : null;
+}
+
+export async function getRelatedBlogPosts(post: BlogPost, limit = 3): Promise<BlogPost[]> {
+  const categorySlugs = post.categories.map((category) => category.slug).filter(Boolean);
+  if (categorySlugs.length === 0) return [];
+  const rows = await safeFetch<RawBlogPost[]>(relatedPostsQuery, {
+    slug: post.slug,
+    categorySlugs,
+    limit,
+  });
+  return (rows ?? []).map(normalizeBlogPost);
+}
+
+export async function getBlogCategories(): Promise<BlogCategory[]> {
+  const rows = await safeFetch<BlogCategory[]>(blogCategoriesQuery);
+  return rows ?? [];
+}
+
+export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
+  type Raw = {
+    guestName: string;
+    rating: number;
+    review: string;
+    source: "google" | "booking" | "direct";
+    sourceUrl?: string;
+    reviewDate?: string;
+    featured: boolean;
+    guestImage?: SanityImage & { alt?: string };
+  };
+
+  const rows = await safeFetch<Raw[]>(featuredTestimonialsQuery);
+  return (rows ?? []).map((entry) => ({
+    guestName: entry.guestName,
+    rating: entry.rating,
+    review: entry.review,
+    source: entry.source,
+    sourceUrl: entry.sourceUrl,
+    reviewDate: entry.reviewDate,
+    featured: entry.featured,
+    image: imageUrl(entry.guestImage, 300) ?? FALLBACK_TESTIMONIAL_IMAGE,
+    imageAlt: altOf(entry.guestImage) || entry.guestName,
+  }));
 }

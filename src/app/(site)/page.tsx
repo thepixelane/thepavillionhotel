@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { bookingEngineUrl as defaultBookingUrl } from "@/lib/booking-engine";
 import {
+  getFeaturedTestimonials,
+  getLatestBlogPosts,
   getDiningVenues,
   getGalleryImages,
   getRooms,
@@ -13,11 +15,13 @@ const FALLBACK_HERO =
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=85";
 
 export default async function Home() {
-  const [settings, rooms, diningVenues, gallery] = await Promise.all([
+  const [settings, rooms, diningVenues, gallery, latestArticles, testimonials] = await Promise.all([
     getSiteSettings(),
     getRooms(),
     getDiningVenues(),
     getGalleryImages(),
+    getLatestBlogPosts(3),
+    getFeaturedTestimonials(),
   ]);
 
   const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
@@ -194,6 +198,80 @@ export default async function Home() {
           </Link>
         </div>
       </section>
+
+      {/* LATEST ARTICLES */}
+      <section className="mt-16 sm:mt-20">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Latest Articles</p>
+            <h2 className="mt-3 text-3xl text-fg sm:text-4xl">From our content hub</h2>
+          </div>
+          <Link
+            href="/blog"
+            className="inline-flex rounded-full border border-line px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg transition hover:border-gold hover:text-gold"
+          >
+            View All
+          </Link>
+        </div>
+
+        {latestArticles.length > 0 ? (
+          <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-3">
+            {latestArticles.map((post) => (
+              <article
+                key={post.slug}
+                className="rounded-3xl border border-line bg-surface p-6 shadow-[0_20px_60px_rgba(20,38,30,0.08)]"
+              >
+                <p className="text-[10px] uppercase tracking-[0.28em] text-gold">{post.estimatedReadTime} min read</p>
+                <h3 className="mt-3 text-2xl text-fg">
+                  <Link href={`/blog/${post.slug}`} className="transition hover:text-gold">
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className="mt-3 line-clamp-3 text-sm leading-7 text-fg-muted">{post.excerpt}</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-8 rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-fg-muted">
+            Publish your first article in Studio to surface it here.
+          </div>
+        )}
+      </section>
+
+      {/* TESTIMONIALS */}
+      {testimonials.length > 0 ? (
+        <section className="mt-16 sm:mt-20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Guest Stories</p>
+              <h2 className="mt-3 text-3xl text-fg sm:text-4xl">What guests say about us</h2>
+            </div>
+            <Link
+              href={settings?.googleMapsUrl || "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-full border border-line px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg transition hover:border-gold hover:text-gold"
+            >
+              Read on Google
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-3">
+            {testimonials.slice(0, 3).map((item) => (
+              <article
+                key={`${item.guestName}-${item.reviewDate ?? "latest"}`}
+                className="rounded-3xl border border-line bg-surface p-6 shadow-[0_20px_60px_rgba(20,38,30,0.08)]"
+              >
+                <p className="text-[11px] uppercase tracking-[0.22em] text-gold">
+                  {"★".repeat(Math.max(1, Math.min(5, item.rating)))}
+                </p>
+                <p className="mt-4 text-sm leading-7 text-fg-muted">“{item.review}”</p>
+                <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-fg/80">{item.guestName}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {/* EVENTS CTA */}
       <section className="mt-16 rounded-3xl bg-forest-deep p-6 text-offwhite sm:mt-20 sm:rounded-4xl sm:p-8 lg:p-12">

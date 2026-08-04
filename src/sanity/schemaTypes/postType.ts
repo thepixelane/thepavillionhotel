@@ -9,22 +9,59 @@ export const postType = defineType({
   fields: [
     defineField({
       name: 'title',
+      title: 'Title',
       type: 'string',
+      validation: (rule) => rule.required().min(8).max(120),
     }),
     defineField({
       name: 'slug',
+      title: 'Slug',
       type: 'slug',
       options: {
         source: 'title',
+        maxLength: 96,
       },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Draft', value: 'draft'},
+          {title: 'Published', value: 'published'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'draft',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Feature this on the blog landing and homepage highlights.',
+    }),
+    defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
+      validation: (rule) => rule.required().min(40).max(220),
+      description: 'Short summary used in cards and social previews.',
     }),
     defineField({
       name: 'author',
+      title: 'Author',
       type: 'reference',
       to: {type: 'author'},
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'mainImage',
+      title: 'Cover image',
       type: 'image',
       options: {
         hotspot: true,
@@ -34,32 +71,95 @@ export const postType = defineType({
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
+          validation: (rule) => rule.required(),
         })
-      ]
+      ],
     }),
     defineField({
       name: 'categories',
+      title: 'Categories',
       type: 'array',
       of: [defineArrayMember({type: 'reference', to: {type: 'category'}})],
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [defineArrayMember({type: 'reference', to: {type: 'tag'}})],
     }),
     defineField({
       name: 'publishedAt',
+      title: 'Published at',
       type: 'datetime',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'estimatedReadTime',
+      title: 'Estimated read time (minutes)',
+      type: 'number',
+      validation: (rule) => rule.min(1).max(60),
+      description: 'Optional override. If empty, the site computes read time from content.',
     }),
     defineField({
       name: 'body',
+      title: 'Content',
       type: 'blockContent',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'SEO title',
+          type: 'string',
+          validation: (rule) => rule.max(70),
+        }),
+        defineField({
+          name: 'description',
+          title: 'SEO description',
+          type: 'text',
+          rows: 3,
+          validation: (rule) => rule.max(160),
+        }),
+        defineField({
+          name: 'canonicalUrl',
+          title: 'Canonical URL',
+          type: 'url',
+        }),
+        defineField({
+          name: 'ogImage',
+          title: 'Open Graph image',
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alternative text',
+              type: 'string',
+            }),
+          ],
+        }),
+      ],
     }),
   ],
   preview: {
     select: {
       title: 'title',
       author: 'author.name',
+      status: 'status',
       media: 'mainImage',
     },
     prepare(selection) {
-      const {author} = selection
-      return {...selection, subtitle: author && `by ${author}`}
+      const {author, status} = selection
+      const statusLabel = status === 'published' ? 'Published' : 'Draft'
+      return {
+        ...selection,
+        subtitle: `${statusLabel}${author ? ` · by ${author}` : ''}`,
+      }
     },
   },
 })
