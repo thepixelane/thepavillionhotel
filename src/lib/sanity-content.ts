@@ -212,7 +212,7 @@ const diningQuery = groq`*[_type == "diningVenue"] | order(order asc, name asc){
   "menuFileUrl": menuFile.asset->url,
   "dishes": coalesce(dishes, []),
   image
-}`;
+}` ;
 
 const galleryQuery = groq`*[_type == "galleryImage"] | order(order asc, _createdAt asc){
   category,
