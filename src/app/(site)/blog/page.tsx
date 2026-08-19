@@ -6,7 +6,7 @@ import { getBlogCategories, getBlogPosts } from "@/lib/sanity-content";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Stories, travel guides, wedding ideas, festival updates, and hotel offers from The Pavillion.",
+    "Editorial stories, travel guides, and planning insights from The Pavillion.",
 };
 
 export default async function BlogPage() {
@@ -24,7 +24,7 @@ export default async function BlogPage() {
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Content Hub</p>
         <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Stories from The Pavillion</h1>
         <p className="mt-5 text-base leading-8 text-fg-muted sm:text-lg">
-          Discover travel ideas, celebrations, dining moments, and hospitality insights from Kolhapur.
+          Discover destination guides, hospitality stories, and planning ideas from Kolhapur.
         </p>
       </header>
 

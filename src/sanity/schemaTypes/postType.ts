@@ -38,6 +38,24 @@ export const postType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'contentType',
+      title: 'Content type',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Blog', value: 'blog'},
+          {title: 'Hotel Offer', value: 'offer'},
+          {title: 'Festival Celebration', value: 'festival'},
+          {title: 'Restaurant Update', value: 'restaurantUpdate'},
+          {title: 'Announcement', value: 'announcement'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'blog',
+      validation: (rule) => rule.required(),
+      description: 'Determines where this content appears on the website.',
+    }),
+    defineField({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',
@@ -93,6 +111,28 @@ export const postType = defineType({
       title: 'Published at',
       type: 'datetime',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'validFrom',
+      title: 'Valid from',
+      type: 'datetime',
+      hidden: ({document}) => !['offer', 'festival', 'restaurantUpdate'].includes(document?.contentType),
+      description: 'Optional start window for offers and campaign-style content.',
+    }),
+    defineField({
+      name: 'validTo',
+      title: 'Valid to',
+      type: 'datetime',
+      hidden: ({document}) => !['offer', 'festival', 'restaurantUpdate'].includes(document?.contentType),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const from = context?.document?.validFrom
+          if (!value || !from) return true
+          return new Date(value).getTime() >= new Date(from).getTime()
+            ? true
+            : 'Valid to must be after valid from.'
+        }),
+      description: 'Optional end window. Expired offers are hidden from Offers page.',
     }),
     defineField({
       name: 'estimatedReadTime',
@@ -151,14 +191,15 @@ export const postType = defineType({
       title: 'title',
       author: 'author.name',
       status: 'status',
+      contentType: 'contentType',
       media: 'mainImage',
     },
     prepare(selection) {
-      const {author, status} = selection
+      const {author, status, contentType} = selection
       const statusLabel = status === 'published' ? 'Published' : 'Draft'
       return {
         ...selection,
-        subtitle: `${statusLabel}${author ? ` · by ${author}` : ''}`,
+        subtitle: `${statusLabel}${contentType ? ` · ${contentType}` : ''}${author ? ` · by ${author}` : ''}`,
       }
     },
   },

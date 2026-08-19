@@ -159,6 +159,7 @@ async function run() {
       title: "Top 10 Places to Visit in Kolhapur During Your Weekend Stay",
       slug: { _type: "slug", current: "top-10-places-to-visit-in-kolhapur" },
       status: "published",
+      contentType: "blog",
       featured: true,
       excerpt:
         "From Mahalaxmi Temple to local markets and sunset viewpoints, here is a practical Kolhapur itinerary for a memorable weekend.",
@@ -185,6 +186,7 @@ async function run() {
       title: "How to Plan a Garden Wedding in Kolhapur: Venue and Timeline Guide",
       slug: { _type: "slug", current: "how-to-plan-a-garden-wedding-in-kolhapur" },
       status: "published",
+      contentType: "blog",
       featured: false,
       excerpt:
         "A simple wedding planning framework covering venue choice, guest flow, decor windows, and weather-friendly scheduling.",
@@ -211,6 +213,7 @@ async function run() {
       title: "Monsoon Stay Offers: Best Time to Book for Families and Couples",
       slug: { _type: "slug", current: "monsoon-stay-offers-best-time-to-book" },
       status: "published",
+      contentType: "offer",
       featured: false,
       excerpt:
         "Discover the best booking windows for monsoon stays, including weekday advantages and package combinations.",
@@ -221,6 +224,8 @@ async function run() {
         { _type: "reference", _ref: tagIds.get("kolhapur") },
       ],
       publishedAt: "2026-08-03T08:00:00.000Z",
+      validFrom: "2026-08-01T00:00:00.000Z",
+      validTo: "2026-09-30T23:59:59.000Z",
       estimatedReadTime: 4,
       body: [
         block("Monsoon months are ideal for guests who prefer quieter travel and softer pricing windows."),
@@ -237,6 +242,7 @@ async function run() {
       title: "A Food Lover's Evening in Kolhapur: From Street Bites to Signature Dining",
       slug: { _type: "slug", current: "food-lovers-evening-in-kolhapur" },
       status: "published",
+      contentType: "restaurantUpdate",
       featured: false,
       excerpt:
         "Plan a balanced evening of local street food exploration followed by a refined dining experience at The Pavillion.",
@@ -247,6 +253,8 @@ async function run() {
         { _type: "reference", _ref: tagIds.get("kolhapur") },
       ],
       publishedAt: "2026-08-04T09:15:00.000Z",
+      validFrom: "2026-08-04T00:00:00.000Z",
+      validTo: "2026-10-31T23:59:59.000Z",
       estimatedReadTime: 5,
       body: [
         block("Kolhapur's evening rhythm is perfect for travelers who enjoy both local flavor and elegant dining."),
@@ -263,6 +271,7 @@ async function run() {
       title: "Corporate Retreat Checklist: Meetings by Day, Celebration by Night",
       slug: { _type: "slug", current: "corporate-retreat-checklist-kolhapur" },
       status: "published",
+      contentType: "announcement",
       featured: false,
       excerpt:
         "A practical checklist for planning smooth corporate offsites with productive sessions and meaningful team engagement.",
@@ -289,6 +298,7 @@ async function run() {
       title: "Festive Weekend Itinerary: Culture, Shopping, and Slow Mornings",
       slug: { _type: "slug", current: "festive-weekend-itinerary-kolhapur" },
       status: "published",
+      contentType: "festival",
       featured: false,
       excerpt:
         "A festive-season weekend plan that blends temple visits, shopping streets, and relaxed hospitality moments.",
@@ -299,6 +309,8 @@ async function run() {
         { _type: "reference", _ref: tagIds.get("kolhapur") },
       ],
       publishedAt: "2026-08-05T07:30:00.000Z",
+      validFrom: "2026-08-05T00:00:00.000Z",
+      validTo: "2026-11-15T23:59:59.000Z",
       estimatedReadTime: 5,
       body: [
         block("Festive weekends in Kolhapur are vibrant, so planning your movement windows helps avoid crowd pressure."),
@@ -376,6 +388,58 @@ async function run() {
   for (const testimonial of testimonials) {
     await upsertByGuestName(testimonial.guestName, testimonial);
     console.log(`  testimonial: ${testimonial.guestName}`);
+  }
+
+  const services = [
+    {
+      title: "Airport Pickup & Drop",
+      slug: { _type: "slug", current: "airport-pickup-drop" },
+      shortDescription:
+        "Scheduled transfer support for arrivals and departures with coordinated timing assistance.",
+      icon: "car",
+      available: true,
+      ctaLabel: "Request Transfer",
+      ctaUrl: "https://wa.me/919607323737",
+      sortOrder: 1,
+    },
+    {
+      title: "Event Concierge",
+      slug: { _type: "slug", current: "event-concierge" },
+      shortDescription:
+        "Dedicated coordination help for weddings, conferences, and private celebrations across our venues.",
+      icon: "bell",
+      available: true,
+      ctaLabel: "Plan Event",
+      ctaUrl: "https://www.hotelpavillion.co.in/",
+      sortOrder: 2,
+    },
+    {
+      title: "Flexible Dining Assistance",
+      slug: { _type: "slug", current: "flexible-dining-assistance" },
+      shortDescription:
+        "Advance table arrangement support with timing preferences for family and group dining.",
+      icon: "sparkles",
+      available: true,
+      ctaLabel: "Reserve Dining",
+      ctaUrl: "https://wa.me/919607323737",
+      sortOrder: 3,
+    },
+    {
+      title: "Late Check-out Support",
+      slug: { _type: "slug", current: "late-checkout-support" },
+      shortDescription:
+        "Subject-to-availability checkout flexibility for guests with later travel plans.",
+      icon: "clock",
+      available: false,
+      ctaLabel: "Check Availability",
+      ctaUrl: "https://wa.me/919607323737",
+      sortOrder: 4,
+    },
+  ];
+
+  for (const service of services) {
+    await upsertBySlug("service", service.slug.current, service);
+    console.log(`  service: ${service.title}`);
   }
 
   console.log("\nDone. Seeded Content Hub dummy data.");

@@ -19,7 +19,15 @@ const client = createClient({
   useCdn: false,
 });
 
-for (const type of ["category", "tag", "author", "post", "testimonial"]) {
+for (const type of ["category", "tag", "author", "post", "testimonial", "service"]) {
   const count = await client.fetch("count(*[_type == $type])", { type });
   console.log(`${type}: ${count}`);
+}
+
+for (const contentType of ["blog", "offer", "festival", "restaurantUpdate", "announcement"]) {
+  const count = await client.fetch(
+    'count(*[_type == "post" && contentType == $contentType])',
+    { contentType }
+  );
+  console.log(`post(${contentType}): ${count}`);
 }

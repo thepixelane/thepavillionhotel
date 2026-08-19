@@ -15,9 +15,9 @@ export default async function DiningPage() {
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <header className="max-w-3xl">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Dining</p>
-        <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Dining Experiences</h1>
+        <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Dining at The Pavillion</h1>
         <p className="mt-5 text-base leading-8 text-fg-muted sm:text-lg">
-          Two relaxed destinations: Pakhtoon for signature cuisine and Areca Café for all-day dining.
+          The Pavillion Hotel offers relaxed dining in Kolhapur with Pakhtoon Restaurant and WalkaWay Restaurant &amp; Cafe for guests, families, and visitors.
         </p>
       </header>
 
@@ -45,9 +45,28 @@ export default async function DiningPage() {
                   </span>
                 ))}
               </div>
-              <Link href={telHref} className="mt-6 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold sm:mt-7">
-                Reserve a Table
-              </Link>
+              <div className="mt-6 flex flex-wrap gap-3 sm:mt-7">
+                {place.menuUrl ? (
+                  <a
+                    href={place.menuUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold"
+                  >
+                    View Menu
+                  </a>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className="inline-flex cursor-not-allowed select-none rounded-full border border-line/80 bg-line/30 px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg/40 blur-[0.3px] opacity-80"
+                  >
+                    View Menu
+                  </span>
+                )}
+                <Link href={telHref} className="inline-flex rounded-full border border-line px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg transition hover:border-gold hover:text-gold">
+                  Call for Booking
+                </Link>
+              </div>
             </div>
           </article>
         ))}

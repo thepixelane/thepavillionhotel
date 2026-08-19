@@ -6,6 +6,7 @@ import {
   getLatestBlogPosts,
   getDiningVenues,
   getGalleryImages,
+  getOffers,
   getRooms,
   getSiteSettings,
   heroImageUrl,
@@ -15,18 +16,20 @@ const FALLBACK_HERO =
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=85";
 
 export default async function Home() {
-  const [settings, rooms, diningVenues, gallery, latestArticles, testimonials] = await Promise.all([
+  const [settings, rooms, diningVenues, gallery, latestArticles, testimonials, offersResult] = await Promise.all([
     getSiteSettings(),
     getRooms(),
     getDiningVenues(),
     getGalleryImages(),
     getLatestBlogPosts(3),
     getFeaturedTestimonials(),
+    getOffers({ limit: 3 }),
   ]);
 
   const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
   const heroSrc = heroImageUrl(settings) ?? FALLBACK_HERO;
   const galleryPreview = gallery.slice(0, 4);
+  const offers = offersResult.posts.slice(0, 3);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
@@ -44,15 +47,15 @@ export default async function Home() {
         <div className="relative flex min-h-[64svh] items-center px-5 py-14 sm:min-h-[70svh] sm:px-8 sm:py-20 lg:min-h-[80svh] lg:px-14 lg:py-24">
           <div className="max-w-3xl">
             <p className="text-[10px] uppercase tracking-[0.4em] text-gold/90 sm:text-[11px] sm:tracking-[0.45em]">
-              Boutique Hotel Â· Kolhapur Â· Since 1995
+              Boutique Hotel · Kolhapur · Shahupuri
             </p>
             <h1 className="mt-4 max-w-2xl text-4xl leading-[1.02] sm:mt-5 sm:text-6xl lg:text-7xl">
               Escape the ordinary,
-              <span className="block text-gold">rediscover the calm</span>
+              <span className="block text-gold">stay in Kolhapur</span>
             </h1>
             <p className="mt-5 max-w-xl text-sm leading-7 text-offwhite/80 sm:mt-6 sm:text-base sm:leading-8 lg:text-lg">
               {settings?.description ??
-                "A boutique retreat in Kolhapur wrapped in gardens, gazebos, rooms, celebrations, and refined dining."}
+                "The Pavillion Hotel is a hotel in Kolhapur offering comfortable accommodation, dining, and event spaces in Shahupuri near Kolhapur Railway Station."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
               <Link href="/stay" className="rounded-full bg-offwhite px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
@@ -61,9 +64,9 @@ export default async function Home() {
               <Link href="/events" className="rounded-full border border-offwhite/60 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-offwhite transition hover:border-gold hover:text-gold sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
                 Plan an Event
               </Link>
-              <Link href={bookingUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-gold/60 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
+              <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-gold/60 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">
                 Book Now
-              </Link>
+              </a>
             </div>
 
             <dl className="mt-10 hidden max-w-lg grid-cols-3 gap-4 border-t border-offwhite/15 pt-6 sm:mt-12 sm:grid">
@@ -87,11 +90,10 @@ export default async function Home() {
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Welcome</p>
         <div className="mx-auto mt-4 h-px w-12 bg-gold/60" aria-hidden="true" />
         <h2 className="mt-6 text-3xl leading-tight text-fg sm:text-4xl lg:text-5xl">
-          {settings?.tagline ?? "A quiet retreat in the heart of Kolhapur"}
+          {settings?.tagline ?? "A boutique hotel in the heart of Kolhapur"}
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-fg-muted sm:mt-6 sm:text-lg">
-          Tucked away in Shahupuri, The Pavillion brings together lush lawns, mature trees, and
-          calm hospitality.
+          Located in Shahupuri near Kolhapur Railway Station, The Pavillion Hotel offers welcoming accommodation, family stays, dining, and event spaces for guests in Kolhapur.
         </p>
       </section>
 
@@ -100,7 +102,7 @@ export default async function Home() {
         {[
           ["01", "Stay", "Three room categories with photo galleries and booking paths.", "/stay"],
           ["02", "Events", "Five venues, tabbed details, and enquiry support.", "/events"],
-          ["03", "Dining", "Pakhtoon and Areca CafÃ© with quick reservation access.", "/dining"],
+          ["03", "Dining", "Pakhtoon Restaurant and WalkaWay Restaurant & Cafe with quick reservation access.", "/dining"],
         ].map(([num, title, description, href]) => (
           <Link
             key={title}
@@ -109,7 +111,7 @@ export default async function Home() {
           >
             <div className="flex items-baseline justify-between">
               <span className="font-serif text-4xl text-gold/40 sm:text-5xl">{num}</span>
-              <span className="text-[11px] uppercase tracking-[0.3em] text-gold transition group-hover:translate-x-1">â†’</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] text-gold transition group-hover:translate-x-1">→</span>
             </div>
             <h3 className="mt-6 text-2xl text-fg sm:mt-8 sm:text-3xl">{title}</h3>
             <p className="mt-3 text-sm leading-7 text-fg-muted">{description}</p>
@@ -144,6 +146,58 @@ export default async function Home() {
         ))}
       </section>
 
+      {/* OFFERS & UPDATES */}
+      {offers.length > 0 ? (
+        <section className="mt-16 sm:mt-20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Offers & Updates</p>
+              <h2 className="mt-3 text-3xl text-fg sm:text-4xl">Ideas worth planning around</h2>
+            </div>
+            <Link
+              href="/offers"
+              className="inline-flex rounded-full border border-line px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg transition hover:border-gold hover:text-gold"
+            >
+              View All
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-3">
+            {offers.map((post) => (
+              <article
+                key={post.slug}
+                className="overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_60px_rgba(20,38,30,0.08)]"
+              >
+                <div className="relative h-52 bg-forest-deep">
+                  {post.coverImage ? (
+                    <Image
+                      src={post.coverImage}
+                      alt={post.coverImageAlt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div className="p-5 sm:p-6">
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-gold">
+                    {post.contentType === "restaurantUpdate"
+                      ? "Restaurant Update"
+                      : post.contentType === "festival"
+                        ? "Festival"
+                        : post.contentType === "announcement"
+                          ? "Announcement"
+                          : "Offer"}
+                  </p>
+                  <h3 className="mt-3 text-xl leading-snug text-fg">{post.title}</h3>
+                  <p className="mt-3 line-clamp-3 text-sm leading-7 text-fg-muted">{post.excerpt}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       {/* STAY + GALLERY PREVIEW */}
       <section className="mt-16 grid gap-8 sm:mt-20 lg:grid-cols-2 lg:gap-10">
         <div>
@@ -161,7 +215,7 @@ export default async function Home() {
                     <p className="mt-2 line-clamp-2 text-sm text-fg-muted">{room.description}</p>
                   </div>
                   <span className="shrink-0 text-[11px] uppercase tracking-[0.3em] text-gold transition group-hover:translate-x-1">
-                    View â†’
+                    View →
                   </span>
                 </div>
               </Link>
@@ -194,7 +248,7 @@ export default async function Home() {
             href="/gallery"
             className="mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:opacity-80"
           >
-            View full gallery <span aria-hidden="true">â†’</span>
+            View full gallery <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
@@ -246,14 +300,14 @@ export default async function Home() {
               <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Guest Stories</p>
               <h2 className="mt-3 text-3xl text-fg sm:text-4xl">What guests say about us</h2>
             </div>
-            <Link
+            <a
               href={settings?.googleMapsUrl || "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex rounded-full border border-line px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-fg transition hover:border-gold hover:text-gold"
             >
               Read on Google
-            </Link>
+            </a>
           </div>
 
           <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-3">
@@ -280,7 +334,7 @@ export default async function Home() {
           Weddings, conferences, and private gatherings
         </h2>
         <p className="mt-5 max-w-2xl text-sm leading-7 text-offwhite/75 sm:text-base sm:leading-8">
-          The estate includes Bahar Lawns, Madhusudan Hall, Conference Hall, Areca Lawns, and the Gazebo.
+          The estate includes Basant Lawns, Madhusudan Hall, Conference Hall, Areca Garden, and the Gazebo.
         </p>
         <div className="mt-7 flex flex-wrap gap-3 sm:mt-8 sm:gap-4">
           <Link href="/events" className="inline-flex rounded-full bg-offwhite px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-6 sm:text-[11px] sm:tracking-[0.35em]">

@@ -23,11 +23,11 @@ export const metadata: Metadata = {
     template: "%s | The Pavillion Hotel",
   },
   description:
-    "Boutique resort-style hotel in Kolhapur for elegant stays, weddings, dining, and enquiries.",
+    "The Pavillion Hotel is a boutique hotel in Shahupuri, Kolhapur offering comfortable rooms, dining, wedding venues, and event facilities near Kolhapur Railway Station.",
   openGraph: {
     title: "The Pavillion Hotel | Kolhapur",
     description:
-      "Boutique resort-style hotel in Kolhapur for elegant stays, weddings, dining, and enquiries.",
+      "The Pavillion Hotel is a boutique hotel in Shahupuri, Kolhapur offering comfortable rooms, dining, wedding venues, and event facilities near Kolhapur Railway Station.",
     url: "/",
     siteName: "The Pavillion Hotel",
     type: "website",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Pavillion Hotel | Kolhapur",
     description:
-      "Boutique resort-style hotel in Kolhapur for elegant stays, weddings, dining, and enquiries.",
+      "The Pavillion Hotel is a boutique hotel in Shahupuri, Kolhapur offering comfortable rooms, dining, wedding venues, and event facilities near Kolhapur Railway Station.",
   },
 };
 

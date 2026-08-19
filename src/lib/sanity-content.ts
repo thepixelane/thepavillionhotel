@@ -15,6 +15,8 @@ const FALLBACK_BLOG_IMAGE =
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85";
 const FALLBACK_TESTIMONIAL_IMAGE =
   "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&q=80";
+const FALLBACK_CONTENT_IMAGE =
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -69,6 +71,8 @@ export type DiningVenue = {
   name: string;
   intro: string;
   timing?: string;
+  menuUrl?: string;
+  menuFile?: string;
   dishes: string[];
   image: string;
   imageAlt: string;
@@ -112,6 +116,7 @@ export type BlogTag = {
 };
 
 export type BlogPost = {
+  contentType: "blog" | "offer" | "festival" | "restaurantUpdate" | "announcement";
   title: string;
   slug: string;
   excerpt: string;
@@ -146,6 +151,19 @@ export type Testimonial = {
   featured: boolean;
   image?: string;
   imageAlt: string;
+};
+
+export type OfferItem = BlogPost;
+
+export type ServiceItem = {
+  title: string;
+  slug: string;
+  shortDescription: string;
+  icon?: string;
+  available: boolean;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  sortOrder?: number;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -191,6 +209,7 @@ const diningQuery = groq`*[_type == "diningVenue"] | order(order asc, name asc){
   name,
   intro,
   timing,
+  "menuFileUrl": menuFile.asset->url,
   "dishes": coalesce(dishes, []),
   image
 }`;
@@ -205,9 +224,11 @@ const blogPostsQuery = groq`*[
   _type == "post" &&
   defined(slug.current) &&
   (!defined(status) || status == "published") &&
+  (!defined(contentType) || contentType == "blog") &&
   ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
   ($tagSlug == null || $tagSlug in tags[]->slug.current)
 ] | order(featured desc, publishedAt desc)[$offset...$end]{
+  contentType,
   title,
   "slug": slug.current,
   excerpt,
@@ -241,6 +262,7 @@ const blogPostCountQuery = groq`count(*[
   _type == "post" &&
   defined(slug.current) &&
   (!defined(status) || status == "published") &&
+  (!defined(contentType) || contentType == "blog") &&
   ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
   ($tagSlug == null || $tagSlug in tags[]->slug.current)
 ])`;
@@ -248,8 +270,10 @@ const blogPostCountQuery = groq`count(*[
 const blogPostBySlugQuery = groq`*[
   _type == "post" &&
   slug.current == $slug &&
-  (!defined(status) || status == "published")
+  (!defined(status) || status == "published") &&
+  (!defined(contentType) || contentType == "blog")
 ][0]{
+  contentType,
   title,
   "slug": slug.current,
   excerpt,
@@ -287,7 +311,8 @@ const blogCategoriesQuery = groq`*[_type == "category" && defined(slug.current)]
     _type == "post" &&
     references(^._id) &&
     defined(slug.current) &&
-    (!defined(status) || status == "published")
+    (!defined(status) || status == "published") &&
+    (!defined(contentType) || contentType == "blog")
   ])
 }`;
 
@@ -296,8 +321,10 @@ const relatedPostsQuery = groq`*[
   defined(slug.current) &&
   slug.current != $slug &&
   (!defined(status) || status == "published") &&
+  (!defined(contentType) || contentType == "blog") &&
   count((categories[]->slug.current)[@ in $categorySlugs]) > 0
 ] | order(publishedAt desc)[0...$limit]{
+  contentType,
   title,
   "slug": slug.current,
   excerpt,
@@ -325,6 +352,64 @@ const relatedPostsQuery = groq`*[
   "canonicalUrl": seo.canonicalUrl,
   "ogImage": seo.ogImage,
   body
+}`;
+
+const offersQuery = groq`*[
+  _type == "post" &&
+  defined(slug.current) &&
+  (!defined(status) || status == "published") &&
+  contentType in ["offer", "festival", "restaurantUpdate", "announcement"] &&
+  (!defined(validFrom) || validFrom <= $now) &&
+  (!defined(validTo) || validTo >= $now)
+] | order(featured desc, publishedAt desc)[$offset...$end]{
+  contentType,
+  title,
+  "slug": slug.current,
+  excerpt,
+  mainImage,
+  categories[]->{
+    title,
+    "slug": slug.current,
+    description
+  },
+  tags[]->{
+    title,
+    "slug": slug.current
+  },
+  author->{
+    name,
+    "slug": slug.current,
+    image
+  },
+  publishedAt,
+  featured,
+  status,
+  estimatedReadTime,
+  "seoTitle": seo.title,
+  "seoDescription": seo.description,
+  "canonicalUrl": seo.canonicalUrl,
+  "ogImage": seo.ogImage,
+  body
+}`;
+
+const offersCountQuery = groq`count(*[
+  _type == "post" &&
+  defined(slug.current) &&
+  (!defined(status) || status == "published") &&
+  contentType in ["offer", "festival", "restaurantUpdate", "announcement"] &&
+  (!defined(validFrom) || validFrom <= $now) &&
+  (!defined(validTo) || validTo >= $now)
+])`;
+
+const servicesQuery = groq`*[_type == "service" && defined(slug.current)] | order(sortOrder asc, title asc){
+  title,
+  "slug": slug.current,
+  shortDescription,
+  icon,
+  available,
+  ctaLabel,
+  ctaUrl,
+  sortOrder
 }`;
 
 const featuredTestimonialsQuery = groq`*[_type == "testimonial" && featured == true] | order(order asc, reviewDate desc)[0...6]{
@@ -363,10 +448,17 @@ async function safeFetch<T>(
 function imageUrl(source: SanityImageSource | undefined, width = 1600): string | null {
   if (!source) return null;
   try {
-    return urlFor(source).width(width).quality(80).auto("format").url();
+    const resolved = urlFor(source).width(width).quality(80).auto("format").url();
+    return resolved && resolved.trim().length > 0 ? resolved : null;
   } catch {
     return null;
   }
+}
+
+function validImageUrl(value?: string | null, fallback?: string | null): string {
+  const candidate = value?.trim();
+  if (candidate) return candidate;
+  return fallback && fallback.trim().length > 0 ? fallback : FALLBACK_CONTENT_IMAGE;
 }
 
 function altOf(source: unknown): string {
@@ -387,6 +479,7 @@ function readTimeFromBody(body: PortableTextBlock[] = []): number {
 }
 
 type RawBlogPost = {
+  contentType?: "blog" | "offer" | "festival" | "restaurantUpdate" | "announcement";
   title: string;
   slug: string;
   excerpt?: string;
@@ -414,6 +507,7 @@ function normalizeBlogPost(raw: RawBlogPost): BlogPost {
   const bodyPlain = plainTextFromBody(body);
   const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_BLOG_IMAGE;
   return {
+    contentType: raw.contentType ?? "blog",
     title: raw.title,
     slug: raw.slug,
     excerpt: raw.excerpt?.trim() || bodyPlain.slice(0, 180),
@@ -530,7 +624,7 @@ export async function getVenues(): Promise<Venue[]> {
       description: venue.description,
       suitableFor: venue.suitableFor ?? [],
       facilities: venue.facilities ?? [],
-      image: sanityImage ?? staticVenue?.image ?? "",
+      image: validImageUrl(sanityImage ?? staticVenue?.image, FALLBACK_CONTENT_IMAGE),
       imageAlt: altOf(venue.image) || venue.name,
     };
   });
@@ -541,6 +635,7 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
     name: string;
     intro: string;
     timing?: string;
+    menuFileUrl?: string;
     dishes?: string[];
     image?: SanityImage & { alt?: string };
   };
@@ -550,6 +645,7 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
       name: place.name,
       intro: place.intro,
       timing: place.timing,
+      menuUrl: place.menuUrl,
       dishes: [...place.dishes],
       image: place.image,
       imageAlt: place.name,
@@ -560,12 +656,14 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
     const staticPlace = staticDiningVenues.find(
       (d) => d.name.toLowerCase() === place.name?.toLowerCase()
     );
+    const menuFileUrl = place.menuFileUrl || staticPlace?.menuUrl;
     return {
       name: place.name,
       intro: place.intro,
       timing: place.timing,
+      menuUrl: menuFileUrl,
       dishes: place.dishes ?? [],
-      image: sanityImage ?? staticPlace?.image ?? "",
+      image: validImageUrl(sanityImage ?? staticPlace?.image, FALLBACK_CONTENT_IMAGE),
       imageAlt: altOf(place.image) || place.name,
     };
   });
@@ -584,7 +682,7 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
   return data.map((entry) => ({
     category: entry.category,
     caption: entry.caption,
-    src: imageUrl(entry.image, 1600) ?? "",
+    src: validImageUrl(imageUrl(entry.image, 1600), staticGalleryImages[0]?.src),
     alt: altOf(entry.image) || entry.caption,
   }));
 }
@@ -669,4 +767,32 @@ export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
     image: imageUrl(entry.guestImage, 300) ?? FALLBACK_TESTIMONIAL_IMAGE,
     imageAlt: altOf(entry.guestImage) || entry.guestName,
   }));
+}
+
+export async function getOffers(options?: {
+  limit?: number;
+  offset?: number;
+}): Promise<BlogPostsResult> {
+  const limit = options?.limit ?? 12;
+  const offset = options?.offset ?? 0;
+  const params = {
+    now: new Date().toISOString(),
+    offset,
+    end: offset + limit,
+  };
+
+  const [rows, total] = await Promise.all([
+    safeFetch<RawBlogPost[]>(offersQuery, params),
+    safeFetch<number>(offersCountQuery, params),
+  ]);
+
+  return {
+    posts: (rows ?? []).map(normalizeBlogPost),
+    total: total ?? 0,
+  };
+}
+
+export async function getServices(): Promise<ServiceItem[]> {
+  const rows = await safeFetch<ServiceItem[]>(servicesQuery);
+  return rows ?? [];
 }

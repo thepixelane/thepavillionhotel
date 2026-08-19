@@ -12,18 +12,18 @@ type ContactRow = {
 export default async function ContactPage() {
 	const settings = await getSiteSettings();
 
-	const primaryPhone = settings?.contactPhone ?? "+91 96073 23737";
+	const primaryPhone = settings?.contactPhone ?? "0231 265 4742";
 	const primaryPhoneHref = `tel:${primaryPhone.replace(/[^+\d]/g, "")}`;
-	const banquetPhone = settings?.contactPhoneAlt ?? "0231 – 2654742 / 2652751";
-	const banquetPhoneHref = `tel:${banquetPhone.replace(/[^+\d]/g, "").split(/[^\d]/).filter(Boolean)[0] ?? ""}`;
+	const banquetPhone = settings?.contactPhoneAlt ?? "0231 265 2751";
+	const banquetPhoneHref = `tel:${banquetPhone.replace(/[^+\d]/g, "")}`;
 	const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
 	const whatsapp = settings?.whatsappNumber ?? "919607323737";
 	const mapsUrl =
 		settings?.googleMapsUrl ??
-		"https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur";
+		"https://maps.google.com/?q=392+E,+Assembly+Road,+Near+Basant-Bahar+Theatre,+Opp.+Railway+Station,+Shahupuri,+Kolhapur,+Maharashtra+416001";
 	const address =
 		settings?.address ??
-		"The Pavillion Hotel\nShahupuri, Kolhapur – 416 001\nMaharashtra, India";
+		"The Pavillion Hotel\n392 E, Assembly Road, Near Basant-Bahar Theatre, Opp. Railway Station, Shahupuri, Kolhapur, Maharashtra – 416001";
 	const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(
 		address.replace(/\n/g, ", ")
 	)}&output=embed`;

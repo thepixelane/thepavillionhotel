@@ -8,6 +8,7 @@ import { DocumentTextIcon } from '@sanity/icons/DocumentText'
 import { TagIcon } from '@sanity/icons/Tag'
 import { UserIcon } from '@sanity/icons/User'
 import { SparklesIcon as TestimonialIcon } from '@sanity/icons/Sparkles'
+import { HomeIcon as ServiceIcon } from '@sanity/icons/Home'
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
@@ -37,11 +38,24 @@ export const structure: StructureResolver = (S) =>
             .title('Content Hub')
             .items([
               S.documentTypeListItem('post').title('Posts').icon(DocumentTextIcon),
+              S.documentTypeListItem('post')
+                .id('offerPosts')
+                .title('Offers & Campaigns')
+                .icon(TagIcon)
+                .child(
+                  S.documentList()
+                    .title('Offers & Campaigns')
+                    .schemaType('post')
+                    .filter(
+                      '_type == "post" && contentType in ["offer", "festival", "restaurantUpdate", "announcement"]',
+                    ),
+                ),
               S.documentTypeListItem('category').title('Categories').icon(TagIcon),
               S.documentTypeListItem('tag').title('Tags').icon(TagIcon),
               S.documentTypeListItem('author').title('Authors').icon(UserIcon),
             ]),
         ),
+      S.documentTypeListItem('service').title('Services').icon(ServiceIcon),
       S.documentTypeListItem('testimonial').title('Testimonials').icon(TestimonialIcon),
       S.divider(),
       ...S.documentTypeListItems().filter(
@@ -58,6 +72,7 @@ export const structure: StructureResolver = (S) =>
             'tag',
             'author',
             'testimonial',
+            'service',
           ].includes(item.getId()!),
       ),
     ])

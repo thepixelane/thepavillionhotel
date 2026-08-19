@@ -32,6 +32,15 @@ export const diningVenueType = defineType({
     }),
     defineField({ name: "timing", title: "Timing", type: "string" }),
     defineField({
+      name: "menuFile",
+      title: "Menu PDF",
+      type: "file",
+      description: "Upload the restaurant menu PDF. This is shown as the main 'View Menu' button on the dining page.",
+      options: {
+        accept: ".pdf",
+      },
+    }),
+    defineField({
       name: "dishes",
       title: "Signature dishes",
       type: "array",

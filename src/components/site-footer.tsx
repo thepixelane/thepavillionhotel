@@ -7,14 +7,16 @@ import { getSiteSettings } from "@/lib/sanity-content";
 export async function SiteFooter() {
   const settings = await getSiteSettings();
 
-  const phone = settings?.contactPhone ?? "+91 96073 23737";
-  const phoneAlt = settings?.contactPhoneAlt ?? "0231 – 2654742";
+  const phone = settings?.contactPhone ?? "0231 265 4742";
+  const phoneAlt = settings?.contactPhoneAlt ?? "0231 265 2751";
   const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
   const whatsapp = settings?.whatsappNumber ?? "919607323737";
-  const address = settings?.address ?? "Shahupuri, Kolhapur – 416 001";
+  const address =
+    settings?.address ??
+    "The Pavillion Hotel\n392 E, Assembly Road, Near Basant-Bahar Theatre, Opp. Railway Station, Shahupuri, Kolhapur, Maharashtra – 416001";
   const mapsUrl =
     settings?.googleMapsUrl ??
-    "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur";
+    "https://maps.google.com/?q=392+E,+Assembly+Road,+Near+Basant-Bahar+Theatre,+Opp.+Railway+Station,+Shahupuri,+Kolhapur,+Maharashtra+416001";
   const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
   const instagramUrl = settings?.instagramUrl ?? "https://www.instagram.com/thepavillionhotel/";
   const tripAdvisorUrl =

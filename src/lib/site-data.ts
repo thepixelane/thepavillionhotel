@@ -3,6 +3,7 @@ export const siteNavItems = [
   { label: "Stay", href: "/stay" },
   { label: "Events", href: "/events" },
   { label: "Dining", href: "/dining" },
+  { label: "Services", href: "/services" },
   { label: "Gallery", href: "/gallery" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
@@ -12,7 +13,7 @@ export const rooms = [
   {
     name: "Deluxe Room",
     description:
-      "Warm interiors and garden views set the tone for a restful stay in our most-loved room category.",
+      "Comfortable accommodation in Kolhapur for business, leisure, and family stays, with warm interiors and garden views at The Pavillion Hotel.",
     details: ["320 sq.ft", "2 Guests", "King Bed"],
     amenities: ["Wi-Fi", "AC", "Mini Bar", "Garden View"],
     nightlyRate: 9800,
@@ -25,7 +26,7 @@ export const rooms = [
   {
     name: "Executive Room",
     description:
-      "Generous living space with a work nook and lounge area for extended stays and business guests.",
+      "A spacious stay in Shahupuri, Kolhapur, designed for business travellers and guests seeking a calm, elevated room experience.",
     details: ["420 sq.ft", "2 Guests", "King Bed"],
     amenities: ["Wi-Fi", "Work Desk", "Lounger", "Rain Shower"],
     nightlyRate: 12400,
@@ -38,7 +39,7 @@ export const rooms = [
   {
     name: "The Suite",
     description:
-      "Our signature suite is expansive, luminous, and framed by a private balcony overlooking the gardens.",
+      "Our signature suite offers a refined stay in Kolhapur with a private balcony, generous living space, and a relaxed, premium atmosphere.",
     details: ["640 sq.ft", "3 Guests", "King + Lounge"],
     amenities: ["Balcony", "Bathtub", "Lounge", "Butler"],
     nightlyRate: 18900,
@@ -52,10 +53,10 @@ export const rooms = [
 
 export const venues = [
   {
-    name: "Bahar Lawns",
+    name: "Basant Lawns",
     capacity: "Up to 2,000 Guests",
     description:
-      "Our largest venue is a sweeping open-air lawn for landmark weddings and grand receptions under the stars.",
+      "Our outdoor event lawn in Kolhapur is ideal for weddings, receptions, and grand celebrations in a scenic, open-air setting.",
     suitableFor: ["Grand Weddings", "Receptions", "Corporate Galas"],
     facilities: ["Stage & Lighting", "Valet Parking", "Catering Kitchens"],
     image:
@@ -65,7 +66,7 @@ export const venues = [
     name: "Madhusudan Hall",
     capacity: "Up to 600 Guests",
     description:
-      "A grand indoor banquet hall with elegant décor, ideal for weddings, conferences, and cultural events.",
+      "A grand indoor banquet hall in Shahupuri, Kolhapur, suited to weddings, conferences, family functions, and large gatherings.",
     suitableFor: ["Banquets", "Conferences", "Celebrations"],
     facilities: ["Air-Conditioned", "AV Setup", "Pre-Function Area"],
     image:
@@ -75,17 +76,17 @@ export const venues = [
     name: "Conference Hall",
     capacity: "Up to 100 Guests",
     description:
-      "A professional conference space for board meetings, workshops, and small corporate gatherings.",
+      "A professional conference venue for meetings, workshops, and corporate sessions in Kolhapur with practical event support.",
     suitableFor: ["Meetings", "Workshops", "Corporate Sessions"],
     facilities: ["Projector & Screen", "Wi-Fi", "Flexible Seating"],
     image:
       "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&q=80",
   },
   {
-    name: "Areca Lawns",
+    name: "Areca Garden",
     capacity: "100–200 Guests",
     description:
-      "An intimate garden setting framed by areca palms, perfect for smaller weddings and cocktail evenings.",
+      "An intimate celebration space near Kolhapur Railway Station, designed for smaller weddings, family functions, and cocktail evenings.",
     suitableFor: ["Sangeets", "Cocktails", "Intimate Weddings"],
     facilities: ["Outdoor Dining", "Ambient Lighting", "Bar Setup"],
     image:
@@ -95,7 +96,7 @@ export const venues = [
     name: "Gazebo",
     capacity: "Private parties and dinners",
     description:
-      "A charming garden gazebo for proposals, intimate dinners, and small gatherings under fairy lights.",
+      "A charming garden gazebo for intimate dinners, proposals, and small celebrations with a quiet, scenic atmosphere.",
     suitableFor: ["Private Dining", "Birthdays", "Proposals"],
     facilities: ["Bespoke Menu", "Live Music", "Floral Decor"],
     image:
@@ -144,18 +145,20 @@ export const galleryImages = [
 
 export const diningVenues = [
   {
-    name: "Pakhtoon",
-    intro: "Bold North-West Frontier cuisine in a warm, candle-lit setting.",
+    name: "Pakhtoon Restaurant",
+    intro: "Bold North-West Frontier cuisine in a warm, candle-lit setting for guests and visitors in Kolhapur.",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
     timing: "7:00 PM – 11:30 PM",
+    menuUrl: "https://www.hotelpavillion.co.in/",
     dishes: ["Peshawari Kebab", "Raan-e-Pakhtoon", "Dum Biryani", "Sheermal"],
   },
   {
-    name: "Areca Café",
+    name: "WalkaWay Restaurant & Cafe",
     intro:
-      "A breezy garden-side café for slow mornings, fresh brews, and light seasonal dishes.",
+      "A relaxed restaurant and café experience for breakfast, casual dining, and all-day visits in Kolhapur.",
     image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
     timing: "7:00 AM – 10:00 PM",
+    menuUrl: "https://www.hotelpavillion.co.in/",
     dishes: ["Estate Coffee", "Garden Salads", "Wood-Fired Pizza", "Sourdough Bakes"],
   },
 ] as const;

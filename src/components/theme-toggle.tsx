@@ -35,74 +35,19 @@ function applyMode(next: Mode) {
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const mode = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const resolvedMode = mode ?? "light";
+  const nextMode: Mode = resolvedMode === "dark" ? "light" : "dark";
 
-  return (
-    <>
-      {/* Desktop / tablet: segmented control — makes the option obvious. */}
-      <div
-        role="radiogroup"
-        aria-label="Theme"
-        className={`hidden items-center gap-1 rounded-full border border-line bg-surface p-1 text-[10px] uppercase tracking-[0.25em] sm:inline-flex ${className}`}
-      >
-        <ThemeSegment
-          label="Light"
-          active={mode === "light"}
-          onSelect={() => applyMode("light")}
-          icon={<SunIcon className="h-3.5 w-3.5" />}
-        />
-        <ThemeSegment
-          label="Dark"
-          active={mode === "dark"}
-          onSelect={() => applyMode("dark")}
-          icon={<MoonIcon className="h-3.5 w-3.5" />}
-        />
-      </div>
-
-      {/* Mobile: compact icon-only toggle to save header space. */}
-      <button
-        type="button"
-        onClick={() => applyMode(mode === "dark" ? "light" : "dark")}
-        aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-        title={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-        className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-fg transition hover:border-gold hover:text-gold sm:hidden"
-      >
-        {mode === "dark" ? (
-          <SunIcon className="h-4 w-4" />
-        ) : mode === "light" ? (
-          <MoonIcon className="h-4 w-4" />
-        ) : (
-          <span className="h-4 w-4" />
-        )}
-      </button>
-    </>
-  );
-}
-
-function ThemeSegment({
-  label,
-  active,
-  onSelect,
-  icon,
-}: {
-  label: string;
-  active: boolean;
-  onSelect: () => void;
-  icon: React.ReactNode;
-}) {
   return (
     <button
       type="button"
-      role="radio"
-      aria-checked={active}
-      onClick={onSelect}
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 transition ${
-        active
-          ? "bg-gold text-forest-deep shadow-sm"
-          : "text-fg/60 hover:text-fg"
-      }`}
+      onClick={() => applyMode(nextMode)}
+      aria-label={resolvedMode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      title={resolvedMode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      className={`inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3 text-[10px] uppercase tracking-[0.2em] text-fg transition hover:border-gold hover:text-gold ${className}`}
     >
-      {icon}
-      <span>{label}</span>
+      {resolvedMode === "dark" ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+      <span className="hidden sm:inline">{resolvedMode === "dark" ? "Light" : "Dark"}</span>
     </button>
   );
 }

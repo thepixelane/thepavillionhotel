@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { MapIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
+import { CalendarIcon, MapIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
 
 export function QuickActions() {
   return (
     <>
       <div className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 lg:flex">
         {[
-          { label: "Book", href: "#contact" as const, icon: MapIcon, external: false },
-          { label: "Plan", href: "/events" as const, icon: MapIcon, external: false },
+          { label: "Book", href: "/contact" as const, icon: MapIcon, external: false },
+          { label: "Plan", href: "/events" as const, icon: CalendarIcon, external: false },
           { label: "Call", href: "tel:+919607323737" as const, icon: PhoneIcon, external: false },
           { label: "WhatsApp", href: "https://wa.me/919607323737" as const, icon: WhatsAppIcon, external: true },
         ].map(({ label, href, icon: Icon }) => (
