@@ -466,9 +466,11 @@ function altOf(source: unknown): string {
 }
 
 function plainTextFromBody(body: PortableTextBlock[] = []): string {
-  return body
-    .filter((block) => block._type === "block")
-    .map((block) => (block.children ?? []).map((child) => child.text ?? "").join(""))
+  return (Array.isArray(body) ? body.filter(Boolean) : [])
+    .filter((block): block is PortableTextBlock => Boolean(block) && block._type === "block")
+    .map((block) => (Array.isArray(block.children) ? block.children : [])
+      .map((child) => child?.text ?? "")
+      .join(""))
     .join(" ")
     .trim();
 }
@@ -503,8 +505,10 @@ type RawBlogPost = {
 };
 
 function normalizeBlogPost(raw: RawBlogPost): BlogPost {
-  const body = raw.body ?? [];
-  const bodyPlain = plainTextFromBody(body);
+  const safeBody = Array.isArray(raw.body) ? raw.body.filter(Boolean) as PortableTextBlock[] : [];
+  const safeCategories = Array.isArray(raw.categories) ? raw.categories.filter(Boolean) : [];
+  const safeTags = Array.isArray(raw.tags) ? raw.tags.filter(Boolean) : [];
+  const bodyPlain = plainTextFromBody(safeBody);
   const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_BLOG_IMAGE;
   return {
     contentType: raw.contentType ?? "blog",
@@ -513,12 +517,12 @@ function normalizeBlogPost(raw: RawBlogPost): BlogPost {
     excerpt: raw.excerpt?.trim() || bodyPlain.slice(0, 180),
     coverImage,
     coverImageAlt: altOf(raw.mainImage) || raw.title,
-    categories: (raw.categories ?? []).map((category) => ({
+    categories: safeCategories.map((category) => ({
       title: category.title,
       slug: category.slug,
       description: category.description,
     })),
-    tags: (raw.tags ?? []).map((tag) => ({ title: tag.title, slug: tag.slug })),
+    tags: safeTags.map((tag) => ({ title: tag.title, slug: tag.slug })),
     author: raw.author
       ? {
           name: raw.author.name,
@@ -529,12 +533,12 @@ function normalizeBlogPost(raw: RawBlogPost): BlogPost {
     publishedAt: raw.publishedAt,
     featured: Boolean(raw.featured),
     status: raw.status,
-    estimatedReadTime: raw.estimatedReadTime ?? readTimeFromBody(body),
+    estimatedReadTime: raw.estimatedReadTime ?? readTimeFromBody(safeBody),
     seoTitle: raw.seoTitle,
     seoDescription: raw.seoDescription,
     canonicalUrl: raw.canonicalUrl,
     ogImage: imageUrl(raw.ogImage, 1600) ?? coverImage,
-    body,
+    body: safeBody,
   };
 }
 

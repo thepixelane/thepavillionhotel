@@ -24,9 +24,13 @@ function formatDate(value?: string): string | null {
 }
 
 function renderPortableText(body: BlogPost["body"]) {
-  return body.map((block) => {
-    if (block._type !== "block") return null;
-    const text = (block.children ?? []).map((child) => child.text ?? "").join("").trim();
+  const safeBody = Array.isArray(body) ? body.filter(Boolean) : [];
+
+  return safeBody.map((block) => {
+    if (!block || block._type !== "block") return null;
+    const text = Array.isArray(block.children)
+      ? block.children.map((child) => child?.text ?? "").join("").trim()
+      : "";
     if (!text) return null;
 
     if (block.style === "h2") {
