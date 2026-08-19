@@ -1,6 +1,8 @@
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+const offerLikeContentTypes = new Set(['offer', 'festival', 'restaurantUpdate'])
+
 export const postType = defineType({
   name: 'post',
   title: 'Post',
@@ -116,14 +118,20 @@ export const postType = defineType({
       name: 'validFrom',
       title: 'Valid from',
       type: 'datetime',
-      hidden: ({document}) => !['offer', 'festival', 'restaurantUpdate'].includes(document?.contentType),
+      hidden: ({document}) => {
+        const contentType = typeof document?.contentType === 'string' ? document.contentType : ''
+        return !offerLikeContentTypes.has(contentType)
+      },
       description: 'Optional start window for offers and campaign-style content.',
     }),
     defineField({
       name: 'validTo',
       title: 'Valid to',
       type: 'datetime',
-      hidden: ({document}) => !['offer', 'festival', 'restaurantUpdate'].includes(document?.contentType),
+      hidden: ({document}) => {
+        const contentType = typeof document?.contentType === 'string' ? document.contentType : ''
+        return !offerLikeContentTypes.has(contentType)
+      },
       validation: (rule) =>
         rule.custom((value, context) => {
           const from = context?.document?.validFrom
