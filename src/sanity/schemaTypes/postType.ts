@@ -134,9 +134,11 @@ export const postType = defineType({
       },
       validation: (rule) =>
         rule.custom((value, context) => {
-          const from = context?.document?.validFrom
-          if (!value || !from) return true
-          return new Date(value).getTime() >= new Date(from).getTime()
+          const rawFrom = context?.document?.validFrom
+          const from = typeof rawFrom === 'string' ? rawFrom : typeof rawFrom === 'number' ? new Date(rawFrom).toISOString() : null
+          const rawTo = typeof value === 'string' || typeof value === 'number' ? value : null
+          if (!rawTo || !from) return true
+          return new Date(rawTo).getTime() >= new Date(from).getTime()
             ? true
             : 'Valid to must be after valid from.'
         }),
