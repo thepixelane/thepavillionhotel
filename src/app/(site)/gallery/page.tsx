@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
 import { getGalleryImages } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Hotel, Rooms & Event Gallery",
+  description:
+    "View photos of The Pavillion Hotel's rooms, restaurants, gardens, wedding venues, and event spaces in Kolhapur.",
+  path: "/gallery",
+});
 
 export default async function GalleryPage() {
   const galleryImages = await getGalleryImages();

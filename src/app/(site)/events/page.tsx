@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { VenueTabs, type Venue as VenueTabsVenue } from "@/components/venue-tabs";
-import { getVenues } from "@/lib/sanity-content";
+import { getSiteSettings, getVenues } from "@/lib/sanity-content";
+import { createPageMetadata, eventVenuesJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Wedding & Event Venues in Kolhapur",
+  description:
+    "Plan weddings, receptions, conferences, and celebrations at The Pavillion Hotel's lawns and banquet venues in central Kolhapur.",
+  path: "/events",
+});
 
 export default async function EventsPage() {
-  const venues = await getVenues();
+  const [venues, settings] = await Promise.all([getVenues(), getSiteSettings()]);
+  const banquetPhone = settings?.contactPhoneAlt ?? "0231 265 2751";
+  const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
   const tabsVenues: VenueTabsVenue[] = venues.map((venue) => ({
     name: venue.name,
     capacity: venue.capacity ?? "",
@@ -14,17 +26,20 @@ export default async function EventsPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
+      <JsonLd data={eventVenuesJsonLd} />
       <header className="max-w-3xl">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Events</p>
-        <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Weddings & Event Venues in Kolhapur</h1>
+        <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Weddings &amp; Events</h1>
         <p className="mt-5 text-base leading-8 text-fg-muted sm:text-lg">
-          The Pavillion Hotel offers banquet, wedding, and celebration spaces in Kolhapur for weddings, receptions, family functions, and corporate gatherings.
+          From weddings and celebrations to corporate events and intimate gatherings, we have spaces to suit every occasion. Come to us for the complete experience.
         </p>
+        <div className="mt-6 flex flex-wrap gap-3"><a href={`tel:${banquetPhone.replace(/[^+\d]/g, "")}`} className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-white">Call Us</a><a href={`mailto:${email}`} className="border border-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest dark:border-fresh dark:text-fresh">Email Us</a></div>
       </header>
 
       <div className="mt-10 sm:mt-12">
         <VenueTabs venues={tabsVenues} />
       </div>
+      <p className="mt-6 text-sm italic text-fg-muted">Capacity varies by seating and event format. Our events team can help plan the layout for your occasion.</p>
 
       <div id="contact" className="mt-12 grid gap-6 rounded-3xl bg-forest-deep p-6 text-offwhite sm:mt-14 sm:rounded-4xl sm:p-8 lg:grid-cols-[1fr_0.9fr] lg:items-start">
         <div>

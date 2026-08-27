@@ -48,7 +48,7 @@ export const diningVenueType = defineType({
     }),
     defineField({
       name: "image",
-      title: "Image",
+      title: "Cover image",
       type: "image",
       options: { hotspot: true },
       fields: [
@@ -58,6 +58,44 @@ export const diningVenueType = defineType({
           type: "string",
           validation: (rule) => rule.required(),
         }),
+      ],
+    }),
+    defineField({
+      name: "gallery",
+      title: "Restaurant gallery",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "menuPages",
+      title: "Menu pages",
+      type: "array",
+      description: "Upload menu pages as images in reading order.",
+      of: [
+        {
+          type: "image",
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        },
       ],
     }),
   ],

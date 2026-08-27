@@ -9,21 +9,25 @@
  * (bg-bg, text-fg, bg-surface, border-line, etc.).
  */
 @theme {
-	--color-forest: #1f3a2e;
-	--color-forest-deep: #14261e;
-	--color-olive: #5a6b3b;
-	--color-beige: #f0e8d8;
-	--color-offwhite: #faf7f1;
+	--color-forest: #253b2e;
+	--color-forest-deep: #253b2e;
+	--color-emerald: #175f45;
+	--color-fresh: #839f47;
+	--color-olive: #66783f;
+	--color-beige: #e1bd86;
+	--color-terracotta: #b45a30;
+	--color-charcoal: #2c2e28;
+	--color-offwhite: #f2ecdf;
 	--color-stone: #8a8577;
-	--color-gold: #b8935a;
+	--color-gold: #e1bd86;
 
 	/* Semantic (light) */
-	--color-bg: #faf7f1;
-	--color-fg: #14261e;
+	--color-bg: #f2ecdf;
+	--color-fg: #2c2e28;
 	--color-fg-muted: #6b6a5f;
 	--color-surface: #ffffff;
-	--color-surface-2: #f0e8d8;
-	--color-line: rgba(20, 38, 30, 0.10);
+	--color-surface-2: #f2ecdf;
+	--color-line: rgba(37, 59, 46, 0.12);
 }
 
 /*
@@ -43,8 +47,8 @@
 
 /* Ancillary vars used directly in CSS (not through Tailwind utilities). */
 :root {
-	--header-bg: rgba(250, 247, 241, 0.82);
-	--ring: rgba(184, 147, 90, 0.55);
+	--header-bg: rgba(242, 236, 223, 0.94);
+	--ring: rgba(180, 90, 48, 0.62);
 }
 
 .dark {
@@ -58,8 +62,8 @@ html {
 
 body {
 	background:
-		radial-gradient(circle at top left, color-mix(in oklab, var(--color-olive) 8%, transparent), transparent 30%),
-		radial-gradient(circle at top right, color-mix(in oklab, var(--color-gold) 10%, transparent), transparent 26%),
+		linear-gradient(135deg, color-mix(in oklab, var(--color-fresh) 4%, transparent), transparent 32%),
+		radial-gradient(circle at top right, color-mix(in oklab, var(--color-beige) 24%, transparent), transparent 28%),
 		var(--color-bg);
 	color: var(--color-fg);
 	font-family: var(--font-inter), sans-serif;
@@ -67,6 +71,60 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	overflow-x: hidden;
+}
+
+@keyframes logo-breathe {
+	0%, 100% { transform: scale(0.96); opacity: 0.82; box-shadow: 0 10px 32px rgba(20, 38, 30, 0.08); }
+	50% { transform: scale(1.035); opacity: 1; box-shadow: 0 18px 52px rgba(20, 38, 30, 0.16); }
+}
+
+@keyframes loading-dot {
+	0%, 60%, 100% { transform: translateY(0); opacity: 0.28; }
+	30% { transform: translateY(-7px); opacity: 1; }
+}
+
+@keyframes loading-shimmer {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+.loading-logo-breathe {
+	animation: logo-breathe 2.4s ease-in-out infinite;
+	transform-origin: center;
+}
+
+.loading-dots span {
+	width: 0.45rem;
+	height: 0.45rem;
+	border-radius: 999px;
+	background: var(--color-emerald);
+	animation: loading-dot 1.2s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 140ms; }
+.loading-dots span:nth-child(3) { animation-delay: 280ms; }
+
+.loading-skeleton {
+	background-image: linear-gradient(
+		105deg,
+		var(--color-surface-2) 36%,
+		color-mix(in oklab, var(--color-fresh) 14%, var(--color-surface)) 46%,
+		var(--color-surface-2) 56%
+	);
+	background-size: 240% 100%;
+	animation: loading-shimmer 1.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+	.loading-logo-breathe { opacity: 1; transform: none; }
+	.loading-dots span { opacity: 0.65; transform: none; }
+	.loading-skeleton { background-position: 0 0; }
 }
 
 h1,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getBlogCategories, getBlogPosts } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -11,12 +12,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const categories = await getBlogCategories();
   const category = categories.find((item) => item.slug === slug);
 
-  return {
-    title: category ? `${category.title} Articles` : "Category",
+  const metadata = createPageMetadata({
+    title: category ? `${category.title} Articles` : "Blog Category",
     description:
       category?.description ||
-      "Browse curated stories and updates from The Pavillion Content Hub.",
-  };
+      "Browse curated stories and updates from The Pavillion Hotel in Kolhapur.",
+    path: `/blog/category/${slug}`,
+  });
+
+  return category ? metadata : { ...metadata, robots: { index: false, follow: true } };
 }
 
 export default async function BlogCategoryPage({ params }: PageProps) {

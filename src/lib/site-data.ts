@@ -1,11 +1,68 @@
+import { bookingEngineUrl } from "@/lib/booking-engine";
+
+export type ContentImage = {
+  src: string;
+  alt: string;
+};
+
+export type SiteSettings = {
+  siteName: string;
+  tagline: string;
+  description: string;
+  bookingEngineUrl: string;
+  contactPhone: string;
+  contactPhoneAlt: string;
+  contactEmail: string;
+  whatsappNumber: string;
+  address: string;
+  googleMapsUrl: string;
+  instagramUrl?: string;
+  facebookUrl?: string;
+  tripAdvisorUrl?: string;
+  homeHeroImages: ContentImage[];
+  stayHeroImage: ContentImage;
+  bookingPartners: { name: string; url: string; order: number }[];
+};
+
+export const siteSettings: SiteSettings = {
+  siteName: "The Pavillion Hotel",
+  tagline: "Nestled in Nature",
+  description:
+    "A Portuguese-style hotel in Shahupuri, Kolhapur offering comfortable rooms, restaurants, wedding venues, and event facilities near Kolhapur Railway Station.",
+  bookingEngineUrl,
+  contactPhone: "0231 265 4742",
+  contactPhoneAlt: "0231 265 2751",
+  contactEmail: "info@hotelpavillion.co.in",
+  whatsappNumber: "919607323737",
+  instagramUrl: "https://www.instagram.com/thepavillionhotel",
+  facebookUrl: "https://www.facebook.com/thepavillionhotel/",
+  address:
+    "The Pavillion Hotel\n392 E, Assembly Road, Near Basant-Bahar Theatre, Opp. Railway Station, Shahupuri, Kolhapur, Maharashtra - 416001",
+  googleMapsUrl:
+    "https://maps.google.com/?q=392+E,+Assembly+Road,+Near+Basant-Bahar+Theatre,+Opp.+Railway+Station,+Shahupuri,+Kolhapur,+Maharashtra+416001",
+  homeHeroImages: [
+    {
+      src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=2000&q=88",
+      alt: "The Pavillion Hotel surrounded by greenery in Kolhapur",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=2000&q=88",
+      alt: "Peaceful courtyard at The Pavillion Hotel in Kolhapur",
+    },
+  ],
+  stayHeroImage: {
+    src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=2000&q=88",
+    alt: "Guest room at The Pavillion Hotel in Kolhapur",
+  },
+  bookingPartners: [],
+};
+
 export const siteNavItems = [
   { label: "Home", href: "/" },
   { label: "Stay", href: "/stay" },
   { label: "Events", href: "/events" },
   { label: "Dining", href: "/dining" },
-  { label: "Services", href: "/services" },
   { label: "Gallery", href: "/gallery" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -13,9 +70,9 @@ export const rooms = [
   {
     name: "Deluxe Room",
     description:
-      "Comfortable accommodation in Kolhapur for business, leisure, and family stays, with warm interiors and garden views at The Pavillion Hotel.",
-    details: ["320 sq.ft", "2 Guests", "King Bed"],
-    amenities: ["Wi-Fi", "AC", "Mini Bar", "Garden View"],
+      "Comfortable accommodation with warm interiors, perfect for a relaxed stay.",
+    details: ["2 Guests", "Queen or Twin Beds"],
+    amenities: ["Queen or Twin Beds", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 9800,
     images: [
       "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80",
@@ -26,9 +83,9 @@ export const rooms = [
   {
     name: "Executive Room",
     description:
-      "A spacious stay in Shahupuri, Kolhapur, designed for business travellers and guests seeking a calm, elevated room experience.",
-    details: ["420 sq.ft", "2 Guests", "King Bed"],
-    amenities: ["Wi-Fi", "Work Desk", "Lounger", "Rain Shower"],
+      "Spacious rooms with a private sit-out, offering a calm and comfortable stay.",
+    details: ["2 Guests", "Queen or Twin Beds"],
+    amenities: ["Queen or Twin Beds", "Garden Sit-out", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 12400,
     images: [
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80",
@@ -39,9 +96,9 @@ export const rooms = [
   {
     name: "The Suite",
     description:
-      "Our signature suite offers a refined stay in Kolhapur with a private balcony, generous living space, and a relaxed, premium atmosphere.",
-    details: ["640 sq.ft", "3 Guests", "King + Lounge"],
-    amenities: ["Balcony", "Bathtub", "Lounge", "Butler"],
+      "Our signature suite with a private balcony or sit-out, generous living space, and a relaxed atmosphere.",
+    details: ["3 Guests", "King Bed"],
+    amenities: ["King Bed", "Garden or Balcony Sit-out", "LED TV", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 18900,
     images: [
       "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200&q=80",
@@ -53,10 +110,10 @@ export const rooms = [
 
 export const venues = [
   {
-    name: "Basant Lawns",
+    name: "Bahar Lawns",
     capacity: "Up to 2,000 Guests",
     description:
-      "Our outdoor event lawn in Kolhapur is ideal for weddings, receptions, and grand celebrations in a scenic, open-air setting.",
+      "Grand open-air celebrations for up to 2,000 guests.",
     suitableFor: ["Grand Weddings", "Receptions", "Corporate Galas"],
     facilities: ["Stage & Lighting", "Valet Parking", "Catering Kitchens"],
     image:
@@ -64,29 +121,29 @@ export const venues = [
   },
   {
     name: "Madhusudan Hall",
-    capacity: "Up to 600 Guests",
+    capacity: "Up to 800 Guests",
     description:
-      "A grand indoor banquet hall in Shahupuri, Kolhapur, suited to weddings, conferences, family functions, and large gatherings.",
+      "A versatile indoor and outdoor venue for up to 800 guests, with an air-conditioned hall, changing rooms, in-built stage and sound system.",
     suitableFor: ["Banquets", "Conferences", "Celebrations"],
     facilities: ["Air-Conditioned", "AV Setup", "Pre-Function Area"],
     image:
       "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80",
   },
   {
-    name: "Conference Hall",
-    capacity: "Up to 100 Guests",
+    name: "Central Conference Hall",
+    capacity: "Up to 175 Guests",
     description:
-      "A professional conference venue for meetings, workshops, and corporate sessions in Kolhapur with practical event support.",
+      "A comfortable space for corporate events and smaller celebrations for up to 175 guests, with outdoor dining and restrooms.",
     suitableFor: ["Meetings", "Workshops", "Corporate Sessions"],
     facilities: ["Projector & Screen", "Wi-Fi", "Flexible Seating"],
     image:
       "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&q=80",
   },
   {
-    name: "Areca Garden",
-    capacity: "100–200 Guests",
+    name: "Areca Lawns",
+    capacity: "Up to 650 Guests",
     description:
-      "An intimate celebration space near Kolhapur Railway Station, designed for smaller weddings, family functions, and cocktail evenings.",
+      "An open-to-sky setting for celebrations of up to 650 guests including the gazebo area.",
     suitableFor: ["Sangeets", "Cocktails", "Intimate Weddings"],
     facilities: ["Outdoor Dining", "Ambient Lighting", "Bar Setup"],
     image:
@@ -94,9 +151,9 @@ export const venues = [
   },
   {
     name: "Gazebo",
-    capacity: "Private parties and dinners",
+    capacity: "Up to 50 Guests",
     description:
-      "A charming garden gazebo for intimate dinners, proposals, and small celebrations with a quiet, scenic atmosphere.",
+      "A private setting overlooking the lawns, ideal for dinner parties and intimate celebrations for up to 50 guests.",
     suitableFor: ["Private Dining", "Birthdays", "Proposals"],
     facilities: ["Bespoke Menu", "Live Music", "Floral Decor"],
     image:
@@ -146,16 +203,16 @@ export const galleryImages = [
 export const diningVenues = [
   {
     name: "Pakhtoon Restaurant",
-    intro: "Bold North-West Frontier cuisine in a warm, candle-lit setting for guests and visitors in Kolhapur.",
+    intro: "A favourite for Mughlai and Afghani cuisine, with tandoor specialities, kebabs, curries and more, alongside a selection of multi-cuisine dishes.",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
     timing: "7:00 PM – 11:30 PM",
     menuUrl: "https://www.hotelpavillion.co.in/",
     dishes: ["Peshawari Kebab", "Raan-e-Pakhtoon", "Dum Biryani", "Sheermal"],
   },
   {
-    name: "WalkaWay Restaurant & Cafe",
+    name: "Walkway Restaurant and Areca Cafe",
     intro:
-      "A relaxed restaurant and café experience for breakfast, casual dining, and all-day visits in Kolhapur.",
+      "An open-air cafe and restaurant with something for everyone, from Mughlai, Chinese and Continental dishes to refreshing drinks and desserts.",
     image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
     timing: "7:00 AM – 10:00 PM",
     menuUrl: "https://www.hotelpavillion.co.in/",

@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getBlogCategories, getBlogPosts } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Blog",
   description:
-    "Editorial stories, travel guides, and planning insights from The Pavillion.",
-};
+    "Read Kolhapur travel guides, wedding planning ideas, dining stories, and hotel updates from The Pavillion Hotel.",
+  path: "/blog",
+});
 
 export default async function BlogPage() {
   const [{ posts }, categories] = await Promise.all([

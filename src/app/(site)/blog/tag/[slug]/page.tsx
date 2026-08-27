@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getBlogPosts } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -8,10 +9,12 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  return {
-    title: `Tag: ${slug}`,
-    description: "Browse tagged content from The Pavillion Content Hub.",
-  };
+  const label = slug.replace(/-/g, " ");
+  return createPageMetadata({
+    title: `${label} Articles`,
+    description: `Browse ${label} stories and updates from The Pavillion Hotel in Kolhapur.`,
+    path: `/blog/tag/${slug}`,
+  });
 }
 
 export default async function BlogTagPage({ params }: PageProps) {

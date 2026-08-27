@@ -1,6 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { WhatsAppIcon } from "@/components/action-icons";
 import { getSiteSettings } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+	title: "Contact & Directions",
+	description:
+		"Contact The Pavillion Hotel for room reservations, wedding enquiries, restaurant bookings, and directions in Shahupuri, Kolhapur.",
+	path: "/contact",
+});
 
 type ContactRow = {
 	label: string;
@@ -18,9 +27,6 @@ export default async function ContactPage() {
 	const banquetPhoneHref = `tel:${banquetPhone.replace(/[^+\d]/g, "")}`;
 	const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
 	const whatsapp = settings?.whatsappNumber ?? "919607323737";
-	const mapsUrl =
-		settings?.googleMapsUrl ??
-		"https://maps.google.com/?q=392+E,+Assembly+Road,+Near+Basant-Bahar+Theatre,+Opp.+Railway+Station,+Shahupuri,+Kolhapur,+Maharashtra+416001";
 	const address =
 		settings?.address ??
 		"The Pavillion Hotel\n392 E, Assembly Road, Near Basant-Bahar Theatre, Opp. Railway Station, Shahupuri, Kolhapur, Maharashtra – 416001";
@@ -43,7 +49,7 @@ export default async function ContactPage() {
 	return (
 		<main className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-20">
 			<div>
-				<p className="text-[11px] uppercase tracking-[0.4em] text-gold">Contact & Book</p>
+				<p className="text-[11px] uppercase tracking-[0.4em] text-emerald">Contact & Book</p>
 				<h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Plan your stay or event</h1>
 				<p className="mt-5 max-w-2xl text-base leading-8 text-fg-muted sm:text-lg">
 					Use this page for reservations, WhatsApp, directions, and all direct booking paths.
@@ -53,14 +59,14 @@ export default async function ContactPage() {
 					{rows.map((row) => (
 						<div key={row.label} className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-4 last:border-b-0 last:pb-0 sm:gap-6">
 							<div className="min-w-0">
-								<p className="text-[11px] uppercase tracking-[0.35em] text-gold">{row.label}</p>
+								<p className="text-[11px] uppercase tracking-[0.35em] text-emerald">{row.label}</p>
 								<p className="mt-2 wrap-break-word text-base text-fg">{row.value}</p>
 							</div>
 							<Link
 								href={row.href}
 								target={row.external ? "_blank" : undefined}
 								rel={row.external ? "noopener noreferrer" : undefined}
-								className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-olive transition hover:text-gold"
+								className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh"
 							>
 								{row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
 								<span>Open</span>
@@ -70,7 +76,7 @@ export default async function ContactPage() {
 				</div>
 
 				<div className="mt-6 rounded-3xl border border-line bg-surface-2 p-6 sm:p-7">
-					<p className="text-[11px] uppercase tracking-[0.35em] text-gold">Address</p>
+					<p className="text-[11px] uppercase tracking-[0.35em] text-emerald">Address</p>
 					<p className="mt-3 whitespace-pre-line text-base leading-7 text-fg">{address}</p>
 				</div>
 			</div>
@@ -111,7 +117,7 @@ export default async function ContactPage() {
 
 				<button
 					type="submit"
-					className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-forest px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold"
+					className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-fresh"
 				>
 					Submit Enquiry
 				</button>

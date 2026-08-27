@@ -1,26 +1,36 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { siteNavItems } from "@/lib/site-data";
-import { ThemeToggle } from "@/components/theme-toggle";
+import logo from "@/assets/logo.svg";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 20);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-(--header-bg) backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:gap-6 sm:px-5 sm:py-4 lg:px-8">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "border-b border-line bg-(--header-bg) shadow-sm backdrop-blur-xl" : "border-b border-transparent bg-bg/70 backdrop-blur-md"}`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 sm:gap-6 sm:px-5 lg:px-8">
         <Link
           href="/"
-          className="font-serif text-xl tracking-[0.18em] text-fg transition hover:text-gold sm:text-2xl sm:tracking-[0.2em]"
+          aria-label="The Pavillion Hotel home"
+          className="relative block h-16 w-18 shrink-0 overflow-hidden rounded-sm border border-forest/10 bg-[#f6f6f6] shadow-[0_3px_14px_rgba(20,38,30,0.10)] transition-transform duration-300 hover:scale-[1.03] sm:h-18 sm:w-20"
         >
-          The Pavillion<span className="text-gold">.</span>
+          <Image src={logo} alt="The Pavillion Hotel" fill priority className="object-contain p-1" sizes="80px" />
         </Link>
 
         <nav className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.3em] md:flex">
@@ -46,16 +56,14 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-
+        <div className="flex items-center gap-2 md:hidden">
           <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((open) => !open)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-fg transition hover:border-gold hover:text-gold md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-fg transition hover:border-gold hover:text-gold"
           >
             {menuOpen ? (
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">

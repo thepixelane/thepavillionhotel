@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-const PATHS = ["/", "/stay", "/events", "/dining", "/gallery", "/contact", "/blog", "/offers", "/services"];
+const PATHS = ["/", "/stay", "/booking-options", "/events", "/dining", "/gallery", "/contact", "/blog", "/offers"];
 
 export async function GET() {
   for (const path of PATHS) {

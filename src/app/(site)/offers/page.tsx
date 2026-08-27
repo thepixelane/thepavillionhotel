@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getOffers } from "@/lib/sanity-content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Offers",
+export const metadata: Metadata = createPageMetadata({
+  title: "Hotel & Dining Offers",
   description:
-    "Explore current offers, festival celebrations, restaurant updates, and announcements from The Pavillion.",
-};
+    "Explore current hotel offers, festival celebrations, restaurant updates, and announcements from The Pavillion Hotel in Kolhapur.",
+  path: "/offers",
+});
 
 function typeLabel(type: string): string {
   switch (type) {

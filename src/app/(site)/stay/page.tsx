@@ -1,59 +1,66 @@
+import Image from "next/image";
 import Link from "next/link";
-import { StayBookingFlow, type BookingRoom } from "@/components/stay-booking-flow";
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { RoomFeatureIcon } from "@/components/room-feature-icon";
 import { RoomImageCarousel } from "@/components/room-image-carousel";
-import { getRooms } from "@/lib/sanity-content";
+import { getRooms, getSiteSettings, stayHeroImage as resolveStayHeroImage } from "@/lib/sanity-content";
+import { createPageMetadata, roomsJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Rooms & Suites in Kolhapur",
+  description:
+    "Explore Deluxe, Executive, and Suite accommodation at The Pavillion Hotel in Kolhapur, with direct booking and amenities for a comfortable stay.",
+  path: "/stay",
+});
 
 export default async function StayPage() {
-  const rooms = await getRooms();
-  const bookingRooms: BookingRoom[] = rooms.map((room) => ({
-    name: room.name,
-    description: room.description,
-    amenities: room.amenities,
-    nightlyRate: room.nightlyRate,
-    capacity: room.capacity,
-  }));
+  const [rooms, settings] = await Promise.all([getRooms(), getSiteSettings()]);
+  const stayHero = resolveStayHeroImage(settings) ?? (rooms[0]?.images[0] ? { src: rooms[0].images[0], alt: rooms[0].imageAlts[0] || "A room at The Pavillion Hotel" } : null);
+  const phone = settings?.contactPhone ?? "0231 265 4742";
+  const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
+  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
-      <header className="max-w-3xl">
-        <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Stay</p>
-        <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Rooms & Suites in Kolhapur</h1>
-        <p className="mt-5 text-base leading-8 text-fg-muted sm:text-lg">
-          Stay at The Pavillion Hotel in Shahupuri, Kolhapur with comfortable accommodation for business travellers, families, and leisure guests.
-        </p>
-      </header>
+    <main>
+      <JsonLd data={roomsJsonLd} />
+      <section className="relative min-h-[72svh] bg-forest-deep sm:min-h-[75svh]">
+        {stayHero ? <Image src={stayHero.src} alt={stayHero.alt} fill priority sizes="100vw" className="object-cover opacity-80" /> : null}
+        <div className="absolute inset-0 bg-linear-to-t from-black/45 to-transparent" />
+      </section>
 
-      <div className="mt-10 sm:mt-12">
-        <StayBookingFlow rooms={bookingRooms} />
-      </div>
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:py-20 lg:px-8">
+        <h1 className="max-w-4xl text-4xl leading-tight text-fg sm:text-6xl">Our rooms and suites are designed to make your stay comfortable and relaxed.</h1>
+        <div className="mt-10 grid border-y border-line lg:grid-cols-2">
+          <div className="py-8 lg:border-r lg:border-line lg:pr-10">
+            <h2 className="text-3xl text-fg">Book your stay directly with us.</h2>
+            <p className="mt-2 text-fg-muted">Get in touch</p>
+            <div className="mt-6 space-y-3 text-lg"><a href={telHref} className="block text-emerald hover:underline">Call: {phone}</a><a href={`mailto:${email}`} className="block text-emerald hover:underline">Email: {email}</a></div>
+          </div>
+          <div className="py-8 lg:pl-10">
+            <h2 className="text-3xl text-fg">Prefer to book online?</h2>
+            <p className="mt-3 max-w-xl text-lg leading-8 text-fg-muted">Compare rates and availability on our booking partners.</p>
+            <Link href="/booking-options" className="mt-6 inline-flex bg-forest px-5 py-3 text-xs uppercase tracking-[0.24em] text-white transition hover:bg-emerald">View Booking Options →</Link>
+          </div>
+        </div>
+      </section>
 
-      <div className="mt-10 grid gap-6 sm:mt-12 sm:gap-8">
-        {rooms.map((room) => (
-          <section key={room.name} className="grid gap-0 overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_60px_rgba(20,38,30,0.08)] lg:grid-cols-[1fr_1fr]">
-            <RoomImageCarousel images={room.images} roomName={room.name} />
-            <div className="p-6 sm:p-8 lg:p-10">
-              <p className="text-[11px] uppercase tracking-[0.35em] text-gold">Category</p>
-              <h2 className="mt-2 text-3xl text-fg sm:text-4xl">{room.name}</h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-fg-muted">{room.description}</p>
-              <div className="mt-6 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.2em] text-fg/70 sm:gap-3">
-                {room.details.map((detail) => (
-                  <span key={detail} className="rounded-full bg-surface-2 px-3 py-2">{detail}</span>
-                ))}
+      <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8">
+        <p className="text-xs uppercase tracking-[0.3em] text-emerald">Discover our rooms</p>
+        <div className="mt-8 grid gap-8">
+          {rooms.map((room) => (
+            <article id={room.slug} key={room.name} className="scroll-mt-28 grid overflow-hidden border border-line bg-surface lg:grid-cols-2">
+              <RoomImageCarousel images={room.images} roomName={room.name} />
+              <div className="p-6 sm:p-9 lg:p-10">
+                <h2 className="text-4xl text-fg sm:text-5xl">{room.name}</h2>
+                <p className="mt-4 text-base leading-8 text-fg-muted">{room.description}</p>
+                <div className="mt-7 grid gap-4 sm:grid-cols-2">{room.amenities.map((amenity) => <RoomFeatureIcon key={amenity} label={amenity} />)}</div>
+                <Link href="/contact" className="mt-8 inline-flex border border-forest px-5 py-3 text-xs uppercase tracking-[0.24em] text-forest transition hover:bg-forest hover:text-white dark:border-fresh dark:text-fresh">Book Now</Link>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {room.amenities.map((amenity) => (
-                  <span key={amenity} className="rounded-full border border-line px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-fg/75">
-                    {amenity}
-                  </span>
-                ))}
-              </div>
-              <Link href="/contact" className="mt-7 inline-flex rounded-full bg-forest px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-gold sm:mt-8">
-                Book Now
-              </Link>
-            </div>
-          </section>
-        ))}
-      </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
