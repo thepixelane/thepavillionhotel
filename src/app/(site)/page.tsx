@@ -84,11 +84,14 @@ export default async function Home() {
             <p className="text-xs uppercase tracking-[0.3em] text-emerald">Guest Stories</p>
             <h2 className="mt-3 text-4xl leading-tight text-forest-deep sm:text-5xl">A stay worth remembering</h2>
           </div>
-          <div className="mt-9 grid gap-px overflow-hidden border border-forest-deep/15 bg-forest-deep/15 md:grid-cols-3">
+          <div className="mt-9 grid gap-4 md:grid-cols-3">
             {(testimonials.length > 0 ? testimonials.slice(0, 3) : [{ guestName: "Guest review", rating: 5, review: "A peaceful stay in the heart of Kolhapur." }]).map((item, index) => (
-              <blockquote key={`${item.guestName}-${index}`} className="flex min-h-64 flex-col bg-white p-7 sm:p-8">
-                <p className="text-sm tracking-[0.16em] text-terracotta" aria-label={`${item.rating} out of 5 stars`}>{"★".repeat(item.rating)}</p>
-                <p className="mt-7 flex-1 font-serif text-2xl leading-9 text-forest-deep">“{item.review}”</p>
+              <blockquote key={`${item.guestName}-${index}`} className={`group relative flex min-h-64 flex-col overflow-hidden rounded-sm border border-forest-deep/15 border-t-4 bg-white p-7 shadow-[0_12px_30px_rgba(37,59,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_rgba(37,59,46,0.14)] sm:p-8 ${index === 0 ? "border-t-terracotta" : index === 1 ? "border-t-emerald" : "border-t-fresh"}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-sm tracking-[0.16em] text-terracotta" aria-label={`${item.rating} out of 5 stars`}>{"★".repeat(item.rating)}</p>
+                  <span className="font-serif text-5xl leading-7 text-terracotta/45 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">&ldquo;</span>
+                </div>
+                <p className="mt-6 flex-1 font-serif text-2xl leading-9 text-forest-deep">&ldquo;{item.review}&rdquo;</p>
                 <footer className="mt-8 border-t border-forest-deep/10 pt-5 text-xs uppercase tracking-[0.2em] text-emerald">{item.guestName}</footer>
               </blockquote>
             ))}

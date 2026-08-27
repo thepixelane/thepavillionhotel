@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
+import { HotelIcon, LocationPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
 import { bookingEngineUrl as defaultBookingUrl } from "@/lib/booking-engine";
 import { getSiteSettings } from "@/lib/sanity-content";
 
@@ -11,8 +11,8 @@ export async function QuickActions() {
   const mapsUrl = settings?.googleMapsUrl ?? "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur";
   const actions = [
     { label: "Call", shortLabel: "Call", href: `tel:${phone.replace(/[^+\d]/g, "")}`, icon: PhoneIcon, external: false },
-    { label: "Book", shortLabel: "Book", href: bookingUrl, icon: CalendarIcon, external: true },
-    { label: "Find Us", shortLabel: "Maps", href: mapsUrl, icon: MapIcon, external: true },
+    { label: "Book a stay", shortLabel: "Book", href: bookingUrl, icon: HotelIcon, external: true },
+    { label: "Find us on Google Maps", shortLabel: "Maps", href: mapsUrl, icon: LocationPinIcon, external: true },
     { label: "WhatsApp", shortLabel: "WA", href: `https://wa.me/${whatsapp}`, icon: WhatsAppIcon, external: true },
   ];
 
@@ -47,14 +47,5 @@ export async function QuickActions() {
         </div>
       </div>
     </>
-  );
-}
-
-function CalendarIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
-      <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M7.5 3.5v4M16.5 3.5v4M3.5 9.5h17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
   );
 }
