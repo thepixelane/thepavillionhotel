@@ -20,7 +20,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="space-y-3 text-sm text-fg-muted lg:justify-self-end">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-emerald">Contact &amp; Reservations</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-emerald dark:text-fresh">Contact &amp; Reservations</p>
           <a href={telHref(phone)} className="flex items-center gap-2 transition hover:text-emerald"><PhoneIcon className="h-4 w-4 text-fresh" /><strong className="text-fg">Stay</strong> {phone}</a>
           <a href={telHref(phoneAlt)} className="flex items-center gap-2 transition hover:text-emerald"><PhoneIcon className="h-4 w-4 text-fresh" /><strong className="text-fg">Banquets</strong> {phoneAlt}</a>
           <a href={`mailto:${email}`} className="flex items-center gap-2 transition hover:text-emerald">

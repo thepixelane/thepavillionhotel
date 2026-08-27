@@ -167,7 +167,7 @@ export function StayBookingFlow({ rooms }: StayBookingFlowProps) {
         {stepItems.map((item) => (
           <div
             key={item.label}
-            className={`rounded-2xl border px-4 py-3 ${item.active ? "border-gold bg-white/5 text-gold" : "border-offwhite/10 text-offwhite/45"}`}
+                className={`rounded-2xl border px-4 py-3 ${item.active ? "border-terracotta bg-terracotta text-white" : "border-offwhite/10 text-offwhite/45"}`}
           >
             {item.label}
           </div>

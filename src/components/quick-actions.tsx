@@ -13,7 +13,7 @@ export async function QuickActions() {
     { label: "Call", shortLabel: "Call", href: `tel:${phone.replace(/[^+\d]/g, "")}`, icon: PhoneIcon, external: false },
     { label: "Book a stay", shortLabel: "Book", href: bookingUrl, icon: HotelIcon, external: true },
     { label: "Find us on Google Maps", shortLabel: "Maps", href: mapsUrl, icon: LocationPinIcon, external: true },
-    { label: "WhatsApp", shortLabel: "WA", href: `https://wa.me/${whatsapp}`, icon: WhatsAppIcon, external: true },
+    { label: "WhatsApp", shortLabel: "WhatsApp", href: `https://wa.me/${whatsapp}`, icon: WhatsAppIcon, external: true },
   ];
 
   return (

@@ -66,7 +66,7 @@ export default async function ContactPage() {
 								href={row.href}
 								target={row.external ? "_blank" : undefined}
 								rel={row.external ? "noopener noreferrer" : undefined}
-								className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh"
+								className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh dark:text-fresh"
 							>
 								{row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
 								<span>Open</span>
@@ -76,7 +76,7 @@ export default async function ContactPage() {
 				</div>
 
 				<div className="mt-6 rounded-3xl border border-line bg-surface-2 p-6 sm:p-7">
-					<p className="text-[11px] uppercase tracking-[0.35em] text-emerald">Address</p>
+					<p className="text-[11px] uppercase tracking-[0.35em] text-emerald dark:text-fresh">Address</p>
 					<p className="mt-3 whitespace-pre-line text-base leading-7 text-fg">{address}</p>
 				</div>
 			</div>
@@ -117,7 +117,7 @@ export default async function ContactPage() {
 
 				<button
 					type="submit"
-					className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-fresh"
+					className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-fresh dark:bg-fresh dark:text-forest-deep"
 				>
 					Submit Enquiry
 				</button>

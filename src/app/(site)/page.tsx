@@ -48,11 +48,11 @@ export default async function Home() {
 
       <section className="grid bg-surface lg:grid-cols-[1.35fr_0.65fr]">
         <PropertyGalleryPreview images={galleryPreview} />
-        <div className="flex flex-col justify-center bg-emerald px-6 py-12 text-white sm:px-10 lg:px-12">
-          <p className="text-xs uppercase tracking-[0.3em] text-beige">Pavillion Highlights</p>
+        <div className="flex flex-col justify-center bg-emerald px-6 py-12 text-white dark:bg-fresh dark:text-forest-deep sm:px-10 lg:px-12">
+          <p className="text-xs uppercase tracking-[0.3em] text-offwhite dark:text-forest-deep">Pavillion Highlights</p>
             <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">Shravan Festival</h2>
-            <p className="mt-5 text-lg leading-8 text-white/85">Unlimited Buffet. 22nd August to 9th September 2026</p>
-          <a href={telHref} className="mt-8 inline-flex w-fit border border-white px-5 py-3 text-xs uppercase tracking-[0.25em] transition hover:bg-white hover:text-emerald">Call Now</a>
+            <p className="mt-5 text-lg leading-8 text-white/85 dark:text-forest-deep">Unlimited Buffet. 22nd August to 9th September 2026</p>
+          <a href={telHref} className="mt-8 inline-flex w-fit border border-white px-5 py-3 text-xs uppercase tracking-[0.25em] transition hover:bg-white hover:text-emerald dark:border-forest-deep dark:hover:bg-forest-deep dark:hover:text-fresh">Call Now</a>
         </div>
       </section>
 
@@ -92,7 +92,7 @@ export default async function Home() {
                   <span className="font-serif text-5xl leading-7 text-terracotta/45 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">&ldquo;</span>
                 </div>
                 <p className="mt-6 flex-1 font-serif text-2xl leading-9 text-forest-deep">&ldquo;{item.review}&rdquo;</p>
-                <footer className="mt-8 border-t border-forest-deep/10 pt-5 text-xs uppercase tracking-[0.2em] text-emerald">{item.guestName}</footer>
+                <footer className="mt-8 border-t border-forest-deep/10 pt-5 text-xs uppercase tracking-[0.2em] text-emerald dark:text-forest-deep">{item.guestName}</footer>
               </blockquote>
             ))}
           </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/public-env";
@@ -60,15 +61,13 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs before hydration so the correct theme is set on first paint (no flash).
-const themeInitScript = `
+const systemThemeScript = `
 (function(){
-  try {
-    var stored = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var isDark = stored ? stored === 'dark' : prefersDark;
-    if (isDark) document.documentElement.classList.add('dark');
-  } catch (e) {}
+  var media = window.matchMedia('(prefers-color-scheme: dark)');
+  var apply = function(){ document.documentElement.classList.toggle('dark', media.matches); };
+  apply();
+  if (media.addEventListener) media.addEventListener('change', apply);
+  else media.addListener(apply);
 })();
 `;
 
@@ -78,9 +77,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
-        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <Script id="system-theme" strategy="beforeInteractive">{systemThemeScript}</Script>
         {children}
       </body>
     </html>

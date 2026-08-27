@@ -30,7 +30,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
             onClick={() => setActiveIndex(index)}
             className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition ${
               index === activeIndex
-                ? "bg-gold text-forest-deep"
+                ? "bg-terracotta text-white"
                 : "border border-line text-fg/70 hover:text-fg"
             }`}
           >

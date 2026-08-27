@@ -19,7 +19,7 @@
 	--color-charcoal: #2c2e28;
 	--color-offwhite: #f2ecdf;
 	--color-stone: #8a8577;
-	--color-gold: #e1bd86;
+	--color-gold: #8a5a20;
 
 	/* Semantic (light) */
 	--color-bg: #f2ecdf;
@@ -41,6 +41,9 @@
 	--color-surface: #16261e;
 	--color-surface-2: #1c3226;
 	--color-line: rgba(240, 235, 222, 0.10);
+	--color-emerald: #72c69b;
+	--color-fresh: #a6c96a;
+	--color-gold: #e1bd86;
 
 	color-scheme: dark;
 }
