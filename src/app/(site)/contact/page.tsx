@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { WhatsAppIcon } from "@/components/action-icons";
+import { ContactForm } from "@/components/contact-form";
 import { getSiteSettings } from "@/lib/sanity-content";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -47,7 +48,7 @@ export default async function ContactPage() {
 	];
 
 	return (
-		<main className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-20">
+		<main className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-8 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-20">
 			<div>
 				<p className="text-[11px] uppercase tracking-[0.4em] text-emerald">Contact & Book</p>
 				<h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Plan your stay or event</h1>
@@ -81,59 +82,19 @@ export default async function ContactPage() {
 				</div>
 			</div>
 
-			<form className="rounded-3xl border border-line bg-surface-2 p-6 shadow-[0_18px_50px_rgba(20,38,30,0.06)] sm:p-7">
-				<h2 className="text-2xl text-fg sm:text-3xl">Send an Enquiry</h2>
-				<p className="mt-3 text-sm leading-7 text-fg-muted">
-					Tell us your dates or requirements and we’ll respond shortly.
-				</p>
+			<div className="grid gap-6">
+				<ContactForm />
 
-				<div className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2">
-					<input
-						name="name"
-						required
-						className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold"
-						placeholder="Full name"
-					/>
-					<input
-						name="phone"
-						required
-						className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold"
-						placeholder="Phone"
-					/>
-					<input
-						type="email"
-						name="email"
-						required
-						className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold sm:col-span-2"
-						placeholder="Email"
-					/>
-					<textarea
-						name="message"
-						required
-						className="min-h-32 rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold sm:col-span-2"
-						placeholder="Tell us more about your plans"
-					/>
-				</div>
-
-				<button
-					type="submit"
-					className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-offwhite transition hover:bg-fresh dark:bg-fresh dark:text-forest-deep"
-				>
-					Submit Enquiry
-				</button>
-
-				<div className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_14px_40px_rgba(20,38,30,0.06)]">
+				<div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_14px_40px_rgba(20,38,30,0.06)]">
 					<iframe
 						title="The Pavillion Hotel on Google Maps"
 						src={mapEmbedSrc}
-						width="100%"
-						height="280"
 						loading="lazy"
 						referrerPolicy="no-referrer-when-downgrade"
-						className="block"
+						className="block h-52 w-full sm:h-64 md:h-72 lg:h-80"
 					/>
 				</div>
-			</form>
+			</div>
 		</main>
 	);
 }

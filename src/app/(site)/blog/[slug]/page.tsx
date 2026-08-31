@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Content Hub</p>
-      <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl">{post.title}</h1>
+      <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">{post.title}</h1>
 
       <div className="mt-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-fg/70">
         {post.author ? <span>By {post.author.name}</span> : null}

@@ -3,6 +3,11 @@
 /* Enable class-based dark mode: `dark:` variant applies when `.dark` is on <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Custom breakpoint beyond Tailwind defaults for genuine 4K / projector displays. */
+@theme {
+	--breakpoint-4xl: 2560px;
+}
+
 /*
  * Brand hues (fixed in both themes) and light-mode defaults for the semantic
  * tokens live inside @theme so Tailwind generates matching utilities
@@ -159,3 +164,7 @@ p {
 .dark ::-webkit-scrollbar { width: 10px; height: 10px; }
 .dark ::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-gold) 40%, transparent); border-radius: 999px; }
 .dark ::-webkit-scrollbar-track { background: transparent; }
+
+@media (max-width: 640px) {
+	.dark ::-webkit-scrollbar { width: 6px; height: 6px; }
+}

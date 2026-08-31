@@ -38,7 +38,7 @@ function LayoutSkeleton({ layout }: { layout: LoadingLayout }) {
     return (
       <div aria-hidden="true">
         <Skeleton className="h-[55svh] w-full" />
-        <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+        <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-16 lg:px-8">
           <div className="mx-auto max-w-3xl">
             <Skeleton className="mx-auto h-36 w-40" />
             <Skeleton className="mx-auto mt-8 h-5 w-11/12" />
@@ -56,7 +56,7 @@ function LayoutSkeleton({ layout }: { layout: LoadingLayout }) {
     return (
       <div aria-hidden="true">
         <Skeleton className="h-[58svh] w-full" />
-        <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+        <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 lg:px-8">
           <HeadingSkeleton />
           <div className="mt-12 grid gap-8">
             {[0, 1].map((item) => <CardSkeleton key={item} horizontal />)}
@@ -68,7 +68,7 @@ function LayoutSkeleton({ layout }: { layout: LoadingLayout }) {
 
   if (layout === "gallery") {
     return (
-      <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8" aria-hidden="true">
+      <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 lg:px-8" aria-hidden="true">
         <HeadingSkeleton />
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {["aspect-square", "aspect-4/5", "aspect-square", "aspect-4/5", "aspect-4/5", "aspect-square", "aspect-4/5", "aspect-square"].map((shape, index) => (
@@ -81,7 +81,7 @@ function LayoutSkeleton({ layout }: { layout: LoadingLayout }) {
 
   if (layout === "split") {
     return (
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 lg:grid-cols-2 lg:px-8" aria-hidden="true">
+      <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-10 px-5 py-14 lg:grid-cols-2 lg:px-8" aria-hidden="true">
         <div>
           <HeadingSkeleton />
           <Skeleton className="mt-10 h-72 w-full rounded-sm" />
@@ -104,7 +104,7 @@ function LayoutSkeleton({ layout }: { layout: LoadingLayout }) {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8" aria-hidden="true">
+    <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 lg:px-8" aria-hidden="true">
       <HeadingSkeleton />
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[0, 1, 2, 3, 4, 5].map((item) => <CardSkeleton key={item} />)}
@@ -119,7 +119,7 @@ export function SiteLoading({ layout = "cards" }: { layout?: LoadingLayout }) {
       <div className="grid min-h-[42svh] place-items-center bg-bg px-5 py-12">
         <div className="text-center">
           <div className="loading-logo-breathe relative mx-auto h-40 w-44 overflow-hidden rounded-sm border border-line bg-[#f6f6f6] shadow-[0_14px_45px_rgba(20,38,30,0.12)] sm:h-44 sm:w-48">
-            <Image src={logo} alt="" fill priority className="object-contain p-3" sizes="192px" />
+            <Image src={logo} alt="The Pavillion Hotel" fill priority className="object-contain p-3" sizes="192px" />
           </div>
           <div className="loading-dots mt-6 flex items-center justify-center gap-2" aria-hidden="true">
             <span /><span /><span />

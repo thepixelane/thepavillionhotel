@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 export type GalleryImage = {
   category: string;
@@ -19,6 +19,10 @@ const filters = ["All", "Property", "Rooms", "Dining", "Events", "Gardens"] as c
 export function GalleryLightbox({ images }: GalleryLightboxProps) {
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const captionId = useId();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const previousOverflow = useRef<string>("");
 
   const filteredImages = useMemo(() => {
     if (activeFilter === "All") {
@@ -29,6 +33,26 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
   }, [activeFilter, images]);
 
   const selectedImage = selectedIndex === null ? null : filteredImages[selectedIndex] ?? null;
+
+  const closeLightbox = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
+
+  useEffect(() => {
+    if (selectedImage === null) return;
+    previousOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeLightbox();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow.current;
+      window.removeEventListener("keydown", onKey);
+      previousTriggerRef.current?.focus();
+    };
+  }, [selectedImage, closeLightbox]);
 
   return (
     <div>
@@ -54,7 +78,10 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
           <button
             key={`${image.src}-${image.caption}`}
             type="button"
-            onClick={() => setSelectedIndex(index)}
+            onClick={(event) => {
+              previousTriggerRef.current = event.currentTarget;
+              setSelectedIndex(index);
+            }}
             className="group relative aspect-4/3 overflow-hidden rounded-2xl bg-forest-deep text-left sm:rounded-3xl"
           >
             <Image
@@ -74,17 +101,21 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
 
       {selectedImage ? (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={captionId}
           className="fixed inset-0 z-50 flex items-center justify-center bg-forest-deep/90 p-3 backdrop-blur-md sm:p-6"
-          onClick={() => setSelectedIndex(null)}
+          onClick={closeLightbox}
         >
           <button
+            ref={closeButtonRef}
             type="button"
             aria-label="Close gallery preview"
             onClick={(e) => {
               e.stopPropagation();
-              setSelectedIndex(null);
+              closeLightbox();
             }}
-            className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-offwhite text-2xl leading-none text-forest-deep shadow-lg transition hover:bg-gold hover:text-offwhite sm:right-6 sm:top-6 sm:h-12 sm:w-12 sm:text-3xl"
+            className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-offwhite text-2xl leading-none text-forest-deep shadow-lg transition hover:bg-gold hover:text-offwhite sm:right-6 sm:top-6 sm:h-12 sm:w-12 sm:text-3xl"
           >
             ×
           </button>
@@ -95,7 +126,9 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
             <div className="relative aspect-16/10">
               <Image src={selectedImage.src} alt={selectedImage.alt} fill sizes="100vw" className="object-cover" />
             </div>
-            <figcaption className="p-4 text-xs text-offwhite/80 sm:p-5 sm:text-sm">{selectedImage.caption}</figcaption>
+            <figcaption id={captionId} className="p-4 text-xs text-offwhite/80 sm:p-5 sm:text-sm">
+              {selectedImage.caption}
+            </figcaption>
           </figure>
         </div>
       ) : null}

@@ -18,10 +18,10 @@ export default async function DiningPage() {
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-14 sm:py-20 lg:px-8">
+    <main className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 sm:py-20 lg:px-8">
       <JsonLd data={diningJsonLd} />
-      <header className="max-w-3xl"><p className="text-xs uppercase tracking-[0.3em] text-emerald">Dining</p><h1 className="mt-4 text-5xl text-fg sm:text-6xl">Dining at The Pavillion</h1><p className="mt-5 text-lg leading-8 text-fg-muted">Pakhtoon Restaurant and Walkway Restaurant and Areca Cafe welcome hotel guests and visitors in Kolhapur.</p></header>
-      <div className="mt-12 grid gap-12">
+      <header className="max-w-3xl"><p className="text-xs uppercase tracking-[0.3em] text-emerald">Dining</p><h1 className="mt-4 text-4xl text-fg sm:text-5xl lg:text-6xl">Dining at The Pavillion</h1><p className="mt-5 text-lg leading-8 text-fg-muted">Pakhtoon Restaurant and Walkway Restaurant and Areca Cafe welcome hotel guests and visitors in Kolhapur.</p></header>
+      <div className="mt-12 grid gap-8 sm:gap-12">
         {diningVenues.map((place, index) => (
           <article key={place.name} className="grid overflow-hidden border border-line bg-surface lg:grid-cols-2">
             <div className={index % 2 ? "lg:order-2" : undefined}><DiningGallery images={place.gallery} name={place.name} /></div>

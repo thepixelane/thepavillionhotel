@@ -18,17 +18,25 @@ type VenueTabsProps = {
 
 export function VenueTabs({ venues }: VenueTabsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeVenue = venues[activeIndex];
+  const activeVenue = venues[activeIndex] ?? venues[0];
+
+  if (!activeVenue) {
+    return (
+      <p className="rounded-2xl border border-line bg-surface p-6 text-sm text-fg-muted">
+        Venue details will appear here soon.
+      </p>
+    );
+  }
 
   return (
     <div>
-      <div className="flex gap-2 overflow-x-auto border-b border-line pb-4">
+      <div className="flex gap-2 overflow-x-auto scroll-smooth border-b border-line pb-4 [scroll-snap-type:x_mandatory] [-webkit-overflow-scrolling:touch]">
         {venues.map((venue, index) => (
           <button
             key={venue.name}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition ${
+            className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition [scroll-snap-align:center] ${
               index === activeIndex
                 ? "bg-terracotta text-white"
                 : "border border-line text-fg/70 hover:text-fg"

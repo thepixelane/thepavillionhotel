@@ -24,7 +24,7 @@ export function SiteHeader() {
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "border-b border-line bg-(--header-bg) shadow-sm backdrop-blur-xl" : "border-b border-transparent bg-bg/70 backdrop-blur-md"}`}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 sm:gap-6 sm:px-5 lg:px-8">
+      <div className="mx-auto flex max-w-7xl 4xl:max-w-[90rem] items-center justify-between gap-4 px-4 py-2 sm:gap-6 sm:px-5 lg:px-8">
         <Link
           href="/"
           aria-label="The Pavillion Hotel home"
@@ -63,7 +63,7 @@ export function SiteHeader() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((open) => !open)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-fg transition hover:border-gold hover:text-gold"
+            className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface text-fg transition hover:border-gold hover:text-gold sm:h-9 sm:w-9"
           >
             {menuOpen ? (
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
@@ -82,10 +82,12 @@ export function SiteHeader() {
       <div
         id="mobile-menu"
         className={`overflow-hidden border-t border-line bg-(--header-bg) backdrop-blur-xl md:hidden ${
-          menuOpen ? "max-h-96" : "max-h-0"
+          menuOpen
+            ? "max-h-[min(85dvh,26rem)] overflow-y-auto"
+            : "max-h-0"
         } transition-[max-height] duration-300 ease-out`}
       >
-        <nav className="mx-auto flex max-w-7xl flex-col px-5 py-3">
+        <nav className="mx-auto flex max-w-7xl 4xl:max-w-[90rem] flex-col px-4 py-3 sm:px-5">
           {siteNavItems.map((item) => {
             const active = isActive(item.href);
             return (
@@ -94,7 +96,7 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}
-                className={`flex items-center justify-between rounded-2xl px-3 py-3 text-[12px] uppercase tracking-[0.28em] transition ${
+                className={`flex items-center justify-between rounded-2xl px-2 py-3 text-[12px] uppercase tracking-[0.28em] transition sm:px-3 ${
                   active
                     ? "bg-surface-2 text-gold"
                     : "text-fg/80 hover:bg-surface-2 hover:text-fg"

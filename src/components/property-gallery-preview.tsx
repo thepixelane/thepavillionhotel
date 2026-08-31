@@ -12,6 +12,7 @@ export function PropertyGalleryPreview({ images }: { images: GalleryImage[] }) {
 
   if (slides.length === 0) return null;
   const image = slides[active];
+  if (!image) return null;
 
   return (
     <div className="relative min-h-96 overflow-hidden bg-forest-deep sm:min-h-120">

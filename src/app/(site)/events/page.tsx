@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EventsEnquiryForm } from "@/components/events-enquiry-form";
 import { JsonLd } from "@/components/json-ld";
 import { VenueTabs, type Venue as VenueTabsVenue } from "@/components/venue-tabs";
 import { getSiteSettings, getVenues } from "@/lib/sanity-content";
@@ -25,7 +26,7 @@ export default async function EventsPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
+    <main className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <JsonLd data={eventVenuesJsonLd} />
       <header className="max-w-3xl">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Events</p>
@@ -49,25 +50,7 @@ export default async function EventsPage() {
             Weddings, banquets, conferences, and intimate dinners can all be handled from here.
           </p>
         </div>
-        <form className="grid gap-3 sm:grid-cols-2">
-          <input className="rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-1" placeholder="Full name" />
-          <input className="rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-1" placeholder="Phone" />
-
-          <div className="relative sm:col-span-2">
-            <select className="w-full appearance-none rounded-2xl border border-offwhite/20 bg-white/10 px-4 py-3 pr-11 text-sm text-offwhite outline-none transition focus:border-gold focus:bg-white/15">
-              <option className="bg-forest-deep text-offwhite">Wedding / Event</option>
-              <option className="bg-forest-deep text-offwhite">Corporate Meeting</option>
-              <option className="bg-forest-deep text-offwhite">Private Dinner</option>
-              <option className="bg-forest-deep text-offwhite">General Enquiry</option>
-            </select>
-            <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-gold/85">▾</span>
-          </div>
-
-          <textarea className="min-h-28 rounded-2xl border border-offwhite/10 bg-white/5 px-4 py-3 text-sm text-offwhite outline-none placeholder:text-offwhite/40 focus:border-gold sm:col-span-2" placeholder="Share your date, capacity, and requirements" />
-          <button type="submit" className="inline-flex rounded-full bg-offwhite px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-forest-deep transition hover:bg-gold hover:text-offwhite sm:col-span-2">
-            Enquire Now
-          </button>
-        </form>
+        <EventsEnquiryForm />
       </div>
     </main>
   );

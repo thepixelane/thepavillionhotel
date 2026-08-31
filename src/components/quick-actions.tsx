@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { HotelIcon, LocationPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
-import { bookingEngineUrl as defaultBookingUrl } from "@/lib/booking-engine";
+import { bookingEngineUrl as defaultBookingUrl, sanitizeBookingUrl } from "@/lib/booking-engine";
 import { getSiteSettings } from "@/lib/sanity-content";
 
 export async function QuickActions() {
   const settings = await getSiteSettings();
   const phone = settings?.contactPhone ?? "0231 265 4742";
   const whatsapp = settings?.whatsappNumber ?? "919607323737";
-  const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
+  const bookingUrl = sanitizeBookingUrl(settings?.bookingEngineUrl?.trim() || defaultBookingUrl);
   const mapsUrl = settings?.googleMapsUrl ?? "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur";
   const actions = [
     { label: "Call", shortLabel: "Call", href: `tel:${phone.replace(/[^+\d]/g, "")}`, icon: PhoneIcon, external: false },
@@ -34,10 +34,10 @@ export async function QuickActions() {
         ))}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/30 bg-forest-deep px-4 py-3 lg:hidden">
-        <div className="mx-auto grid max-w-7xl grid-cols-4 gap-2 text-center text-[10px] uppercase tracking-[0.2em] text-offwhite">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/30 bg-forest-deep px-2 py-3 sm:px-4 lg:hidden">
+        <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] grid-cols-4 gap-1 text-center text-[10px] uppercase tracking-[0.2em] text-offwhite sm:gap-2">
           {actions.map(({ label, href, icon: Icon, shortLabel, external }) => (
-            <Link key={label} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} aria-label={label} title={label} className="rounded-xl bg-offwhite px-2 py-2 text-forest-deep transition hover:bg-gold hover:text-offwhite">
+            <Link key={label} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} aria-label={label} title={label} className="rounded-xl bg-offwhite px-1 py-3 text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-2 sm:py-2">
               <span className="flex flex-col items-center gap-1">
                 <Icon className="h-5 w-5" />
                 <span className="leading-none">{shortLabel}</span>

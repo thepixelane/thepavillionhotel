@@ -2,6 +2,7 @@ import { groq } from "next-sanity";
 import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
+import { FALLBACK_IMAGES } from "@/lib/constants";
 import {
   diningVenues as staticDiningVenues,
   galleryImages as staticGalleryImages,
@@ -13,13 +14,6 @@ import {
 } from "@/lib/site-data";
 
 type QueryParams = Record<string, unknown>;
-
-const FALLBACK_BLOG_IMAGE =
-  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85";
-const FALLBACK_TESTIMONIAL_IMAGE =
-  "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&q=80";
-const FALLBACK_CONTENT_IMAGE =
-  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -382,7 +376,7 @@ function imageUrl(source: SanityImageSource | undefined, width = 1600): string |
 function validImageUrl(value?: string | null, fallback?: string | null): string {
   const candidate = value?.trim();
   if (candidate) return candidate;
-  return fallback && fallback.trim().length > 0 ? fallback : FALLBACK_CONTENT_IMAGE;
+  return fallback && fallback.trim().length > 0 ? fallback : FALLBACK_IMAGES.content;
 }
 
 function altOf(source: unknown): string {
@@ -433,7 +427,7 @@ function normalizeBlogPost(raw: RawBlogPost): BlogPost {
   const safeCategories = Array.isArray(raw.categories) ? raw.categories.filter(Boolean) : [];
   const safeTags = Array.isArray(raw.tags) ? raw.tags.filter(Boolean) : [];
   const bodyPlain = plainTextFromBody(safeBody);
-  const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_BLOG_IMAGE;
+  const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_IMAGES.blog;
   return {
     contentType: raw.contentType ?? "blog",
     title: raw.title,
@@ -564,10 +558,6 @@ export async function getBlogPosts(options?: {
     total: total ?? 0,
   };
 }
-export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
-  const { posts } = await getBlogPosts({ limit, offset: 0 });
-  return posts;
-}
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   const post = await safeFetch<RawBlogPost | null>(blogPostBySlugQuery, { slug });
@@ -611,7 +601,7 @@ export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
     sourceUrl: entry.sourceUrl,
     reviewDate: entry.reviewDate,
     featured: entry.featured,
-    image: imageUrl(entry.guestImage, 300) ?? FALLBACK_TESTIMONIAL_IMAGE,
+    image: imageUrl(entry.guestImage, 300) ?? FALLBACK_IMAGES.testimonial,
     imageAlt: altOf(entry.guestImage) || entry.guestName,
   }));
 }

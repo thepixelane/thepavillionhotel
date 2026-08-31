@@ -7,7 +7,7 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-line bg-surface pb-24 pt-8 lg:pb-8">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-5 lg:grid-cols-2 lg:px-8">
+      <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-8 px-4 sm:px-5 lg:grid-cols-2 lg:px-8">
         <div>
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 text-sm leading-6 text-fg-muted transition hover:text-emerald">
             <MapIcon className="mt-1 h-5 w-5 shrink-0 text-fresh" />
@@ -34,5 +34,5 @@ export function SiteFooter() {
 }
 
 function SocialLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
-  return <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className="grid h-10 w-10 place-items-center rounded-full border border-line text-forest transition hover:border-fresh hover:bg-fresh hover:text-white dark:text-offwhite">{children}</a>;
+  return <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className="grid h-11 w-11 place-items-center rounded-full border border-line text-forest transition hover:border-fresh hover:bg-fresh hover:text-white md:h-10 md:w-10 dark:text-offwhite">{children}</a>;
 }

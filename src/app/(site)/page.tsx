@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import logo from "@/assets/logo.svg";
 import { HomeHero } from "@/components/home-hero";
 import { PropertyGalleryPreview } from "@/components/property-gallery-preview";
-import { bookingEngineUrl as defaultBookingUrl } from "@/lib/booking-engine";
+import { bookingEngineUrl as defaultBookingUrl, sanitizeBookingUrl } from "@/lib/booking-engine";
+import { FALLBACK_IMAGES } from "@/lib/constants";
 import {
   getFeaturedTestimonials,
   getGalleryImages,
@@ -22,24 +23,19 @@ export const metadata: Metadata = createPageMetadata({
   path: "/",
 });
 
-const FALLBACK_HEROES = [
-  { src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=2000&q=88", alt: "The Pavillion Hotel surrounded by greenery" },
-  { src: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=2000&q=88", alt: "A peaceful hotel courtyard" },
-];
-
 export default async function Home() {
   const [settings, rooms, gallery, testimonials, venues] = await Promise.all([
     getSiteSettings(), getRooms(), getGalleryImages(), getFeaturedTestimonials(), getVenues(),
   ]);
   const heroImages = resolveHomeHeroImages(settings);
-  const bookingUrl = settings?.bookingEngineUrl?.trim() || defaultBookingUrl;
+  const bookingUrl = sanitizeBookingUrl(settings?.bookingEngineUrl?.trim() || defaultBookingUrl);
   const phone = settings?.contactPhone ?? "0231 265 4742";
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
   const galleryPreview = gallery.filter((item) => item.category === "Property").concat(gallery).slice(0, 6);
 
   return (
     <main>
-      <HomeHero images={heroImages.length > 0 ? heroImages : FALLBACK_HEROES} />
+      <HomeHero images={heroImages.length > 0 ? heroImages : [...FALLBACK_IMAGES.hero]} />
 
       <section className="mx-auto max-w-4xl px-5 py-16 text-center sm:py-24">
         <div className="relative mx-auto h-48 w-52 overflow-hidden rounded-sm border border-line bg-[#f6f6f6] shadow-[0_14px_45px_rgba(20,38,30,0.10)] sm:h-56 sm:w-60"><Image src={logo} alt="The Pavillion Hotel - Nestled in Nature" fill className="object-contain p-3 sm:p-4" sizes="(max-width: 640px) 208px, 240px" /></div>
@@ -56,7 +52,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-24 lg:px-8">
+      <section className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-16 sm:px-5 sm:py-24 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div><p className="text-xs uppercase tracking-[0.3em] text-emerald">Accommodations</p><h2 className="mt-3 text-4xl text-fg sm:text-5xl">Discover our rooms</h2></div>
           <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.25em] text-white transition hover:bg-emerald">Book Now</a>
@@ -72,21 +68,21 @@ export default async function Home() {
       </section>
 
       <section className="bg-forest-deep text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-10 px-5 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
           <div><p className="text-xs uppercase tracking-[0.3em] text-beige">Celebrate With Us</p><h2 className="mt-4 text-4xl leading-tight sm:text-6xl">Plan Your Next Event.</h2><div className="mt-8 flex gap-3"><Link href="/events" className="bg-white px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest-deep">Events</Link><Link href="/contact" className="border border-white/50 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white">Contact Us</Link></div></div>
           <div><p className="font-serif text-3xl italic leading-relaxed text-fresh sm:text-4xl">{venues.slice(0, 5).map((venue) => venue.name).join(". ")}.</p><p className="mt-5 max-w-3xl text-lg leading-8 text-white/75">From wedding celebrations, gatherings, and corporate events. We have a space for every occasion.</p></div>
         </div>
       </section>
 
       <section className="border-b border-line bg-offwhite">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-16 sm:py-20 lg:px-8">
           <div className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.3em] text-emerald">Guest Stories</p>
             <h2 className="mt-3 text-4xl leading-tight text-forest-deep sm:text-5xl">A stay worth remembering</h2>
           </div>
           <div className="mt-9 grid gap-4 md:grid-cols-3">
             {(testimonials.length > 0 ? testimonials.slice(0, 3) : [{ guestName: "Guest review", rating: 5, review: "A peaceful stay in the heart of Kolhapur." }]).map((item, index) => (
-              <blockquote key={`${item.guestName}-${index}`} className={`group relative flex min-h-64 flex-col overflow-hidden rounded-sm border border-forest-deep/15 border-t-4 bg-white p-7 shadow-[0_12px_30px_rgba(37,59,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_rgba(37,59,46,0.14)] sm:p-8 ${index === 0 ? "border-t-terracotta" : index === 1 ? "border-t-emerald" : "border-t-fresh"}`}>
+              <blockquote key={`${item.guestName}-${index}`} className={`group relative flex min-h-56 flex-col overflow-hidden rounded-sm border border-forest-deep/15 border-t-4 bg-white p-6 shadow-[0_12px_30px_rgba(37,59,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_rgba(37,59,46,0.14)] sm:min-h-64 sm:p-8 ${index === 0 ? "border-t-terracotta" : index === 1 ? "border-t-emerald" : "border-t-fresh"}`}>
                 <div className="flex items-start justify-between gap-4">
                   <p className="text-sm tracking-[0.16em] text-terracotta" aria-label={`${item.rating} out of 5 stars`}>{"★".repeat(item.rating)}</p>
                   <span className="font-serif text-5xl leading-7 text-terracotta/45 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">&ldquo;</span>

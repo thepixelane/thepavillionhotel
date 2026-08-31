@@ -29,8 +29,8 @@ export default async function StayPage() {
         <div className="absolute inset-0 bg-linear-to-t from-black/45 to-transparent" />
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-14 sm:py-20 lg:px-8">
-        <h1 className="max-w-4xl text-4xl leading-tight text-fg sm:text-6xl">Our rooms and suites are designed to make your stay comfortable and relaxed.</h1>
+      <section className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 sm:py-20 lg:px-8">
+        <h1 className="max-w-4xl text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Our rooms and suites are designed to make your stay comfortable and relaxed.</h1>
         <div className="mt-10 grid border-y border-line lg:grid-cols-2">
           <div className="py-8 lg:border-r lg:border-line lg:pr-10">
             <h2 className="text-3xl text-fg">Book your stay directly with us.</h2>
@@ -45,7 +45,7 @@ export default async function StayPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8">
+      <section className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 pb-20 lg:px-8">
         <p className="text-xs uppercase tracking-[0.3em] text-emerald">Discover our rooms</p>
         <div className="mt-8 grid gap-8">
           {rooms.map((room) => (

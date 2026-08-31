@@ -34,7 +34,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Category</p>
-      <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl">
+      <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">
         {category?.title ?? "Category"}
       </h1>
       {category?.description ? (

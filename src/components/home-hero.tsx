@@ -28,8 +28,8 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
         />
       ))}
       <div className="absolute inset-0 bg-linear-to-t from-black/55 via-black/10 to-black/15" />
-      <div className="relative mx-auto flex min-h-[78svh] max-w-7xl items-end px-5 pb-16 pt-24 sm:px-8 lg:min-h-[88svh] lg:px-12 lg:pb-20">
-        <p className="font-serif text-4xl text-white sm:text-5xl">Since 1995</p>
+      <div className="relative mx-auto flex min-h-[78svh] max-w-7xl 4xl:max-w-[90rem] items-end px-5 pb-16 pt-24 sm:px-8 lg:min-h-[88svh] lg:px-12 lg:pb-20">
+        <p className="font-serif text-4xl text-white sm:text-5xl 4xl:text-6xl">Since 1995</p>
       </div>
     </section>
   );

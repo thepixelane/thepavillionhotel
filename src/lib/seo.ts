@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
+import { FALLBACK_IMAGES } from "@/lib/constants";
 import { siteUrl } from "@/lib/public-env";
 import { diningVenues, rooms, siteSettings, venues } from "@/lib/site-data";
 
-export const defaultSocialImage = {
-  url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&h=630&fit=crop&q=85",
-  width: 1200,
-  height: 630,
-  alt: "The Pavillion Hotel in Kolhapur",
-};
+export const defaultSocialImage = FALLBACK_IMAGES.social;
 
 type PageMetadataInput = {
   title: string;

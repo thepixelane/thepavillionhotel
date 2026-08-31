@@ -30,7 +30,7 @@ export default async function OffersPage() {
   const { posts } = await getOffers({ limit: 18 });
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
+    <main className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <header className="max-w-3xl">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Offers & Updates</p>
         <h1 className="mt-4 text-4xl leading-tight text-fg sm:text-5xl lg:text-6xl">Campaigns worth planning around</h1>
