@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
   faHotel,
+  faImages,
   faLocationDot,
   faMap,
   faPhone,
@@ -34,6 +35,10 @@ export function HotelIcon({ className }: IconProps) {
 
 export function LocationPinIcon({ className }: IconProps) {
   return <FontAwesomeIcon icon={faLocationDot} aria-hidden="true" className={className} />;
+}
+
+export function ImagesIcon({ className }: IconProps) {
+  return <FontAwesomeIcon icon={faImages} aria-hidden="true" className={className} />;
 }
 
 export function InstagramIcon({ className }: IconProps) {

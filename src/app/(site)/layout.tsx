@@ -1,3 +1,4 @@
+import { HeaderSpacer } from "@/components/header-spacer";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { QuickActions } from "@/components/quick-actions";
@@ -17,6 +18,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify([hotelJsonLd, websiteJsonLd]).replace(/</g, "\\u003c") }}
       />
       <SiteHeader />
+      <HeaderSpacer />
       <div id="site-main">{children}</div>
       <SiteFooter />
       <QuickActions />

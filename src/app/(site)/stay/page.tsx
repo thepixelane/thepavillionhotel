@@ -24,9 +24,9 @@ export default async function StayPage() {
   return (
     <main>
       <JsonLd data={roomsJsonLd} />
-      <section className="relative min-h-[72svh] bg-forest-deep sm:min-h-[75svh]">
+      <section className="relative min-h-[100svh] overflow-hidden bg-forest-deep">
         {stayHero ? <Image src={stayHero.src} alt={stayHero.alt} fill priority sizes="100vw" className="object-cover opacity-80" /> : null}
-        <div className="absolute inset-0 bg-linear-to-t from-black/45 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/15 to-black/30" />
       </section>
 
       <section className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-14 sm:py-20 lg:px-8">

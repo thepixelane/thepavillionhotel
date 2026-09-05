@@ -1,8 +1,9 @@
+currently my landing page is as per client's request, but in my opionion
 we need some text on landing page, at least we need to shiow them why they are on our website tehre only. user should find it quickly isntead of searching.
+for myself, when i visit this website its either of these thigns - price, location, photos are important for a user
+so lets develop this and lets check how it looks
 
 need logo variation as per theme.
-
 we need plain logo and wordmark separately as icon will be used for favicon and loading animations.
 
 
-price, location, photos are important for a user
