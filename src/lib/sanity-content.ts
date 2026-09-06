@@ -7,6 +7,7 @@ import { menus as staticMenus } from "@/lib/menus";
 import {
   diningVenues as staticDiningVenues,
   galleryImages as staticGalleryImages,
+  homeHighlight as staticHighlight,
   rooms as staticRooms,
   siteSettings as staticSiteSettings,
   venues as staticVenues,
@@ -71,62 +72,6 @@ export type GalleryImage = {
   alt: string;
 };
 
-type PortableTextSpan = {
-  _type: "span";
-  text?: string;
-};
-
-type PortableTextBlock = {
-  _type?: string;
-  _key?: string;
-  style?: string;
-  children?: PortableTextSpan[];
-};
-
-export type BlogAuthor = {
-  name: string;
-  slug?: string;
-  image?: string;
-};
-
-export type BlogCategory = {
-  title: string;
-  slug: string;
-  description?: string;
-  postCount?: number;
-};
-
-export type BlogTag = {
-  title: string;
-  slug: string;
-};
-
-export type BlogPost = {
-  contentType: "blog" | "offer" | "festival" | "restaurantUpdate" | "announcement";
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage: string;
-  coverImageAlt: string;
-  categories: BlogCategory[];
-  tags: BlogTag[];
-  author?: BlogAuthor;
-  publishedAt?: string;
-  featured: boolean;
-  status?: "draft" | "published";
-  estimatedReadTime?: number;
-  seoTitle?: string;
-  seoDescription?: string;
-  canonicalUrl?: string;
-  ogImage?: string;
-  body: PortableTextBlock[];
-};
-
-export type BlogPostsResult = {
-  posts: BlogPost[];
-  total: number;
-};
-
 export type Testimonial = {
   guestName: string;
   rating: number;
@@ -139,13 +84,17 @@ export type Testimonial = {
   imageAlt: string;
 };
 
-export type OfferItem = BlogPost;
-
 export type MenuDocument = {
   slug: string;
   title: string;
   /** Absolute Sanity CDN URL, or a /public path when falling back to a bundled PDF. */
   fileUrl: string | null;
+};
+
+export type Highlight = {
+  title: string;
+  description: string;
+  ctaLabel: string;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -164,192 +113,11 @@ const menuBySlugQuery = groq`*[_type == "menu" && slug.current == $slug][0]{
   "fileUrl": select(active != false => file.asset->url, null)
 }`;
 
-const galleryQuery = groq`*[_type == "galleryImage"] | order(order asc, _createdAt asc){
-  category,
-  caption,
-  image
-}`;
-
-const blogPostsQuery = groq`*[
-  _type == "post" &&
-  defined(slug.current) &&
-  (!defined(status) || status == "published") &&
-  (!defined(contentType) || contentType == "blog") &&
-  ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
-  ($tagSlug == null || $tagSlug in tags[]->slug.current)
-] | order(featured desc, publishedAt desc)[$offset...$end]{
-  contentType,
+const highlightQuery = groq`*[_type == "highlight" && active != false] | order(order asc, _createdAt desc)[0]{
   title,
-  "slug": slug.current,
-  excerpt,
-  mainImage,
-  categories[]->{
-    title,
-    "slug": slug.current,
-    description
-  },
-  tags[]->{
-    title,
-    "slug": slug.current
-  },
-  author->{
-    name,
-    "slug": slug.current,
-    image
-  },
-  publishedAt,
-  featured,
-  status,
-  estimatedReadTime,
-  "seoTitle": seo.title,
-  "seoDescription": seo.description,
-  "canonicalUrl": seo.canonicalUrl,
-  "ogImage": seo.ogImage,
-  body
-}`;
-
-const blogPostCountQuery = groq`count(*[
-  _type == "post" &&
-  defined(slug.current) &&
-  (!defined(status) || status == "published") &&
-  (!defined(contentType) || contentType == "blog") &&
-  ($categorySlug == null || $categorySlug in categories[]->slug.current) &&
-  ($tagSlug == null || $tagSlug in tags[]->slug.current)
-])`;
-
-const blogPostBySlugQuery = groq`*[
-  _type == "post" &&
-  slug.current == $slug &&
-  (!defined(status) || status == "published") &&
-  (!defined(contentType) || contentType == "blog")
-][0]{
-  contentType,
-  title,
-  "slug": slug.current,
-  excerpt,
-  mainImage,
-  categories[]->{
-    title,
-    "slug": slug.current,
-    description
-  },
-  tags[]->{
-    title,
-    "slug": slug.current
-  },
-  author->{
-    name,
-    "slug": slug.current,
-    image
-  },
-  publishedAt,
-  featured,
-  status,
-  estimatedReadTime,
-  "seoTitle": seo.title,
-  "seoDescription": seo.description,
-  "canonicalUrl": seo.canonicalUrl,
-  "ogImage": seo.ogImage,
-  body
-}`;
-
-const blogCategoriesQuery = groq`*[_type == "category" && defined(slug.current)] | order(title asc){
-  title,
-  "slug": slug.current,
   description,
-  "postCount": count(*[
-    _type == "post" &&
-    references(^._id) &&
-    defined(slug.current) &&
-    (!defined(status) || status == "published") &&
-    (!defined(contentType) || contentType == "blog")
-  ])
+  ctaLabel
 }`;
-
-const relatedPostsQuery = groq`*[
-  _type == "post" &&
-  defined(slug.current) &&
-  slug.current != $slug &&
-  (!defined(status) || status == "published") &&
-  (!defined(contentType) || contentType == "blog") &&
-  count((categories[]->slug.current)[@ in $categorySlugs]) > 0
-] | order(publishedAt desc)[0...$limit]{
-  contentType,
-  title,
-  "slug": slug.current,
-  excerpt,
-  mainImage,
-  categories[]->{
-    title,
-    "slug": slug.current,
-    description
-  },
-  tags[]->{
-    title,
-    "slug": slug.current
-  },
-  author->{
-    name,
-    "slug": slug.current,
-    image
-  },
-  publishedAt,
-  featured,
-  status,
-  estimatedReadTime,
-  "seoTitle": seo.title,
-  "seoDescription": seo.description,
-  "canonicalUrl": seo.canonicalUrl,
-  "ogImage": seo.ogImage,
-  body
-}`;
-
-const offersQuery = groq`*[
-  _type == "post" &&
-  defined(slug.current) &&
-  (!defined(status) || status == "published") &&
-  contentType in ["offer", "festival", "restaurantUpdate", "announcement"] &&
-  (!defined(validFrom) || validFrom <= $now) &&
-  (!defined(validTo) || validTo >= $now)
-] | order(featured desc, publishedAt desc)[$offset...$end]{
-  contentType,
-  title,
-  "slug": slug.current,
-  excerpt,
-  mainImage,
-  categories[]->{
-    title,
-    "slug": slug.current,
-    description
-  },
-  tags[]->{
-    title,
-    "slug": slug.current
-  },
-  author->{
-    name,
-    "slug": slug.current,
-    image
-  },
-  publishedAt,
-  featured,
-  status,
-  estimatedReadTime,
-  "seoTitle": seo.title,
-  "seoDescription": seo.description,
-  "canonicalUrl": seo.canonicalUrl,
-  "ogImage": seo.ogImage,
-  body
-}`;
-
-const offersCountQuery = groq`count(*[
-  _type == "post" &&
-  defined(slug.current) &&
-  (!defined(status) || status == "published") &&
-  contentType in ["offer", "festival", "restaurantUpdate", "announcement"] &&
-  (!defined(validFrom) || validFrom <= $now) &&
-  (!defined(validTo) || validTo >= $now)
-])`;
 
 const featuredTestimonialsQuery = groq`*[_type == "testimonial" && featured == true] | order(order asc, reviewDate desc)[0...6]{
   guestName,
@@ -394,91 +162,8 @@ function imageUrl(source: SanityImageSource | undefined, width = 1600): string |
   }
 }
 
-function validImageUrl(value?: string | null, fallback?: string | null): string {
-  const candidate = value?.trim();
-  if (candidate) return candidate;
-  return fallback && fallback.trim().length > 0 ? fallback : FALLBACK_IMAGES.content;
-}
-
 function altOf(source: unknown): string {
   return (source as { alt?: string } | undefined)?.alt ?? "";
-}
-
-function plainTextFromBody(body: PortableTextBlock[] = []): string {
-  return (Array.isArray(body) ? body.filter(Boolean) : [])
-    .filter((block): block is PortableTextBlock => Boolean(block) && block._type === "block")
-    .map((block) => (Array.isArray(block.children) ? block.children : [])
-      .map((child) => child?.text ?? "")
-      .join(""))
-    .join(" ")
-    .trim();
-}
-
-function readTimeFromBody(body: PortableTextBlock[] = []): number {
-  const words = plainTextFromBody(body).split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.ceil(words / 225));
-}
-
-type RawBlogPost = {
-  contentType?: "blog" | "offer" | "festival" | "restaurantUpdate" | "announcement";
-  title: string;
-  slug: string;
-  excerpt?: string;
-  mainImage?: SanityImage & { alt?: string };
-  categories?: { title: string; slug: string; description?: string }[];
-  tags?: { title: string; slug: string }[];
-  author?: {
-    name: string;
-    slug?: string;
-    image?: SanityImage & { alt?: string };
-  };
-  publishedAt?: string;
-  featured?: boolean;
-  status?: "draft" | "published";
-  estimatedReadTime?: number;
-  seoTitle?: string;
-  seoDescription?: string;
-  canonicalUrl?: string;
-  ogImage?: SanityImage & { alt?: string };
-  body?: PortableTextBlock[];
-};
-
-function normalizeBlogPost(raw: RawBlogPost): BlogPost {
-  const safeBody = Array.isArray(raw.body) ? raw.body.filter(Boolean) as PortableTextBlock[] : [];
-  const safeCategories = Array.isArray(raw.categories) ? raw.categories.filter(Boolean) : [];
-  const safeTags = Array.isArray(raw.tags) ? raw.tags.filter(Boolean) : [];
-  const bodyPlain = plainTextFromBody(safeBody);
-  const coverImage = imageUrl(raw.mainImage, 1600) ?? FALLBACK_IMAGES.blog;
-  return {
-    contentType: raw.contentType ?? "blog",
-    title: raw.title,
-    slug: raw.slug,
-    excerpt: raw.excerpt?.trim() || bodyPlain.slice(0, 180),
-    coverImage,
-    coverImageAlt: altOf(raw.mainImage) || raw.title,
-    categories: safeCategories.map((category) => ({
-      title: category.title,
-      slug: category.slug,
-      description: category.description,
-    })),
-    tags: safeTags.map((tag) => ({ title: tag.title, slug: tag.slug })),
-    author: raw.author
-      ? {
-          name: raw.author.name,
-          slug: raw.author.slug,
-          image: imageUrl(raw.author.image, 320) ?? undefined,
-        }
-      : undefined,
-    publishedAt: raw.publishedAt,
-    featured: Boolean(raw.featured),
-    status: raw.status,
-    estimatedReadTime: raw.estimatedReadTime ?? readTimeFromBody(safeBody),
-    seoTitle: raw.seoTitle,
-    seoDescription: raw.seoDescription,
-    canonicalUrl: raw.canonicalUrl,
-    ogImage: imageUrl(raw.ogImage, 1600) ?? coverImage,
-    body: safeBody,
-  };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -524,9 +209,18 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
     dishes: [...place.dishes],
     image: place.image,
     imageAlt: place.name,
-    gallery: [{ src: place.image, alt: place.name }],
+    gallery: place.gallery.map((src) => ({ src, alt: place.name })),
     menuPages: [],
   }));
+}
+
+export async function getHighlight(): Promise<Highlight> {
+  const data = await safeFetch<Partial<Highlight> | null>(highlightQuery);
+  return {
+    title: data?.title?.trim() || staticHighlight.title,
+    description: data?.description?.trim() || staticHighlight.description,
+    ctaLabel: data?.ctaLabel?.trim() || staticHighlight.ctaLabel,
+  };
 }
 
 export async function getMenus(): Promise<MenuDocument[]> {
@@ -554,21 +248,7 @@ export async function getMenuBySlug(slug: string): Promise<MenuDocument | null> 
 }
 
 export async function getGalleryImages(): Promise<GalleryImage[]> {
-  type Raw = {
-    category: string;
-    caption: string;
-    image?: SanityImage & { alt?: string };
-  };
-  const data = await safeFetch<Raw[]>(galleryQuery);
-  if (!data || data.length === 0) {
-    return staticGalleryImages.map((image) => ({ ...image }));
-  }
-  return data.map((entry) => ({
-    category: entry.category,
-    caption: entry.caption,
-    src: validImageUrl(imageUrl(entry.image, 1600), staticGalleryImages[0]?.src),
-    alt: altOf(entry.image) || entry.caption,
-  }));
+  return staticGalleryImages.map((image) => ({ ...image }));
 }
 
 export function homeHeroImages(settings: SiteSettings | null): ContentImage[] {
@@ -577,53 +257,6 @@ export function homeHeroImages(settings: SiteSettings | null): ContentImage[] {
 
 export function stayHeroImage(settings: SiteSettings | null): ContentImage | null {
   return settings?.stayHeroImage ? { ...settings.stayHeroImage } : null;
-}
-
-export async function getBlogPosts(options?: {
-  categorySlug?: string;
-  tagSlug?: string;
-  limit?: number;
-  offset?: number;
-}): Promise<BlogPostsResult> {
-  const limit = options?.limit ?? 12;
-  const offset = options?.offset ?? 0;
-  const params = {
-    categorySlug: options?.categorySlug ?? null,
-    tagSlug: options?.tagSlug ?? null,
-    offset,
-    end: offset + limit,
-  };
-
-  const [rows, total] = await Promise.all([
-    safeFetch<RawBlogPost[]>(blogPostsQuery, params),
-    safeFetch<number>(blogPostCountQuery, params),
-  ]);
-
-  return {
-    posts: (rows ?? []).map(normalizeBlogPost),
-    total: total ?? 0,
-  };
-}
-
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const post = await safeFetch<RawBlogPost | null>(blogPostBySlugQuery, { slug });
-  return post ? normalizeBlogPost(post) : null;
-}
-
-export async function getRelatedBlogPosts(post: BlogPost, limit = 3): Promise<BlogPost[]> {
-  const categorySlugs = post.categories.map((category) => category.slug).filter(Boolean);
-  if (categorySlugs.length === 0) return [];
-  const rows = await safeFetch<RawBlogPost[]>(relatedPostsQuery, {
-    slug: post.slug,
-    categorySlugs,
-    limit,
-  });
-  return (rows ?? []).map(normalizeBlogPost);
-}
-
-export async function getBlogCategories(): Promise<BlogCategory[]> {
-  const rows = await safeFetch<BlogCategory[]>(blogCategoriesQuery);
-  return rows ?? [];
 }
 
 export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
@@ -650,28 +283,5 @@ export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
     image: imageUrl(entry.guestImage, 300) ?? FALLBACK_IMAGES.testimonial,
     imageAlt: altOf(entry.guestImage) || entry.guestName,
   }));
-}
-
-export async function getOffers(options?: {
-  limit?: number;
-  offset?: number;
-}): Promise<BlogPostsResult> {
-  const limit = options?.limit ?? 12;
-  const offset = options?.offset ?? 0;
-  const params = {
-    now: new Date().toISOString(),
-    offset,
-    end: offset + limit,
-  };
-
-  const [rows, total] = await Promise.all([
-    safeFetch<RawBlogPost[]>(offersQuery, params),
-    safeFetch<number>(offersCountQuery, params),
-  ]);
-
-  return {
-    posts: (rows ?? []).map(normalizeBlogPost),
-    total: total ?? 0,
-  };
 }
 

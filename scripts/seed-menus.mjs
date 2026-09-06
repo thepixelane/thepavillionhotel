@@ -49,11 +49,15 @@ const client = createClient({
   useCdn: false,
 });
 
+// Source PDFs live outside the repo so they are not committed or deployed.
+const PDF_SOURCE = "../..";
+
 const MENUS = [
-  { slug: "pakhtoon", title: "Pakhtoon Restaurant", file: "src/assets/PakhtoonMenu.pdf", order: 1 },
-  { slug: "walkway", title: "Walkway Restaurant & Areca Cafe", file: "src/assets/WalkwayMenu.pdf", order: 2 },
-  { slug: "bar", title: "Bar Menu", file: "src/assets/BarMenu.pdf", order: 3 },
-  { slug: "room-service", title: "In-Room Dining", file: "src/assets/RoomMenu.pdf", order: 4 },
+  { slug: "pakhtoon", title: "The Pavillion Restaurant", file: `${PDF_SOURCE}/PakhtoonMenu.pdf`, order: 1, active: true },
+  // Retired: all seating areas share the food menu above. Kept so printed QR codes still resolve.
+  { slug: "walkway", title: "Walkway Seating", file: `${PDF_SOURCE}/WalkwayMenu.pdf`, order: 2, active: false },
+  { slug: "bar", title: "Bar Menu", file: `${PDF_SOURCE}/BarMenu.pdf`, order: 3, active: true },
+  { slug: "room-service", title: "In-Room Dining", file: `${PDF_SOURCE}/RoomMenu.pdf`, order: 4, active: true },
 ];
 
 async function uploadPdf(absPath) {
@@ -76,7 +80,7 @@ async function run() {
       title: menu.title,
       slug: { _type: "slug", current: menu.slug },
       order: menu.order,
-      active: true,
+      active: menu.active,
     };
 
     const absPath = resolve(__dirname, "..", menu.file);

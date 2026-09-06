@@ -9,6 +9,7 @@ import { FALLBACK_IMAGES } from "@/lib/constants";
 import {
   getFeaturedTestimonials,
   getGalleryImages,
+  getHighlight,
   getRooms,
   getSiteSettings,
   getVenues,
@@ -24,8 +25,8 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 export default async function Home() {
-  const [settings, rooms, gallery, testimonials, venues] = await Promise.all([
-    getSiteSettings(), getRooms(), getGalleryImages(), getFeaturedTestimonials(), getVenues(),
+  const [settings, rooms, gallery, testimonials, venues, highlight] = await Promise.all([
+    getSiteSettings(), getRooms(), getGalleryImages(), getFeaturedTestimonials(), getVenues(), getHighlight(),
   ]);
   const heroImages = resolveHomeHeroImages(settings);
   const bookingUrl = sanitizeBookingUrl(settings?.bookingEngineUrl?.trim() || defaultBookingUrl);
@@ -46,9 +47,9 @@ export default async function Home() {
         <PropertyGalleryPreview images={galleryPreview} />
         <div className="flex flex-col justify-center bg-emerald px-6 py-12 text-white dark:bg-fresh dark:text-forest-deep sm:px-10 lg:px-12">
           <p className="text-xs uppercase tracking-[0.3em] text-offwhite dark:text-forest-deep">Pavillion Highlights</p>
-            <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">Shravan Festival</h2>
-            <p className="mt-5 text-lg leading-8 text-white/85 dark:text-forest-deep">Unlimited Buffet. 22nd August to 9th September 2026</p>
-          <a href={telHref} className="mt-8 inline-flex w-fit border border-white px-5 py-3 text-xs uppercase tracking-[0.25em] transition hover:bg-white hover:text-emerald dark:border-forest-deep dark:hover:bg-forest-deep dark:hover:text-fresh">Call Now</a>
+            <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">{highlight.title}</h2>
+            <p className="mt-5 text-lg leading-8 text-white/85 dark:text-forest-deep">{highlight.description}</p>
+          <a href={telHref} className="mt-8 inline-flex w-fit border border-white px-5 py-3 text-xs uppercase tracking-[0.25em] transition hover:bg-white hover:text-emerald dark:border-forest-deep dark:hover:bg-forest-deep dark:hover:text-fresh">{highlight.ctaLabel}</a>
         </div>
       </section>
 

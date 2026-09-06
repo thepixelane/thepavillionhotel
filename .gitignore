@@ -41,3 +41,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local build/diagnostic output
+*.log
+
+# Unprocessed photography and PDF masters live outside this repo, in
+# ../_assets-originals/ and ../*.pdf. Only web-optimised output belongs here.
+/public/menus/
