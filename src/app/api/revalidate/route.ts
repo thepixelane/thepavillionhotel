@@ -13,8 +13,6 @@ const PATHS = [
   "/dining",
   "/gallery",
   "/contact",
-  "/blog",
-  "/offers",
 ];
 
 function safeEqual(a: string, b: string): boolean {
@@ -51,7 +49,7 @@ function revalidateAll(): { paths: string[] } {
   for (const path of PATHS) {
     revalidatePath(path);
   }
-  revalidatePath("/blog", "layout");
+  revalidatePath("/menu/[slug]", "page");
   return { paths: PATHS };
 }
 

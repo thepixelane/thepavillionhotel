@@ -33,10 +33,11 @@ export function HomeHero({ images, bookingUrl, mapsUrl, locationLabel, fromPrice
   const priceLabel = fromPrice ? `${priceFormatter.format(fromPrice)} / night` : "See our rooms";
 
   return (
+    // From md up the hero slides under the sticky header so it starts flush at the top.
     <section
       aria-roledescription="carousel"
       aria-label="The Pavillion Hotel"
-      className="relative isolate min-h-[100svh] overflow-hidden bg-forest-deep text-white"
+      className="relative isolate min-h-svh overflow-hidden bg-forest-deep text-white md:-mt-22"
     >
       {slides.map((image, index) => (
         <Image
@@ -46,12 +47,12 @@ export function HomeHero({ images, bookingUrl, mapsUrl, locationLabel, fromPrice
           fill
           priority={index === 0}
           sizes="100vw"
-          className={`object-cover transition-opacity duration-1000 ${index === active ? "opacity-85" : "opacity-0"}`}
+          className={`object-cover object-center transition-opacity duration-1000 ${index === active ? "opacity-85" : "opacity-0"}`}
         />
       ))}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/35 to-black/45" />
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-7xl 4xl:max-w-[90rem] flex-col items-start justify-end px-5 pb-14 pt-28 sm:px-8 sm:pb-16 sm:pt-32 lg:px-12 lg:pb-20">
+      <div className="relative mx-auto flex min-h-svh max-w-7xl 4xl:max-w-360 flex-col items-start justify-end px-5 pb-14 pt-28 sm:px-8 sm:pb-16 sm:pt-32 lg:px-12 lg:pb-20">
         <p className="text-[10px] uppercase tracking-[0.42em] text-white/85 sm:text-[11px] sm:tracking-[0.5em]">
           Kolhapur · Boutique Hotel · Since 1995
         </p>

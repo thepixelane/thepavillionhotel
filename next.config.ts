@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
+  // Pin the workspace root so the dev server never walks up into d:\Pavillion
+  // (.venv, legacy/, _assets-originals/) when inferring what to watch.
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
+  // Keep compiled routes warm — evicting /studio forces a full ~10k-module rebuild.
+  onDemandEntries: {
+    maxInactiveAge: 30 * 60 * 1000,
+    pagesBufferLength: 12,
+  },
   images: {
     remotePatterns: [
       {

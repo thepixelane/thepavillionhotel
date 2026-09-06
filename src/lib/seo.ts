@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { FALLBACK_IMAGES } from "@/lib/constants";
 import { siteUrl } from "@/lib/public-env";
-import { diningVenues, rooms, siteSettings, venues } from "@/lib/site-data";
+import { diningVenues, rooms, siteSettings, venues, SHARED_MENU_SLUG } from "@/lib/site-data";
 
 export const defaultSocialImage = FALLBACK_IMAGES.social;
 
@@ -130,14 +130,24 @@ export const eventVenuesJsonLd = {
   })),
 };
 
-export const diningJsonLd = diningVenues.map((venue) => ({
+// One restaurant with three seating areas, so this is a single entity rather
+// than one Restaurant per seating area.
+export const diningJsonLd = {
   "@context": "https://schema.org",
   "@type": "Restaurant",
-  name: venue.name,
-  description: venue.intro,
-  image: venue.image,
+  name: "The Pavillion Restaurant",
+  description:
+    "The Pavillion Restaurant serves Mughlai, Afghani, Chinese and Continental cuisine across three seating areas: Pakhtoon, Walkway and Areca Bistro.",
+  image: diningVenues.map((venue) => venue.image),
   telephone: siteSettings.contactPhone,
   url: `${siteUrl}/dining`,
+  hasMenu: `${siteUrl}/menu/${SHARED_MENU_SLUG}`,
   parentOrganization: { "@id": `${siteUrl}/#hotel` },
   address: hotelJsonLd.address,
-}));
+  containsPlace: diningVenues.map((venue) => ({
+    "@type": "Place",
+    name: venue.name,
+    description: venue.intro,
+    image: venue.image,
+  })),
+};
