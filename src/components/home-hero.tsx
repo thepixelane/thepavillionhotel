@@ -15,7 +15,9 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
   }, [slides.length]);
 
   return (
-    <section aria-roledescription="carousel" aria-label="The Pavillion Hotel" className="relative isolate min-h-[78svh] overflow-hidden bg-forest-deep text-white lg:min-h-[88svh]">
+    // Matches the 3:2 source photos so the full frame shows without cropping.
+    // From md up the hero slides under the sticky header so it starts flush at the top.
+    <section aria-roledescription="carousel" aria-label="The Pavillion Hotel" className="relative isolate aspect-3/2 w-full overflow-hidden bg-forest-deep text-white md:-mt-22">
       {slides.map((image, index) => (
         <Image
           key={image.src}
@@ -24,12 +26,12 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
           fill
           priority={index === 0}
           sizes="100vw"
-          className={`object-cover transition-opacity duration-1000 ${index === active ? "opacity-75" : "opacity-0"}`}
+          className={`object-contain transition-opacity duration-1000 ${index === active ? "opacity-100" : "opacity-0"}`}
         />
       ))}
-      <div className="absolute inset-0 bg-linear-to-t from-black/55 via-black/10 to-black/15" />
-      <div className="relative mx-auto flex min-h-[78svh] max-w-7xl 4xl:max-w-[90rem] items-end px-5 pb-16 pt-24 sm:px-8 lg:min-h-[88svh] lg:px-12 lg:pb-20">
-        <p className="font-serif text-4xl text-white sm:text-5xl 4xl:text-6xl">Since 1995</p>
+      <div className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-black/10" />
+      <div className="absolute inset-0 mx-auto flex max-w-7xl 4xl:max-w-360 items-end px-5 pb-6 sm:px-8 sm:pb-10 lg:px-12 lg:pb-16">
+        <p className="font-serif text-2xl text-white drop-shadow-md sm:text-4xl lg:text-5xl 4xl:text-6xl">Since 1995</p>
       </div>
     </section>
   );

@@ -42,12 +42,12 @@ export const siteSettings: SiteSettings = {
     "https://maps.google.com/?q=392+E,+Assembly+Road,+Near+Basant-Bahar+Theatre,+Opp.+Railway+Station,+Shahupuri,+Kolhapur,+Maharashtra+416001",
   homeHeroImages: [
     {
-      src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=2000&q=88",
-      alt: "The Pavillion Hotel surrounded by greenery in Kolhapur",
+      src: "/images/home-hero-1.jpg",
+      alt: "The colonnaded entrance and fountain courtyard at The Pavillion Hotel in Kolhapur",
     },
     {
-      src: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=2000&q=88",
-      alt: "Peaceful courtyard at The Pavillion Hotel in Kolhapur",
+      src: "/images/home-hero-2.jpg",
+      alt: "Palm-lined lawns and lit garden facade at The Pavillion Hotel at dusk",
     },
   ],
   stayHeroImage: {

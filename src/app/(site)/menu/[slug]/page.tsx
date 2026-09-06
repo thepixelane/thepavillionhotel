@@ -38,9 +38,10 @@ export default async function MenuPage({ params }: PageProps) {
   const menu = await getMenuBySlug(slug);
   if (!menu) notFound();
 
-  const available = isAvailable(menu.fileUrl);
+  const fileUrl = menu.fileUrl;
+  const available = isAvailable(fileUrl);
   // Fit-to-width so the first page isn't cropped in desktop PDF viewers.
-  const viewerUrl = available ? `${menu.fileUrl}#view=FitH&toolbar=1` : null;
+  const viewerUrl = available ? `${fileUrl}#view=FitH&toolbar=1` : undefined;
 
   return (
     <div className="mx-auto flex min-h-[70svh] w-full max-w-6xl flex-col gap-5 px-4 py-8 sm:gap-6 sm:px-6 sm:py-10">
@@ -48,7 +49,7 @@ export default async function MenuPage({ params }: PageProps) {
         <h1 className="font-serif text-2xl text-fg sm:text-3xl">{menu.title}</h1>
         {available ? (
           <a
-            href={menu.fileUrl}
+            href={fileUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden border border-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest transition hover:bg-forest hover:text-white sm:inline-block dark:border-fresh dark:text-fresh"
@@ -71,7 +72,7 @@ export default async function MenuPage({ params }: PageProps) {
               Tap below to open the menu in your phone&rsquo;s PDF viewer.
             </p>
             <a
-              href={menu.fileUrl}
+              href={fileUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full max-w-xs bg-forest px-6 py-4 text-xs uppercase tracking-[0.22em] text-white"
@@ -79,7 +80,7 @@ export default async function MenuPage({ params }: PageProps) {
               View {menu.title}
             </a>
             <a
-              href={menu.fileUrl}
+              href={fileUrl}
               download
               className="text-[11px] uppercase tracking-[0.22em] text-fg-muted underline underline-offset-4"
             >
@@ -88,7 +89,7 @@ export default async function MenuPage({ params }: PageProps) {
           </div>
 
           <iframe
-            src={viewerUrl ?? undefined}
+            src={viewerUrl}
             title={`${menu.title} PDF`}
             className="hidden h-[80svh] w-full rounded-2xl border border-line bg-white sm:block"
           />
