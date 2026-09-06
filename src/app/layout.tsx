@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/public-env";
@@ -61,25 +60,14 @@ export const metadata: Metadata = {
   },
 };
 
-const systemThemeScript = `
-(function(){
-  var media = window.matchMedia('(prefers-color-scheme: dark)');
-  var apply = function(){ document.documentElement.classList.toggle('dark', media.matches); };
-  apply();
-  if (media.addEventListener) media.addEventListener('change', apply);
-  else media.addListener(apply);
-})();
-`;
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
-        <Script id="system-theme" strategy="beforeInteractive">{systemThemeScript}</Script>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
         {children}
       </body>
     </html>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* Enable class-based dark mode: `dark:` variant applies when `.dark` is on <html>. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Dark mode follows the OS setting via Tailwind's default `prefers-color-scheme`
+   variant. No class toggle, so it works identically in dev, build and with JS off. */
 
 /* Custom breakpoint beyond Tailwind defaults for genuine 4K / projector displays. */
 @theme {
@@ -36,21 +36,23 @@
 }
 
 /*
- * Dark-mode overrides. Redeclaring --color-* under .dark cascades to every
+ * Dark-mode overrides. Redeclaring --color-* here cascades to every
  * Tailwind utility that reads these tokens (bg-bg, text-fg, bg-surface, …).
  */
-.dark {
-	--color-bg: #0d1a14;
-	--color-fg: #f0ebde;
-	--color-fg-muted: #a9a397;
-	--color-surface: #16261e;
-	--color-surface-2: #1c3226;
-	--color-line: rgba(240, 235, 222, 0.10);
-	--color-emerald: #72c69b;
-	--color-fresh: #a6c96a;
-	--color-gold: #e1bd86;
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-bg: #0d1a14;
+		--color-fg: #f0ebde;
+		--color-fg-muted: #a9a397;
+		--color-surface: #16261e;
+		--color-surface-2: #1c3226;
+		--color-line: rgba(240, 235, 222, 0.10);
+		--color-emerald: #72c69b;
+		--color-fresh: #a6c96a;
+		--color-gold: #e1bd86;
 
-	color-scheme: dark;
+		color-scheme: dark;
+	}
 }
 
 /* Ancillary vars used directly in CSS (not through Tailwind utilities). */
@@ -59,9 +61,11 @@
 	--ring: rgba(180, 90, 48, 0.62);
 }
 
-.dark {
-	--header-bg: rgba(13, 26, 20, 0.78);
-	--ring: rgba(184, 147, 90, 0.65);
+@media (prefers-color-scheme: dark) {
+	:root {
+		--header-bg: rgba(13, 26, 20, 0.78);
+		--ring: rgba(184, 147, 90, 0.65);
+	}
 }
 
 html {
@@ -161,10 +165,12 @@ p {
 }
 
 /* Subtle scrollbar in dark mode. */
-.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
-.dark ::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-gold) 40%, transparent); border-radius: 999px; }
-.dark ::-webkit-scrollbar-track { background: transparent; }
+@media (prefers-color-scheme: dark) {
+	::-webkit-scrollbar { width: 10px; height: 10px; }
+	::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-gold) 40%, transparent); border-radius: 999px; }
+	::-webkit-scrollbar-track { background: transparent; }
+}
 
-@media (max-width: 640px) {
-	.dark ::-webkit-scrollbar { width: 6px; height: 6px; }
+@media (prefers-color-scheme: dark) and (max-width: 640px) {
+	::-webkit-scrollbar { width: 6px; height: 6px; }
 }
