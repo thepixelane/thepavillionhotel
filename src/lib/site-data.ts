@@ -207,6 +207,7 @@ export const diningVenues = [
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
     timing: "7:00 PM – 11:30 PM",
     menuUrl: "https://www.hotelpavillion.co.in/",
+    menuSlug: "pakhtoon",
     dishes: ["Peshawari Kebab", "Raan-e-Pakhtoon", "Dum Biryani", "Sheermal"],
   },
   {
@@ -216,6 +217,7 @@ export const diningVenues = [
     image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
     timing: "7:00 AM – 10:00 PM",
     menuUrl: "https://www.hotelpavillion.co.in/",
+    menuSlug: "walkway",
     dishes: ["Estate Coffee", "Garden Salads", "Wood-Fired Pizza", "Sourdough Bakes"],
   },
 ] as const;

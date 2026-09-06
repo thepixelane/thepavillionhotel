@@ -52,6 +52,7 @@ function revalidateAll(): { paths: string[] } {
     revalidatePath(path);
   }
   revalidatePath("/blog", "layout");
+  revalidatePath("/menu/[slug]", "page");
   return { paths: PATHS };
 }
 

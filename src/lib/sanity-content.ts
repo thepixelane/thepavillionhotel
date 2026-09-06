@@ -3,6 +3,7 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { FALLBACK_IMAGES } from "@/lib/constants";
+import { menus as staticMenus } from "@/lib/menus";
 import {
   diningVenues as staticDiningVenues,
   galleryImages as staticGalleryImages,
@@ -55,6 +56,7 @@ export type DiningVenue = {
   timing?: string;
   menuUrl?: string;
   menuFile?: string;
+  menuSlug?: string;
   dishes: string[];
   image: string;
   imageAlt: string;
@@ -139,9 +141,28 @@ export type Testimonial = {
 
 export type OfferItem = BlogPost;
 
+export type MenuDocument = {
+  slug: string;
+  title: string;
+  /** Absolute Sanity CDN URL, or a /public path when falling back to a bundled PDF. */
+  fileUrl: string | null;
+};
+
 /* -------------------------------------------------------------------------- */
 /*  GROQ queries                                                              */
 /* -------------------------------------------------------------------------- */
+
+const menusQuery = groq`*[_type == "menu" && defined(slug.current)] | order(order asc, title asc){
+  "slug": slug.current,
+  title,
+  "fileUrl": select(active != false => file.asset->url, null)
+}`;
+
+const menuBySlugQuery = groq`*[_type == "menu" && slug.current == $slug][0]{
+  "slug": slug.current,
+  title,
+  "fileUrl": select(active != false => file.asset->url, null)
+}`;
 
 const galleryQuery = groq`*[_type == "galleryImage"] | order(order asc, _createdAt asc){
   category,
@@ -499,12 +520,37 @@ export async function getDiningVenues(): Promise<DiningVenue[]> {
     intro: place.intro,
     timing: place.timing,
     menuUrl: place.menuUrl,
+    menuSlug: place.menuSlug,
     dishes: [...place.dishes],
     image: place.image,
     imageAlt: place.name,
     gallery: [{ src: place.image, alt: place.name }],
     menuPages: [],
   }));
+}
+
+export async function getMenus(): Promise<MenuDocument[]> {
+  const data = await safeFetch<MenuDocument[]>(menusQuery);
+  const fromSanity = (data ?? []).filter((menu) => menu.slug);
+  const seen = new Set(fromSanity.map((menu) => menu.slug));
+
+  // Bundled PDFs stay available so printed QR codes keep working before the
+  // matching Sanity document exists.
+  const fallbacks = staticMenus
+    .filter((menu) => !seen.has(menu.slug))
+    .map((menu) => ({ slug: menu.slug, title: menu.title, fileUrl: menu.file }));
+
+  return [...fromSanity, ...fallbacks];
+}
+
+export async function getMenuBySlug(slug: string): Promise<MenuDocument | null> {
+  const data = await safeFetch<MenuDocument | null>(menuBySlugQuery, { slug });
+  if (data?.slug) return data;
+
+  const fallback = staticMenus.find((menu) => menu.slug === slug);
+  return fallback
+    ? { slug: fallback.slug, title: fallback.title, fileUrl: fallback.file }
+    : null;
 }
 
 export async function getGalleryImages(): Promise<GalleryImage[]> {

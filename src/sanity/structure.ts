@@ -5,6 +5,7 @@ import { TagIcon } from '@sanity/icons/Tag'
 import { UserIcon } from '@sanity/icons/User'
 import { SparklesIcon as TestimonialIcon } from '@sanity/icons/Sparkles'
 import { EnvelopeIcon } from '@sanity/icons/Envelope'
+import { DocumentPdfIcon } from '@sanity/icons/DocumentPdf'
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
@@ -12,6 +13,7 @@ export const structure: StructureResolver = (S) =>
     .title('The Pavillion')
     .items([
       S.documentTypeListItem('galleryImage').title('Gallery images').icon(ImagesIcon),
+      S.documentTypeListItem('menu').title('Menus (PDF)').icon(DocumentPdfIcon),
       S.divider(),
       S.listItem()
         .title('Content Hub')
@@ -62,6 +64,7 @@ export const structure: StructureResolver = (S) =>
             'author',
             'testimonial',
             'enquiry',
+            'menu',
           ].includes(item.getId()!),
       ),
     ])
