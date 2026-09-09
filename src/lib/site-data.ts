@@ -51,8 +51,8 @@ export const siteSettings: SiteSettings = {
     },
   ],
   stayHeroImage: {
-    src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=2000&q=88",
-    alt: "Guest room at The Pavillion Hotel in Kolhapur",
+    src: "/images/stay/deluxe-room/deluxe-room-1.jpeg",
+    alt: "Deluxe room at The Pavillion Hotel in Kolhapur",
   },
   bookingPartners: [],
 };
@@ -75,9 +75,9 @@ export const rooms = [
     amenities: ["Queen or Twin Beds", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 9800,
     images: [
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80",
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1200&q=80",
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=80",
+      "/images/stay/deluxe-room/deluxe-room-1.jpeg",
+      "/images/stay/deluxe-room/deluxe-room-2.jpeg",
+      "/images/stay/deluxe-room/deluxe-room-3.jpeg",
     ],
   },
   {
@@ -88,9 +88,9 @@ export const rooms = [
     amenities: ["Queen or Twin Beds", "Garden Sit-out", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 12400,
     images: [
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80",
-      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80",
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=80",
+      "/images/stay/executive-room/executive-room-1.jpeg",
+      "/images/stay/executive-room/executive-room-2.jpeg",
+      "/images/stay/executive-room/executive-room-3.jpeg",
     ],
   },
   {
@@ -101,9 +101,11 @@ export const rooms = [
     amenities: ["King Bed", "Garden or Balcony Sit-out", "LED TV", "Free Wi-Fi and Car Park", "In-Room Dining"],
     nightlyRate: 18900,
     images: [
-      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200&q=80",
-      "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200&q=80",
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=80",
+      "/images/stay/suite-room/suite-room-1.JPG",
+      "/images/stay/suite-room/suite-room-2.JPG",
+      "/images/stay/suite-room/suite-room-3.JPG",
+      "/images/stay/suite-room/suite-room-4.JPG",
+      "/images/stay/suite-room/suite-room-5.JPG",
     ],
   },
 ] as const;
@@ -158,6 +160,72 @@ export const venues = [
 ] as const;
 
 export const galleryImages = [
+  {
+    category: "Rooms",
+    caption: "Deluxe room interior",
+    src: "/images/stay/deluxe-room/deluxe-room-1.jpeg",
+    alt: "Deluxe room interior at The Pavillion Hotel",
+  },
+  {
+    category: "Rooms",
+    caption: "Deluxe room with warm wood accents",
+    src: "/images/stay/deluxe-room/deluxe-room-2.jpeg",
+    alt: "Deluxe room with warm wood accents and natural light",
+  },
+  {
+    category: "Rooms",
+    caption: "Deluxe room details",
+    src: "/images/stay/deluxe-room/deluxe-room-3.jpeg",
+    alt: "Close look at a deluxe room at The Pavillion Hotel",
+  },
+  {
+    category: "Rooms",
+    caption: "Executive room bedroom",
+    src: "/images/stay/executive-room/executive-room-1.jpeg",
+    alt: "Executive room bedroom at The Pavillion Hotel",
+  },
+  {
+    category: "Rooms",
+    caption: "Executive room bathroom",
+    src: "/images/stay/executive-room/executive-room-2.jpeg",
+    alt: "Executive room bathroom at The Pavillion Hotel",
+  },
+  {
+    category: "Rooms",
+    caption: "Executive room with lounge setup",
+    src: "/images/stay/executive-room/executive-room-3.jpeg",
+    alt: "Executive room with lounge seating and warm lighting",
+  },
+  {
+    category: "Rooms",
+    caption: "Suite room evening view",
+    src: "/images/stay/suite-room/suite-room-1.JPG",
+    alt: "Suite room interior at The Pavillion Hotel",
+  },
+  {
+    category: "Rooms",
+    caption: "Suite room bedroom",
+    src: "/images/stay/suite-room/suite-room-2.JPG",
+    alt: "Suite room with king bed and lounge styling",
+  },
+  {
+    category: "Rooms",
+    caption: "Suite room with warm beige styling",
+    src: "/images/stay/suite-room/suite-room-3.JPG",
+    alt: "Suite room with warm beige styling and spacious layout",
+  },
+  {
+    category: "Rooms",
+    caption: "Suite room with seating area",
+    src: "/images/stay/suite-room/suite-room-4.JPG",
+    alt: "Suite room seating area and bedroom layout",
+  },
+  {
+    category: "Rooms",
+    caption: "Suite room details",
+    src: "/images/stay/suite-room/suite-room-5.JPG",
+    alt: "Suite room details and decor at The Pavillion Hotel",
+  },
   {
     category: "Property",
     caption: "The Pavillion framed by greenery",

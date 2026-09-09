@@ -66,8 +66,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>
