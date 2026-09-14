@@ -75,7 +75,7 @@ export function RoomImageCarousel({ images, roomName }: RoomImageCarouselProps) 
                 type="button"
                 onClick={goPrevious}
                 aria-label={`Previous image for ${roomName}`}
-                className="grid h-11 w-11 place-items-center rounded-full border border-offwhite/20 bg-white/10 text-offwhite transition hover:border-gold hover:text-gold sm:h-10 sm:w-10"
+                className="image-nav-button sm:h-10 sm:w-10"
               >
                 ←
               </button>
@@ -83,7 +83,7 @@ export function RoomImageCarousel({ images, roomName }: RoomImageCarouselProps) 
                 type="button"
                 onClick={goNext}
                 aria-label={`Next image for ${roomName}`}
-                className="grid h-11 w-11 place-items-center rounded-full border border-offwhite/20 bg-white/10 text-offwhite transition hover:border-gold hover:text-gold sm:h-10 sm:w-10"
+                className="image-nav-button sm:h-10 sm:w-10"
               >
                 →
               </button>

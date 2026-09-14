@@ -164,6 +164,26 @@ p {
 	border-radius: 4px;
 }
 
+.image-nav-button {
+	display: grid;
+	height: 2.75rem;
+	width: 2.75rem;
+	place-items: center;
+	border: 1px solid color-mix(in oklab, var(--color-offwhite) 22%, transparent);
+	border-radius: 999px;
+	background: rgb(255 255 255 / 10%);
+	color: var(--color-offwhite);
+	font-size: 1.125rem;
+	line-height: 1;
+	transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+}
+
+.image-nav-button:hover {
+	border-color: var(--color-gold);
+	background: rgb(255 255 255 / 16%);
+	color: var(--color-gold);
+}
+
 /* Subtle scrollbar in dark mode. */
 @media (prefers-color-scheme: dark) {
 	::-webkit-scrollbar { width: 10px; height: 10px; }

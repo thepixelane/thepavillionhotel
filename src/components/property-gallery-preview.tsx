@@ -24,8 +24,8 @@ export function PropertyGalleryPreview({ images }: { images: GalleryImage[] }) {
           <Link href="/gallery" className="mt-3 inline-block text-xs uppercase tracking-[0.2em] underline-offset-4 hover:underline">View gallery</Link>
         </div>
         <div className="flex gap-2">
-          <button type="button" onClick={() => move(-1)} aria-label="Previous gallery image" className="grid h-11 w-11 place-items-center border border-white/60 bg-black/20 text-lg">←</button>
-          <button type="button" onClick={() => move(1)} aria-label="Next gallery image" className="grid h-11 w-11 place-items-center border border-white/60 bg-black/20 text-lg">→</button>
+          <button type="button" onClick={() => move(-1)} aria-label="Previous gallery image" className="image-nav-button">←</button>
+          <button type="button" onClick={() => move(1)} aria-label="Next gallery image" className="image-nav-button">→</button>
         </div>
       </div>
     </div>

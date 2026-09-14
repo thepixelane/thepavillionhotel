@@ -23,6 +23,7 @@ export default async function EventsPage() {
     suitableFor: venue.suitableFor,
     facilities: venue.facilities,
     image: venue.image,
+    images: venue.images,
   }));
 
   return (

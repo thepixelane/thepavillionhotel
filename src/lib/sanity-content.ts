@@ -48,6 +48,7 @@ export type Venue = {
   suitableFor: string[];
   facilities: string[];
   image: string;
+  images: string[];
   imageAlt: string;
 };
 
@@ -195,6 +196,7 @@ export async function getVenues(): Promise<Venue[]> {
     suitableFor: [...venue.suitableFor],
     facilities: [...venue.facilities],
     image: venue.image,
+    images: [...venue.images],
     imageAlt: venue.name,
   }));
 }

@@ -25,12 +25,16 @@ export function DiningGallery({ images, name }: { images: ContentImage[]; name: 
     >
       <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
       {images.length > 1 ? (
-        <div className="absolute bottom-4 right-4 flex gap-2">
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-linear-to-t from-forest-deep/85 to-transparent p-4">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-offwhite/80" aria-live="polite">
+            {active + 1} / {images.length}
+          </p>
+          <div className="flex gap-2">
           <button
             type="button"
             onClick={() => move(-1)}
             aria-label={`Previous ${name} photograph`}
-            className="grid h-11 w-11 place-items-center bg-white text-forest sm:h-10 sm:w-10"
+            className="image-nav-button sm:h-10 sm:w-10"
           >
             ←
           </button>
@@ -38,10 +42,11 @@ export function DiningGallery({ images, name }: { images: ContentImage[]; name: 
             type="button"
             onClick={() => move(1)}
             aria-label={`Next ${name} photograph`}
-            className="grid h-11 w-11 place-items-center bg-white text-forest sm:h-10 sm:w-10"
+            className="image-nav-button sm:h-10 sm:w-10"
           >
             →
           </button>
+          </div>
         </div>
       ) : null}
     </div>

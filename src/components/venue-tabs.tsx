@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export type Venue = {
   name: string;
@@ -10,6 +10,7 @@ export type Venue = {
   suitableFor: readonly string[];
   facilities: readonly string[];
   image: string;
+  images: readonly string[];
 };
 
 type VenueTabsProps = {
@@ -18,6 +19,7 @@ type VenueTabsProps = {
 
 export function VenueTabs({ venues }: VenueTabsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const activeVenue = venues[activeIndex] ?? venues[0];
 
   if (!activeVenue) {
@@ -28,6 +30,16 @@ export function VenueTabs({ venues }: VenueTabsProps) {
     );
   }
 
+  const venueImages = activeVenue.images.length > 0 ? activeVenue.images : [activeVenue.image];
+  const activeImage = venueImages[activeImageIndex] ?? venueImages[0] ?? activeVenue.image;
+  const moveImage = useCallback((direction: number) => {
+    setActiveImageIndex((current) => (current + direction + venueImages.length) % venueImages.length);
+  }, [venueImages.length]);
+  const selectVenue = (index: number) => {
+    setActiveIndex(index);
+    setActiveImageIndex(0);
+  };
+
   return (
     <div>
       <div className="flex gap-2 overflow-x-auto scroll-smooth border-b border-line pb-4 [scroll-snap-type:x_mandatory] [-webkit-overflow-scrolling:touch]">
@@ -35,7 +47,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
           <button
             key={venue.name}
             type="button"
-            onClick={() => setActiveIndex(index)}
+            onClick={() => selectVenue(index)}
             className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition [scroll-snap-align:center] ${
               index === activeIndex
                 ? "bg-terracotta text-white"
@@ -49,7 +61,18 @@ export function VenueTabs({ venues }: VenueTabsProps) {
 
       <div className="mt-8 grid gap-8 rounded-4xl border border-line bg-surface p-6 text-fg shadow-[0_20px_60px_rgba(20,38,30,0.08)] lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:p-8">
         <div className="relative min-h-88 overflow-hidden rounded-4xl">
-          <Image src={activeVenue.image} alt={activeVenue.name} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
+          <Image src={activeImage} alt={`${activeVenue.name} image ${activeImageIndex + 1} of ${venueImages.length}`} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
+          {venueImages.length > 1 ? (
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-linear-to-t from-forest-deep/85 to-transparent p-4">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-offwhite/80" aria-live="polite">
+                {activeImageIndex + 1} / {venueImages.length}
+              </p>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => moveImage(-1)} aria-label={`Previous image for ${activeVenue.name}`} className="image-nav-button">←</button>
+                <button type="button" onClick={() => moveImage(1)} aria-label={`Next image for ${activeVenue.name}`} className="image-nav-button">→</button>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div>

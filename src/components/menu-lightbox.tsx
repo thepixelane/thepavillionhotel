@@ -59,7 +59,7 @@ export function MenuLightbox({ pages, restaurant, pdf }: { pages: ContentImage[]
           </div>
           {pdf ? <div className="flex flex-1 items-center justify-center p-3 sm:p-6"><iframe src={pdf} title={`${restaurant} menu PDF`} className="h-full min-h-[75svh] w-full max-w-6xl bg-white" /></div> : <div className="relative flex-1 overflow-auto" onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }} onTouchEnd={(event) => { const end = event.changedTouches[0]?.clientX; if (touchStart.current !== null && end !== undefined && Math.abs(end - touchStart.current) > 50) move(end < touchStart.current ? 1 : -1); touchStart.current = null; }}>
             <div className="relative mx-auto h-full min-h-[70svh] w-full origin-top transition-transform" style={{ transform: `scale(${scale})` }}>{page ? <Image src={page.src} alt={page.alt} fill sizes="100vw" className="object-contain" /> : null}</div>
-            {pages.length > 1 ? <><button type="button" onClick={() => move(-1)} aria-label="Previous menu page" className="fixed left-3 top-1/2 grid h-12 w-12 place-items-center bg-white text-forest shadow-lg">←</button><button type="button" onClick={() => move(1)} aria-label="Next menu page" className="fixed right-3 top-1/2 grid h-12 w-12 place-items-center bg-white text-forest shadow-lg">→</button></> : null}
+            {pages.length > 1 ? <><button type="button" onClick={() => move(-1)} aria-label="Previous menu page" className="image-nav-button fixed left-3 top-1/2 -translate-y-1/2 sm:left-6">←</button><button type="button" onClick={() => move(1)} aria-label="Next menu page" className="image-nav-button fixed right-3 top-1/2 -translate-y-1/2 sm:right-6">→</button></> : null}
           </div>}
         </div>
       ) : null}
