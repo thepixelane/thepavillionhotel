@@ -1,16 +1,16 @@
 "use client";
 
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import {
-  initialEnquiryState,
   submitEnquiry,
-  type EnquiryFormState,
 } from "@/app/actions/submit-enquiry";
+import { contactEnquirySchema, type ContactEnquiryValues } from "@/lib/enquiry-schema";
+import { initialEnquiryState, type EnquiryFormState } from "@/lib/enquiry-state";
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+function SubmitButton({ pending }: { pending: boolean }) {
   return (
     <button
       type="submit"
@@ -32,13 +32,25 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 }
 
 export function ContactForm() {
-  const [state, formAction] = useActionState<EnquiryFormState, FormData>(
+  const [state, formAction, isPending] = useActionState<EnquiryFormState, FormData>(
     submitEnquiry,
     initialEnquiryState,
   );
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLParagraphElement>(null);
   const [renderedAt] = useState<number>(() => Date.now());
+  const {
+    register,
+    handleSubmit,
+    formState: { errors: clientErrors },
+  } = useForm<ContactEnquiryValues>({
+    resolver: zodResolver(contactEnquirySchema),
+    mode: "onBlur",
+  });
+
+  const submitValidatedForm = () => {
+    if (formRef.current) formAction(new FormData(formRef.current));
+  };
 
   useEffect(() => {
     if (state.status === "success") {
@@ -52,7 +64,7 @@ export function ContactForm() {
   return (
     <form
       ref={formRef}
-      action={formAction}
+      onSubmit={handleSubmit(submitValidatedForm)}
       noValidate
       className="rounded-3xl border border-line bg-surface-2 p-5 shadow-[0_18px_50px_rgba(20,38,30,0.06)] sm:p-7"
     >
@@ -74,7 +86,7 @@ export function ContactForm() {
         />
       </div>
 
-      {state.status !== "idle" ? (
+      {state.status !== "idle" && state.message ? (
         <p
           ref={successRef}
           role="status"
@@ -96,15 +108,16 @@ export function ContactForm() {
           </label>
           <input
             id="contact-name"
-            name="name"
+            {...register("name")}
             required
+            maxLength={120}
             autoComplete="name"
-            aria-invalid={Boolean(fieldErrors.name)}
-            aria-describedby={fieldErrors.name ? "contact-name-error" : undefined}
+            aria-invalid={Boolean(clientErrors.name || fieldErrors.name)}
+            aria-describedby={clientErrors.name || fieldErrors.name ? "contact-name-error" : undefined}
             className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold"
             placeholder="Full name"
           />
-          <FieldError id="contact-name-error" message={fieldErrors.name} />
+          <FieldError id="contact-name-error" message={clientErrors.name?.message || fieldErrors.name} />
         </div>
         <div className="grid gap-1">
           <label htmlFor="contact-phone" className="sr-only">
@@ -112,15 +125,17 @@ export function ContactForm() {
           </label>
           <input
             id="contact-phone"
-            name="phone"
+            {...register("phone")}
             inputMode="tel"
+            required
+            maxLength={40}
             autoComplete="tel"
-            aria-invalid={Boolean(fieldErrors.phone)}
-            aria-describedby={fieldErrors.phone ? "contact-phone-error" : undefined}
+            aria-invalid={Boolean(clientErrors.phone || fieldErrors.phone)}
+            aria-describedby={clientErrors.phone || fieldErrors.phone ? "contact-phone-error" : undefined}
             className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold"
             placeholder="Phone"
           />
-          <FieldError id="contact-phone-error" message={fieldErrors.phone} />
+          <FieldError id="contact-phone-error" message={clientErrors.phone?.message || fieldErrors.phone} />
         </div>
         <div className="grid gap-1 sm:col-span-2">
           <label htmlFor="contact-email" className="sr-only">
@@ -129,14 +144,16 @@ export function ContactForm() {
           <input
             id="contact-email"
             type="email"
-            name="email"
+            {...register("email")}
+            required
+            maxLength={254}
             autoComplete="email"
-            aria-invalid={Boolean(fieldErrors.email)}
-            aria-describedby={fieldErrors.email ? "contact-email-error" : undefined}
+            aria-invalid={Boolean(clientErrors.email || fieldErrors.email)}
+            aria-describedby={clientErrors.email || fieldErrors.email ? "contact-email-error" : undefined}
             className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold"
             placeholder="Email"
           />
-          <FieldError id="contact-email-error" message={fieldErrors.email} />
+          <FieldError id="contact-email-error" message={clientErrors.email?.message || fieldErrors.email} />
         </div>
         <div className="grid gap-1 sm:col-span-2">
           <label htmlFor="contact-message" className="sr-only">
@@ -144,18 +161,19 @@ export function ContactForm() {
           </label>
           <textarea
             id="contact-message"
-            name="message"
+            {...register("message")}
             required
-            aria-invalid={Boolean(fieldErrors.message)}
-            aria-describedby={fieldErrors.message ? "contact-message-error" : undefined}
+            maxLength={4000}
+            aria-invalid={Boolean(clientErrors.message || fieldErrors.message)}
+            aria-describedby={clientErrors.message || fieldErrors.message ? "contact-message-error" : undefined}
             className="min-h-24 rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none ring-0 transition placeholder:text-fg-muted focus:border-gold sm:min-h-32"
             placeholder="Tell us more about your plans"
           />
-          <FieldError id="contact-message-error" message={fieldErrors.message} />
+          <FieldError id="contact-message-error" message={clientErrors.message?.message || fieldErrors.message} />
         </div>
       </div>
 
-      <SubmitButton />
+      <SubmitButton pending={isPending} />
       <p className="mt-3 text-center text-[10px] uppercase tracking-[0.28em] text-fg-muted">
         We&rsquo;ll never share your details.
       </p>

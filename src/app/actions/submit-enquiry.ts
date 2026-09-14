@@ -6,23 +6,11 @@ import { revalidatePath } from "next/cache";
 import { createClient, type SanityClient } from "next-sanity";
 
 import { apiVersion, dataset, projectId } from "@/sanity/env";
-
-export type EnquirySource = "contact" | "events" | "banquet" | "stay";
-
-export type EnquiryFormState = {
-  status: "idle" | "success" | "error";
-  message: string;
-  fieldErrors?: Partial<Record<EnquiryField, string>>;
-};
-
-type EnquiryField =
-  | "name"
-  | "email"
-  | "phone"
-  | "message"
-  | "eventType"
-  | "eventDate"
-  | "guests";
+import type {
+  EnquiryField,
+  EnquiryFormState,
+  EnquirySource,
+} from "@/lib/enquiry-state";
 
 const MAX_LENGTHS: Record<EnquiryField, number> = {
   name: 120,
@@ -37,16 +25,33 @@ const MAX_LENGTHS: Record<EnquiryField, number> = {
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 3;
 const MIN_TIME_TO_FILL_MS = 2_500;
+const EVENT_TYPES = new Set([
+  "Wedding / Event",
+  "Corporate Meeting",
+  "Private Dinner",
+  "General Enquiry",
+]);
 
 const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
 
-function normalize(value: FormDataEntryValue | null): string {
+function normalizeText(value: FormDataEntryValue | null): string {
   if (typeof value !== "string") return "";
-  return value.trim();
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .trim();
+}
+
+function normalizeMessage(value: FormDataEntryValue | null): string {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .replace(/\r\n?/g, "\n")
+    .trim();
 }
 
 function isEmail(value: string): boolean {
-  if (!value) return false;
+  if (!value || value.length > MAX_LENGTHS.email) return false;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
@@ -54,6 +59,21 @@ function isPhone(value: string): boolean {
   if (!value) return false;
   const digits = value.replace(/[^\d]/g, "");
   return digits.length >= 7 && digits.length <= 15;
+}
+
+function normalizePhone(value: string): string {
+  const digits = value.replace(/[^\d]/g, "");
+  return value.trim().startsWith("+") ? `+${digits}` : digits;
+}
+
+function isValidDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parts = value.split("-").map(Number);
+  const year = parts[0] ?? 0;
+  const month = parts[1] ?? 0;
+  const day = parts[2] ?? 0;
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
 function hashClientKey(ip: string, ua: string): string {
@@ -97,12 +117,12 @@ export async function submitEnquiry(
   _prev: EnquiryFormState,
   formData: FormData,
 ): Promise<EnquiryFormState> {
-  const honeypot = normalize(formData.get("hp_website"));
+  const honeypot = normalizeText(formData.get("hp_website"));
   if (honeypot) {
     return { status: "success", message: "Thank you. We'll be in touch shortly." };
   }
 
-  const renderedAtRaw = normalize(formData.get("rendered_at"));
+  const renderedAtRaw = normalizeText(formData.get("rendered_at"));
   const renderedAt = Number(renderedAtRaw);
   if (Number.isFinite(renderedAt) && renderedAt > 0) {
     const elapsed = Date.now() - renderedAt;
@@ -114,38 +134,46 @@ export async function submitEnquiry(
     }
   }
 
-  const sourceRaw = normalize(formData.get("source"));
+  const sourceRaw = normalizeText(formData.get("source"));
   const source: EnquirySource = ((): EnquirySource => {
     if (sourceRaw === "events" || sourceRaw === "banquet" || sourceRaw === "stay") return sourceRaw;
     return "contact";
   })();
 
-  const name = normalize(formData.get("name"));
-  const email = normalize(formData.get("email"));
-  const phone = normalize(formData.get("phone"));
-  const message = normalize(formData.get("message"));
-  const eventType = normalize(formData.get("eventType"));
-  const eventDate = normalize(formData.get("eventDate"));
-  const guests = normalize(formData.get("guests"));
+  const name = normalizeText(formData.get("name"));
+  const email = normalizeText(formData.get("email")).toLowerCase();
+  const rawPhone = normalizeText(formData.get("phone"));
+  const phone = rawPhone ? normalizePhone(rawPhone) : "";
+  const message = normalizeMessage(formData.get("message"));
+  const requestedEventType = normalizeText(formData.get("eventType"));
+  const eventType = requestedEventType && EVENT_TYPES.has(requestedEventType) ? requestedEventType : "";
+  const eventDate = normalizeText(formData.get("eventDate"));
+  const guests = normalizeText(formData.get("guests"));
 
   const fieldErrors: Partial<Record<EnquiryField, string>> = {};
   if (!name) fieldErrors.name = "Please share your name.";
   else if (name.length > MAX_LENGTHS.name) fieldErrors.name = "Name is too long.";
 
-  const hasContact = email.length > 0 || phone.length > 0;
-  if (!hasContact) {
-    fieldErrors.email = "Add an email or phone number so we can respond.";
-    fieldErrors.phone = "Add an email or phone number so we can respond.";
-  } else {
-    if (email && !isEmail(email)) fieldErrors.email = "Please enter a valid email address.";
-    if (email && email.length > MAX_LENGTHS.email) fieldErrors.email = "Email is too long.";
-    if (phone && !isPhone(phone)) fieldErrors.phone = "Please enter a valid phone number.";
-  }
+  if (!email) fieldErrors.email = "Please provide your email address.";
+  else if (!isEmail(email)) fieldErrors.email = "Please enter a valid email address.";
+  if (!phone) fieldErrors.phone = "Please provide your phone number.";
+  else if (!isPhone(phone)) fieldErrors.phone = "Please enter a valid phone number.";
 
   if (source === "contact" && !message) {
     fieldErrors.message = "Please tell us a little about your plans.";
   }
   if (message.length > MAX_LENGTHS.message) fieldErrors.message = "Message is too long.";
+  if ((source === "events" || source === "banquet") && !eventType) {
+    fieldErrors.eventType = "Please select a valid event type.";
+  } else if (requestedEventType && !eventType) {
+    fieldErrors.eventType = "Please select a valid event type.";
+  }
+  if (eventDate && !isValidDate(eventDate)) {
+    fieldErrors.eventDate = "Please enter a valid event date.";
+  }
+  if (guests && !/^\d{1,5}(?:\s*[-+]\s*\d{1,5})?$/.test(guests)) {
+    fieldErrors.guests = "Please enter a valid guest count.";
+  }
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
@@ -208,4 +236,3 @@ export async function submitEnquiry(
   };
 }
 
-export const initialEnquiryState: EnquiryFormState = { status: "idle", message: "" };
