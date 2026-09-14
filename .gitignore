@@ -48,3 +48,5 @@ next-env.d.ts
 # Unprocessed photography and PDF masters live outside this repo, in
 # ../_assets-originals/ and ../*.pdf. Only web-optimised output belongs here.
 /public/menus/
+
+package-lock.json
