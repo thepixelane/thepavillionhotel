@@ -31,7 +31,7 @@ export const siteSettings: SiteSettings = {
 		"A Portuguese-style hotel in Shahupuri, Kolhapur offering comfortable rooms, restaurants, wedding venues, and event facilities near Kolhapur Railway Station.",
 	bookingEngineUrl,
 	contactPhone: "0231 265 4742",
-	contactPhoneAlt: "0231 265 2751",
+	contactPhoneAlt: "+91 90110 33737",
 	contactEmail: "info@hotelpavillion.co.in",
 	whatsappNumber: "919607323737",
 	instagramUrl: "https://www.instagram.com/thepavillionhotel",

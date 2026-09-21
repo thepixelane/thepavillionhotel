@@ -24,7 +24,7 @@ export default async function ContactPage() {
 
 	const primaryPhone = settings?.contactPhone ?? "0231 265 4742";
 	const primaryPhoneHref = `tel:${primaryPhone.replace(/[^+\d]/g, "")}`;
-	const banquetPhone = settings?.contactPhoneAlt ?? "0231 265 2751";
+	const banquetPhone = settings?.contactPhoneAlt ?? "+91 90110 33737";
 	const banquetPhoneHref = `tel:${banquetPhone.replace(/[^+\d]/g, "")}`;
 	const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
 	const whatsapp = settings?.whatsappNumber ?? "919607323737";

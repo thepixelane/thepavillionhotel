@@ -14,7 +14,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default async function EventsPage() {
   const [venues, settings] = await Promise.all([getVenues(), getSiteSettings()]);
-  const banquetPhone = settings?.contactPhoneAlt ?? "0231 265 2751";
+  const banquetPhone = settings?.contactPhoneAlt ?? "+91 90110 33737";
   const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
   const tabsVenues: VenueTabsVenue[] = venues.map((venue) => ({
     name: venue.name,
