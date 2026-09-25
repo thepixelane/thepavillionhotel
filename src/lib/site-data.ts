@@ -1,5 +1,3 @@
-import { bookingEngineUrl } from "@/lib/booking-engine";
-
 export type ContentImage = {
 	src: string;
 	alt: string;
@@ -9,7 +7,6 @@ export type SiteSettings = {
 	siteName: string;
 	tagline: string;
 	description: string;
-	bookingEngineUrl: string;
 	contactPhone: string;
 	contactPhoneAlt: string;
 	contactEmail: string;
@@ -29,7 +26,6 @@ export const siteSettings: SiteSettings = {
 	tagline: "Nestled in Nature",
 	description:
 		"A Portuguese-style hotel in Shahupuri, Kolhapur offering comfortable rooms, restaurants, wedding venues, and event facilities near Kolhapur Railway Station.",
-	bookingEngineUrl,
 	contactPhone: "0231 265 4742",
 	contactPhoneAlt: "+91 90110 33737",
 	contactEmail: "info@hotelpavillion.co.in",
@@ -54,7 +50,13 @@ export const siteSettings: SiteSettings = {
 		src: "/images/stay/deluxe-room/deluxe-room-1.jpeg",
 		alt: "Deluxe room at The Pavillion Hotel in Kolhapur",
 	},
-	bookingPartners: [],
+	// No direct booking engine — guests book via phone, email, or these OTA partners (source: hotelpavillion.co.in/contact).
+	bookingPartners: [
+		{ name: "Agoda", url: "https://www.agoda.com/en-in/the-pavillion-hotel-h29854102/hotel/kolhapur-in.html?cid=1844104&ds=F33SG9ZtcwDTym2c", order: 1 },
+		{ name: "Goibibo", url: "https://www.goibibo.com/hotels/pavillion-hotel-in-kolhapur-1999460885051411285/", order: 2 },
+		{ name: "MakeMyTrip", url: "https://www.makemytrip.com/hotels/hotel_pavillion-details-kolhapur.html", order: 3 },
+		{ name: "TripAdvisor", url: "https://www.tripadvisor.in/Hotel_Review-g737166-d3175530-Reviews-The_Pavillion_Hotel-Kolhapur_Kolhapur_District_Maharashtra.html", order: 4 },
+	],
 };
 
 export const siteNavItems = [

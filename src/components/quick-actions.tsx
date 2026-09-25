@@ -1,17 +1,15 @@
 import Link from "next/link";
 import { HotelIcon, LocationPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/action-icons";
-import { bookingEngineUrl as defaultBookingUrl, sanitizeBookingUrl } from "@/lib/booking-engine";
 import { getSiteSettings } from "@/lib/sanity-content";
 
 export async function QuickActions() {
   const settings = await getSiteSettings();
   const phone = settings?.contactPhone ?? "0231 265 4742";
   const whatsapp = settings?.whatsappNumber ?? "919607323737";
-  const bookingUrl = sanitizeBookingUrl(settings?.bookingEngineUrl?.trim() || defaultBookingUrl);
   const mapsUrl = settings?.googleMapsUrl ?? "https://maps.google.com/?q=The+Pavillion+Hotel,+Shahupuri,+Kolhapur";
   const actions = [
     { label: "Call", shortLabel: "Call", href: `tel:${phone.replace(/[^+\d]/g, "")}`, icon: PhoneIcon, external: false },
-    { label: "Book a stay", shortLabel: "Book", href: bookingUrl, icon: HotelIcon, external: true },
+    { label: "Book a stay", shortLabel: "Book", href: "/booking-options", icon: HotelIcon, external: false },
     { label: "Find us on Google Maps", shortLabel: "Maps", href: mapsUrl, icon: LocationPinIcon, external: true },
     { label: "WhatsApp", shortLabel: "WhatsApp", href: `https://wa.me/${whatsapp}`, icon: WhatsAppIcon, external: true },
   ];

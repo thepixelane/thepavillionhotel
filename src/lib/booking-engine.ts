@@ -14,5 +14,3 @@ export function sanitizeBookingUrl(candidate: string | undefined | null): string
     return FALLBACK_BOOKING_URL;
   }
 }
-
-export const bookingEngineUrl: string = sanitizeBookingUrl(process.env.BOOKING_ENGINE_URL);

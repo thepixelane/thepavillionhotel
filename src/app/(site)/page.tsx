@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import logo from "@/assets/logo.svg";
 import { HomeHero } from "@/components/home-hero";
 import { PropertyGalleryPreview } from "@/components/property-gallery-preview";
-import { bookingEngineUrl as defaultBookingUrl, sanitizeBookingUrl } from "@/lib/booking-engine";
 import { FALLBACK_IMAGES } from "@/lib/constants";
 import {
   getFeaturedTestimonials,
@@ -29,7 +28,6 @@ export default async function Home() {
     getSiteSettings(), getRooms(), getGalleryImages(), getFeaturedTestimonials(), getVenues(), getHighlight(),
   ]);
   const heroImages = resolveHomeHeroImages(settings);
-  const bookingUrl = sanitizeBookingUrl(settings?.bookingEngineUrl?.trim() || defaultBookingUrl);
   const phone = settings?.contactPhone ?? "0231 265 4742";
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
   const galleryPreview = gallery.filter((item) => item.category === "Property").concat(gallery).slice(0, 6);
@@ -56,7 +54,7 @@ export default async function Home() {
       <section className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-16 sm:px-5 sm:py-24 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div><p className="text-xs uppercase tracking-[0.3em] text-emerald">Accommodations</p><h2 className="mt-3 text-4xl text-fg sm:text-5xl">Discover our rooms</h2></div>
-          <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.25em] text-white transition hover:bg-emerald">Book Now</a>
+          <Link href="/booking-options" className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.25em] text-white transition hover:bg-emerald">Book Now</Link>
         </div>
         <div className="mt-9 grid gap-6 lg:grid-cols-3">
           {rooms.slice(0, 3).map((room) => (
