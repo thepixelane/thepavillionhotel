@@ -7,6 +7,6 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: false,
-  // Required: dataset is private — token is server-only (no NEXT_PUBLIC_ prefix)
-  token: process.env.SANITY_WRITE_TOKEN,
+  // Private dataset reads stay server-only and use the least-privileged token.
+  token: process.env.SANITY_READ_TOKEN ?? process.env.SANITY_WRITE_TOKEN,
 })
