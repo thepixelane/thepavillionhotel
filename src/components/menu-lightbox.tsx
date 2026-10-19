@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ContentImage } from "@/lib/site-data";
+import { ImageCarouselStage } from "@/components/image-carousel-stage";
 
 export function MenuLightbox({ pages, restaurant, pdf }: { pages: ContentImage[]; restaurant: string; pdf?: string }) {
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ export function MenuLightbox({ pages, restaurant, pdf }: { pages: ContentImage[]
             <div className="flex items-center gap-2">{pdf ? <a href={pdf} target="_blank" rel="noopener noreferrer" className="hidden h-10 items-center border border-white/30 px-4 text-xs uppercase tracking-[0.18em] sm:inline-flex">Open PDF</a> : <><button type="button" onClick={() => setScale((value) => Math.max(1, value - 0.25))} aria-label="Zoom out" className="grid h-10 w-10 place-items-center border border-white/30">−</button><button type="button" onClick={() => setScale((value) => Math.min(3, value + 0.25))} aria-label="Zoom in" className="grid h-10 w-10 place-items-center border border-white/30">+</button></>}<button ref={closeButton} type="button" onClick={close} className="h-10 border border-white px-4 text-xs uppercase tracking-[0.18em]">Close</button></div>
           </div>
           {pdf ? <div className="flex flex-1 items-center justify-center p-3 sm:p-6"><iframe src={pdf} title={`${restaurant} menu PDF`} className="h-full min-h-[75svh] w-full max-w-6xl bg-white" /></div> : <div className="relative flex-1 overflow-auto" onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }} onTouchEnd={(event) => { const end = event.changedTouches[0]?.clientX; if (touchStart.current !== null && end !== undefined && Math.abs(end - touchStart.current) > 50) move(end < touchStart.current ? 1 : -1); touchStart.current = null; }}>
-            <div className="relative mx-auto h-full min-h-[70svh] w-full origin-top transition-transform" style={{ transform: `scale(${scale})` }}>{page ? <Image src={page.src} alt={page.alt} fill sizes="100vw" className="object-contain" /> : null}</div>
+            <div className="relative mx-auto h-full min-h-[70svh] w-full origin-top transition-transform" style={{ transform: `scale(${scale})` }}>{page ? <ImageCarouselStage images={pages} activeIndex={active} sizes="100vw" imageClassName="object-contain" /> : null}</div>
             {pages.length > 1 ? <><button type="button" onClick={() => move(-1)} aria-label="Previous menu page" className="image-nav-button fixed left-3 top-1/2 -translate-y-1/2 sm:left-6">←</button><button type="button" onClick={() => move(1)} aria-label="Next menu page" className="image-nav-button fixed right-3 top-1/2 -translate-y-1/2 sm:right-6">→</button></> : null}
           </div>}
         </div>

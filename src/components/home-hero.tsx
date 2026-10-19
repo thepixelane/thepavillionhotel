@@ -25,6 +25,7 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
           alt={image.alt}
           fill
           priority={index === 0}
+          loading="eager"
           sizes="100vw"
           className={`object-cover object-center transition-opacity duration-1000 ${index === active ? "opacity-100" : "opacity-0"}`}
         />

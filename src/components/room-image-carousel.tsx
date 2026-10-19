@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
+import { ImageCarouselStage } from "@/components/image-carousel-stage";
 
 type RoomImageCarouselProps = {
   images: readonly string[];
@@ -45,12 +45,10 @@ export function RoomImageCarousel({ images, roomName }: RoomImageCarouselProps) 
       <div className="relative overflow-hidden rounded-2xl bg-forest-deep sm:rounded-3xl">
         <div className="relative aspect-4/3 min-h-64 sm:min-h-72">
           {activeImage ? (
-            <Image
-              src={activeImage}
-              alt={`${roomName} image ${activeIndex + 1} of ${validImages.length}`}
-              fill
+            <ImageCarouselStage
+              images={validImages.map((src, index) => ({ src, alt: `${roomName} image ${index + 1} of ${validImages.length}` }))}
+              activeIndex={activeIndex}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">

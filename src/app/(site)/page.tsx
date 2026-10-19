@@ -67,9 +67,37 @@ export default async function Home() {
       </section>
 
       <section className="bg-forest-deep text-white">
-        <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-10 px-5 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
-          <div><p className="text-xs uppercase tracking-[0.3em] text-beige">Celebrate With Us</p><h2 className="mt-4 text-4xl leading-tight sm:text-6xl">Plan Your Next Event.</h2><div className="mt-8 flex gap-3"><Link href="/events" className="bg-white px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest-deep">Events</Link><Link href="/contact" className="border border-white/50 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white">Contact Us</Link></div></div>
-          <div><p className="font-serif text-3xl italic leading-relaxed text-fresh sm:text-4xl">{venues.slice(0, 5).map((venue) => venue.name).join(". ")}.</p><p className="mt-5 max-w-3xl text-lg leading-8 text-white/75">From wedding celebrations, gatherings, and corporate events. We have a space for every occasion.</p></div>
+        <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] gap-10 px-5 py-14 sm:gap-14 sm:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:px-8 lg:py-24">
+          <div className="py-2 lg:py-8">
+            <p className="text-xs uppercase tracking-[0.3em] text-beige">Celebrate With Us</p>
+            <h2 className="mt-4 max-w-xl text-4xl leading-tight sm:text-5xl lg:text-6xl">Make it a day worth gathering for.</h2>
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+              From grand weddings and receptions to conferences and intimate celebrations, find a space that fits your occasion.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/events#contact" className="bg-white px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest-deep transition hover:bg-fresh">
+                Enquire about your event
+              </Link>
+              <Link href="/events" className="border border-white/50 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white transition hover:border-white hover:bg-white/10">
+                Explore all venues
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <div className="border-y border-white/20 py-6">
+              <p className="font-serif text-6xl leading-none text-fresh sm:text-7xl">2,000</p>
+              <p className="mt-3 text-xs uppercase tracking-[0.24em] text-white/70">Guests at Bahar Lawns</p>
+            </div>
+            <div className="mt-5 divide-y divide-white/15">
+              {venues.slice(0, 4).map((venue) => (
+                <div key={venue.name} className="flex items-center justify-between gap-4 py-3 text-sm sm:text-base">
+                  <span className="text-white">{venue.name}</span>
+                  <span className="text-right text-white/60">{venue.capacity}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

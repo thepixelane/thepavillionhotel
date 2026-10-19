@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ImageCarouselStage } from "@/components/image-carousel-stage";
 import type { GalleryImage } from "@/lib/sanity-content";
 
 export function PropertyGalleryPreview({ images }: { images: GalleryImage[] }) {
@@ -16,7 +16,7 @@ export function PropertyGalleryPreview({ images }: { images: GalleryImage[] }) {
 
   return (
     <div className="relative min-h-96 overflow-hidden bg-forest-deep sm:min-h-120">
-      <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
+      <ImageCarouselStage images={slides} activeIndex={active} sizes="(max-width: 1024px) 100vw, 60vw" />
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-linear-to-t from-black/70 to-transparent p-5 text-white sm:p-7">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-white/75">Property gallery</p>

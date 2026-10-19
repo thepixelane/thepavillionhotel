@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useState } from "react";
+import { ImageCarouselStage } from "@/components/image-carousel-stage";
 import type { ContentImage } from "@/lib/site-data";
 
 export function DiningGallery({ images, name }: { images: ContentImage[]; name: string }) {
@@ -23,7 +23,7 @@ export function DiningGallery({ images, name }: { images: ContentImage[]; name: 
       aria-roledescription="carousel"
       aria-label={`${name} photo gallery`}
     >
-      <Image src={image.src} alt={image.alt} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+      <ImageCarouselStage images={images} activeIndex={active} sizes="(max-width: 1024px) 100vw, 50vw" />
       {images.length > 1 ? (
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-linear-to-t from-forest-deep/85 to-transparent p-4">
           <p className="text-[10px] uppercase tracking-[0.3em] text-offwhite/80" aria-live="polite">
