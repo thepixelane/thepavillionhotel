@@ -33,7 +33,7 @@ export async function QuickActions() {
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/30 bg-forest-deep px-2 py-3 sm:px-4 lg:hidden">
-        <div className="mx-auto grid max-w-7xl 4xl:max-w-[90rem] grid-cols-4 gap-1 text-center text-[10px] uppercase tracking-[0.2em] text-offwhite sm:gap-2">
+        <div className="mx-auto grid max-w-7xl 4xl:max-w-360 grid-cols-4 gap-1 text-center text-[10px] uppercase tracking-[0.2em] text-offwhite sm:gap-2">
           {actions.map(({ label, href, icon: Icon, shortLabel, external }) => (
             <Link key={label} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} aria-label={label} title={label} className="rounded-xl bg-offwhite px-1 py-3 text-forest-deep transition hover:bg-gold hover:text-offwhite sm:px-2 sm:py-2">
               <span className="flex flex-col items-center gap-1">

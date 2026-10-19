@@ -27,7 +27,7 @@ export default async function EventsPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
+    <main className="mx-auto max-w-7xl 4xl:max-w-360 px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
       <JsonLd data={eventVenuesJsonLd} />
       <header className="max-w-3xl">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Events</p>

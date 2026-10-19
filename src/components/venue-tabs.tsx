@@ -51,7 +51,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
             key={venue.name}
             type="button"
             onClick={() => selectVenue(index)}
-            className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition [scroll-snap-align:center] ${
+            className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition snap-center ${
               index === activeIndex
                 ? "bg-terracotta text-white"
                 : "border border-line text-fg/70 hover:text-fg"

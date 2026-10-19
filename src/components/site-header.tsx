@@ -89,7 +89,7 @@ export function SiteHeader() {
             : "max-h-0"
         } transition-[max-height] duration-300 ease-out`}
       >
-        <nav className="mx-auto flex max-w-7xl 4xl:max-w-[90rem] flex-col px-4 py-3 sm:px-5">
+        <nav className="mx-auto flex max-w-7xl 4xl:max-w-360 flex-col px-4 py-3 sm:px-5">
           {siteNavItems.map((item) => {
             const active = isActive(item.href);
             return (
