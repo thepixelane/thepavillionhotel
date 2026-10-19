@@ -119,9 +119,9 @@ export function SiteLoading({ layout = "cards" }: { layout?: LoadingLayout }) {
     <main role="status" aria-live="polite" aria-label="Loading page">
       <div className="grid min-h-[42svh] place-items-center bg-bg px-5 py-12">
         <div className="text-center">
-          <div className="loading-logo-breathe relative mx-auto h-40 w-44 overflow-hidden rounded-sm border border-line bg-white shadow-[0_14px_45px_rgba(20,38,30,0.12)] dark:bg-[#273928] sm:h-44 sm:w-48">
-            <Image src={greenLogo} alt="The Pavillion Hotel" fill priority className="object-contain dark:hidden" sizes="(max-width: 640px) 176px, 192px" />
-            <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 176px, 192px" />
+          <div className="loading-logo-breathe relative mx-auto h-36 w-48 sm:h-40 sm:w-[13.5rem]">
+            <Image src={greenLogo} alt="The Pavillion Hotel" fill priority className="object-contain dark:hidden" sizes="(max-width: 640px) 192px, 216px" />
+            <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 192px, 216px" />
           </div>
           <div className="loading-dots mt-6 flex items-center justify-center gap-2" aria-hidden="true">
             <span /><span /><span />

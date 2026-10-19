@@ -25,11 +25,11 @@ export function SiteHeader() {
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "border-b border-line bg-(--header-bg) shadow-sm backdrop-blur-xl" : "border-b border-transparent bg-bg/70 backdrop-blur-md"}`}>
-      <div className="mx-auto flex max-w-7xl 4xl:max-w-[90rem] items-center justify-between gap-4 px-4 py-2 sm:gap-6 sm:px-5 lg:px-8">
+      <div className="mx-auto flex max-w-7xl 4xl:max-w-360 items-center justify-between gap-4 px-4 py-2 sm:gap-6 sm:px-5 lg:px-8">
         <Link
           href="/"
           aria-label="The Pavillion Hotel home"
-          className="relative block h-12 w-36 shrink-0 overflow-hidden rounded-sm border border-forest/10 bg-[#f9f4e8] shadow-[0_3px_14px_rgba(20,38,30,0.10)] transition-transform duration-300 hover:scale-[1.02] dark:border-white/10 dark:bg-[#19351f] sm:h-14 sm:w-44"
+          className="relative block h-16 w-36 shrink-0 transition-transform duration-300 hover:scale-[1.02] sm:h-18 sm:w-44"
         >
           <Image src={greenLogo} alt="The Pavillion Hotel, Nestled in Nature" fill priority className="object-contain dark:hidden" sizes="(max-width: 640px) 144px, 176px" />
           <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 144px, 176px" />

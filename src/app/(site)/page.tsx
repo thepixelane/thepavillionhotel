@@ -38,9 +38,9 @@ export default async function Home() {
       <HomeHero images={heroImages.length > 0 ? heroImages : [...FALLBACK_IMAGES.hero]} />
 
       <section className="mx-auto max-w-4xl px-5 py-8 text-center sm:py-12">
-        <div className="relative mx-auto h-28 w-32 overflow-hidden rounded-sm border border-line bg-white shadow-[0_14px_45px_rgba(20,38,30,0.10)] dark:bg-[#273928] sm:h-32 sm:w-36">
-          <Image src={greenLogo} alt="The Pavillion Hotel - Nestled in Nature" fill className="object-contain dark:hidden" sizes="(max-width: 640px) 128px, 144px" />
-          <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 128px, 144px" />
+        <div className="relative mx-auto h-36 w-48 sm:h-40 sm:w-[13.5rem]">
+          <Image src={greenLogo} alt="The Pavillion Hotel - Nestled in Nature" fill className="object-contain dark:hidden" sizes="(max-width: 640px) 192px, 216px" />
+          <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 192px, 216px" />
         </div>
         <p className="mx-auto mt-5 max-w-5xl text-sm leading-6 text-fg sm:line-clamp-3 sm:text-base sm:leading-7">Nestled in the heart of Kolhapur, The Pavillion is a Portuguese-style resort surrounded by nature, offering a peaceful escape within the city. From comfortable stays to weddings, celebrations and events, there&apos;s space here to slow down, come together and make memories</p>
       </section>
