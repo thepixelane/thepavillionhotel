@@ -1,5 +1,6 @@
 import Image from "next/image";
-import logo from "@/assets/logo.svg";
+import greenLogo from "@/assets/green_logo_vertical.png";
+import whiteLogo from "@/assets/white_logo_vertical.png";
 
 export type LoadingLayout = "home" | "immersive" | "cards" | "gallery" | "split" | "article";
 
@@ -118,8 +119,9 @@ export function SiteLoading({ layout = "cards" }: { layout?: LoadingLayout }) {
     <main role="status" aria-live="polite" aria-label="Loading page">
       <div className="grid min-h-[42svh] place-items-center bg-bg px-5 py-12">
         <div className="text-center">
-          <div className="loading-logo-breathe relative mx-auto h-40 w-44 overflow-hidden rounded-sm border border-line bg-[#f6f6f6] shadow-[0_14px_45px_rgba(20,38,30,0.12)] sm:h-44 sm:w-48">
-            <Image src={logo} alt="The Pavillion Hotel" fill priority className="object-contain p-3" sizes="192px" />
+          <div className="loading-logo-breathe relative mx-auto h-40 w-44 overflow-hidden rounded-sm border border-line bg-white shadow-[0_14px_45px_rgba(20,38,30,0.12)] dark:bg-[#273928] sm:h-44 sm:w-48">
+            <Image src={greenLogo} alt="The Pavillion Hotel" fill priority className="object-contain dark:hidden" sizes="(max-width: 640px) 176px, 192px" />
+            <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 176px, 192px" />
           </div>
           <div className="loading-dots mt-6 flex items-center justify-center gap-2" aria-hidden="true">
             <span /><span /><span />

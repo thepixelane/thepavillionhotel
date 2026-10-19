@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { siteNavItems } from "@/lib/site-data";
-import logo from "@/assets/logo.svg";
+import greenLogo from "@/assets/green_logo_hori.png";
+import whiteLogo from "@/assets/white_logo_hori.png";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -28,9 +29,10 @@ export function SiteHeader() {
         <Link
           href="/"
           aria-label="The Pavillion Hotel home"
-          className="relative block h-16 w-18 shrink-0 overflow-hidden rounded-sm border border-forest/10 bg-[#f6f6f6] shadow-[0_3px_14px_rgba(20,38,30,0.10)] transition-transform duration-300 hover:scale-[1.03] sm:h-18 sm:w-20"
+          className="relative block h-12 w-36 shrink-0 overflow-hidden rounded-sm border border-forest/10 bg-[#f9f4e8] shadow-[0_3px_14px_rgba(20,38,30,0.10)] transition-transform duration-300 hover:scale-[1.02] dark:border-white/10 dark:bg-[#19351f] sm:h-14 sm:w-44"
         >
-          <Image src={logo} alt="The Pavillion Hotel" fill priority className="object-contain p-1" sizes="80px" />
+          <Image src={greenLogo} alt="The Pavillion Hotel, Nestled in Nature" fill priority className="object-contain dark:hidden" sizes="(max-width: 640px) 144px, 176px" />
+          <Image src={whiteLogo} alt="" aria-hidden="true" fill className="hidden object-contain dark:block" sizes="(max-width: 640px) 144px, 176px" />
         </Link>
 
         <nav className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.3em] md:flex">
