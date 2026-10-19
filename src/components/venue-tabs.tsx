@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export type Venue = {
   name: string;
@@ -31,10 +31,16 @@ export function VenueTabs({ venues }: VenueTabsProps) {
   }
 
   const venueImages = activeVenue.images.length > 0 ? activeVenue.images : [activeVenue.image];
-  const activeImage = venueImages[activeImageIndex] ?? venueImages[0] ?? activeVenue.image;
-  const moveImage = useCallback((direction: number) => {
+  const imageIndices = Array.from(
+    new Set([
+      (activeImageIndex - 1 + venueImages.length) % venueImages.length,
+      activeImageIndex,
+      (activeImageIndex + 1) % venueImages.length,
+    ]),
+  );
+  const moveImage = (direction: number) => {
     setActiveImageIndex((current) => (current + direction + venueImages.length) % venueImages.length);
-  }, [venueImages.length]);
+  };
   const selectVenue = (index: number) => {
     setActiveIndex(index);
     setActiveImageIndex(0);
@@ -59,9 +65,23 @@ export function VenueTabs({ venues }: VenueTabsProps) {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-8 rounded-4xl border border-line bg-surface p-6 text-fg shadow-[0_20px_60px_rgba(20,38,30,0.08)] lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:p-8">
+      <div className="grid gap-8 text-fg lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="relative min-h-88 overflow-hidden rounded-4xl">
-          <Image src={activeImage} alt={`${activeVenue.name} image ${activeImageIndex + 1} of ${venueImages.length}`} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
+          {imageIndices.map((index) => {
+            const image = venueImages[index];
+            if (!image) return null;
+            return (
+              <Image
+                key={`${activeVenue.name}-${index}-${image}`}
+                src={image}
+                alt={`${activeVenue.name} image ${index + 1} of ${venueImages.length}`}
+                fill
+                loading="eager"
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                className={`object-cover transition-opacity duration-200 ${index === activeImageIndex ? "opacity-100" : "opacity-0"}`}
+              />
+            );
+          })}
           {venueImages.length > 1 ? (
             <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-linear-to-t from-forest-deep/85 to-transparent p-4">
               <p className="text-[10px] uppercase tracking-[0.3em] text-offwhite/80" aria-live="polite">
@@ -76,7 +96,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
         </div>
 
         <div>
-          <p className="text-[11px] uppercase tracking-[0.35em] text-gold">Venue</p>
+          {/* <p className="text-[11px] uppercase tracking-[0.35em] text-gold">Venue</p> */}
           <h3 className="mt-3 text-4xl text-fg">{activeVenue.name}</h3>
           <p className="mt-3 text-sm uppercase tracking-[0.3em] text-olive">{activeVenue.capacity}</p>
           <p className="mt-6 text-base leading-8 text-fg-muted">{activeVenue.description}</p>

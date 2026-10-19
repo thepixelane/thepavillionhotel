@@ -31,7 +31,7 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
       ))}
       <div className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-black/20" />
       <div className="absolute inset-0 mx-auto flex max-w-7xl 4xl:max-w-360 items-end px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12 lg:pb-20">
-        <p className="font-serif text-3xl text-white drop-shadow-md sm:text-5xl lg:text-6xl 4xl:text-7xl">Since 1995</p>
+        <p className="text-xl text-white drop-shadow-md sm:text-2xl" style={{ fontFamily: "cursive" }}>Since 1995</p>
       </div>
     </section>
   );

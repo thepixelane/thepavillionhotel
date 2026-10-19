@@ -12,6 +12,22 @@ export const metadata: Metadata = createPageMetadata({
 
 export default async function GalleryPage() {
   const galleryImages = await getGalleryImages();
+  const categoryOrder: Record<string, number> = {
+    Property: 0,
+    Gardens: 1,
+    Rooms: 2,
+    Events: 3,
+    Dining: 4,
+  };
+  const orderedGalleryImages = [...galleryImages].sort((first, second) => {
+    const firstPriority = first.category === "Rooms" && first.src.includes("executive-room")
+      ? 2
+      : (categoryOrder[first.category] ?? 5) + 1;
+    const secondPriority = second.category === "Rooms" && second.src.includes("executive-room")
+      ? 2
+      : (categoryOrder[second.category] ?? 5) + 1;
+    return firstPriority - secondPriority;
+  });
 
   return (
     <main className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-4 py-10 sm:px-5 sm:py-14 lg:px-8 lg:py-20">
@@ -24,7 +40,7 @@ export default async function GalleryPage() {
       </header>
 
       <div className="mt-10 sm:mt-12">
-        <GalleryLightbox images={galleryImages} />
+        <GalleryLightbox images={orderedGalleryImages} />
       </div>
     </main>
   );

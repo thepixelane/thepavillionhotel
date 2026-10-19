@@ -88,6 +88,7 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
               src={image.src}
               alt={image.alt}
               fill
+              priority={index < 3}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition duration-700 group-hover:scale-105"
             />

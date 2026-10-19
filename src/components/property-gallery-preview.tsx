@@ -21,7 +21,7 @@ export function PropertyGalleryPreview({ images }: { images: GalleryImage[] }) {
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-white/75">Property gallery</p>
           <p className="mt-2 font-serif text-2xl">{image.caption}</p>
-          <Link href="/gallery" className="mt-3 inline-block text-xs uppercase tracking-[0.2em] underline-offset-4 hover:underline">View gallery</Link>
+          <Link href="/gallery" prefetch className="mt-3 inline-block text-xs uppercase tracking-[0.2em] underline-offset-4 hover:underline">View gallery</Link>
         </div>
         <div className="flex gap-2">
           <button type="button" onClick={() => move(-1)} aria-label="Previous gallery image" className="image-nav-button">←</button>
