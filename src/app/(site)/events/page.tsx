@@ -35,7 +35,7 @@ export default async function EventsPage() {
         <p className="mt-5 text-base leading-8 text-fg-muted sm:text-lg">
           From weddings and celebrations to corporate events and intimate gatherings, we have spaces to suit every occasion. Come to us for the complete experience.
         </p>
-        <div className="mt-6 flex flex-wrap gap-3"><a href={`tel:${banquetPhone.replace(/[^+\d]/g, "")}`} className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-white">Call Us</a><a href={`mailto:${email}`} className="border border-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest dark:border-fresh dark:text-fresh">Email Us</a></div>
+        <div className="mt-6 flex flex-wrap gap-3"><a href={`tel:${banquetPhone.replace(/[^+\d]/g, "")}`} className="bg-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-white">Call: {banquetPhone}</a><a href={`mailto:${email}`} className="border border-forest px-5 py-3 text-xs uppercase tracking-[0.22em] text-forest dark:border-fresh dark:text-fresh">Email Us</a></div>
       </header>
 
       <div className="mt-10 sm:mt-12">

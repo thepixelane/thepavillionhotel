@@ -14,16 +14,15 @@ export const metadata: Metadata = createPageMetadata({
 
 type ContactRow = {
 	label: string;
-	value: string;
-	href: string;
+	value?: string;
+	href?: string;
 	external?: boolean;
+	phoneOptions?: { value: string; href: string }[];
 };
 
 export default async function ContactPage() {
 	const settings = await getSiteSettings();
 
-	const primaryPhone = settings?.contactPhone ?? "0231 265 4742";
-	const primaryPhoneHref = `tel:${primaryPhone.replace(/[^+\d]/g, "")}`;
 	const banquetPhone = settings?.contactPhoneAlt ?? "+91 90110 33737";
 	const banquetPhoneHref = `tel:${banquetPhone.replace(/[^+\d]/g, "")}`;
 	const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
@@ -36,7 +35,14 @@ export default async function ContactPage() {
 	)}&output=embed`;
 
 	const rows: ContactRow[] = [
-		{ label: "Reservations", value: primaryPhone, href: primaryPhoneHref },
+		{
+			label: "Reservations",
+			phoneOptions: [
+				{ value: "+91 9607323737", href: "tel:+919607323737" },
+				{ value: "0231 2654742", href: "tel:02312654742" },
+				{ value: "0231 2652751", href: "tel:02312652751" },
+			],
+		},
 		{ label: "Banquet Enquiries", value: banquetPhone, href: banquetPhoneHref },
 		{ label: "Email", value: email, href: `mailto:${email}` },
 		{
@@ -61,17 +67,28 @@ export default async function ContactPage() {
 						<div key={row.label} className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-4 last:border-b-0 last:pb-0 sm:gap-6">
 							<div className="min-w-0">
 								<p className="text-[11px] uppercase tracking-[0.35em] text-emerald">{row.label}</p>
-								<p className="mt-2 wrap-break-word text-base text-fg">{row.value}</p>
+								{row.phoneOptions ? (
+									<div className="mt-2 flex flex-wrap items-baseline gap-x-1">
+										{row.phoneOptions.map((phone, index) => (
+											<span key={phone.href} className="inline-flex items-baseline gap-x-1">
+												<a href={phone.href} className="whitespace-nowrap text-base text-fg hover:text-emerald hover:underline">{phone.value}</a>
+												{index < row.phoneOptions!.length - 1 ? <span aria-hidden="true">,</span> : null}
+											</span>
+										))}
+									</div>
+								) : <p className="mt-2 wrap-break-word text-base text-fg">{row.value}</p>}
 							</div>
-							<Link
-								href={row.href}
-								target={row.external ? "_blank" : undefined}
-								rel={row.external ? "noopener noreferrer" : undefined}
-								className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh dark:text-fresh"
-							>
-								{row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
-								<span>Open</span>
-							</Link>
+							{row.href ? (
+								<Link
+									href={row.href}
+									target={row.external ? "_blank" : undefined}
+									rel={row.external ? "noopener noreferrer" : undefined}
+									className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh dark:text-fresh"
+								>
+									{row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
+									<span>Open</span>
+								</Link>
+							) : null}
 						</div>
 					))}
 				</div>

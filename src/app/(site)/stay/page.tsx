@@ -17,9 +17,12 @@ export const metadata: Metadata = createPageMetadata({
 export default async function StayPage() {
   const [rooms, settings] = await Promise.all([getRooms(), getSiteSettings()]);
   const stayHero = resolveStayHeroImage(settings) ?? (rooms[0]?.images[0] ? { src: rooms[0].images[0], alt: rooms[0].imageAlts[0] || "A room at The Pavillion Hotel" } : null);
-  const phone = settings?.contactPhone ?? "0231 265 4742";
   const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
-  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+  const reservationPhones = [
+    { label: "+91 9607323737", href: "tel:+919607323737" },
+    { label: "0231 2654742", href: "tel:02312654742" },
+    { label: "0231 2652751", href: "tel:02312652751" },
+  ];
 
   return (
     <main>
@@ -34,8 +37,16 @@ export default async function StayPage() {
         <div className="mt-10 grid border-y border-line lg:grid-cols-2">
           <div className="py-8 lg:border-r lg:border-line lg:pr-10">
             <h2 className="text-3xl text-fg">Book your stay directly with us.</h2>
-            <p className="mt-2 text-fg-muted">Get in touch</p>
-            <div className="mt-6 space-y-3 text-lg"><a href={telHref} className="block text-emerald hover:underline">Call: {phone}</a><a href={`mailto:${email}`} className="block text-emerald hover:underline">Email: {email}</a></div>
+            <p className="mt-2 text-fg-muted">Call:</p>
+            <div className="mt-3 flex flex-wrap items-baseline gap-x-1 text-lg">
+              {reservationPhones.map((phone, index) => (
+                <span key={phone.href} className="inline-flex items-baseline gap-x-1">
+                  <a href={phone.href} className="whitespace-nowrap text-emerald hover:underline">{phone.label}</a>
+                  {index < reservationPhones.length - 1 ? <span aria-hidden="true">,</span> : null}
+                </span>
+              ))}
+            </div>
+            <a href={`mailto:${email}`} className="mt-2 inline-block text-lg text-emerald hover:underline">Email: {email}</a>
           </div>
           <div className="py-8 lg:pl-10">
             <h2 className="text-3xl text-fg">Prefer to book online?</h2>

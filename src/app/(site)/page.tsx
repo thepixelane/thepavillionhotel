@@ -90,8 +90,7 @@ export default async function Home() {
 
           <div>
             <div className="border-y border-white/20 py-6">
-              <p className="font-serif text-6xl leading-none text-fresh sm:text-7xl">2,000</p>
-              <p className="mt-3 text-xs uppercase tracking-[0.24em] text-white/70">Guests at Bahar Lawns</p>
+              <p className="font-serif text-4xl italic leading-tight text-fresh sm:text-5xl">A venue for every occasion</p>
             </div>
             <div className="mt-5 divide-y divide-white/15">
               {venues.slice(0, 4).map((venue) => (
