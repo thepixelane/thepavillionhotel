@@ -2,7 +2,8 @@ import { FacebookIcon, InstagramIcon, MailIcon, MapIcon, PhoneIcon, WhatsAppIcon
 import { siteSettings } from "@/lib/site-data";
 
 export function SiteFooter() {
-  const { contactPhone: phone, contactPhoneAlt: phoneAlt, contactEmail: email, whatsappNumber: whatsapp, address, googleMapsUrl: mapsUrl, instagramUrl, facebookUrl } = siteSettings;
+  const { contactPhoneAlt: phoneAlt, contactEmail: email, whatsappNumber: whatsapp, address, googleMapsUrl: mapsUrl, instagramUrl, facebookUrl } = siteSettings;
+  const stayPhone = "+91 9607323737";
   const telHref = (raw: string) => `tel:${raw.replace(/[^+\d]/g, "")}`;
 
   return (
@@ -21,7 +22,7 @@ export function SiteFooter() {
         </div>
         <div className="space-y-3 text-sm text-fg-muted lg:justify-self-end">
           <p className="text-[11px] uppercase tracking-[0.3em] text-emerald dark:text-fresh">Contact &amp; Reservations</p>
-          <a href={telHref(phone)} className="flex items-center gap-2 transition hover:text-emerald"><PhoneIcon className="h-4 w-4 text-fresh" /><strong className="text-fg">Stay</strong> {phone}</a>
+          <a href={telHref(stayPhone)} className="flex items-center gap-2 transition hover:text-emerald"><PhoneIcon className="h-4 w-4 text-fresh" /><strong className="text-fg">Stay</strong> {stayPhone}</a>
           <a href={telHref(phoneAlt)} className="flex items-center gap-2 transition hover:text-emerald"><PhoneIcon className="h-4 w-4 text-fresh" /><strong className="text-fg">Banquets</strong> {phoneAlt}</a>
           <a href={`mailto:${email}`} className="flex items-center gap-2 transition hover:text-emerald">
             <MailIcon className="h-4 w-4 shrink-0 text-fresh" />

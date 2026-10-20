@@ -85,8 +85,8 @@ export default async function ContactPage() {
 									rel={row.external ? "noopener noreferrer" : undefined}
 									className="inline-flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-emerald transition hover:text-fresh dark:text-fresh"
 								>
-									{row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
-									<span>Open</span>
+									{/* {row.label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null} */}
+									<span>{row.label === "WhatsApp" ? "Chat" : row.href.startsWith("tel:") ? "Call" : row.href.startsWith("mailto:") ? "Email" : "Open"}</span>
 								</Link>
 							) : null}
 						</div>

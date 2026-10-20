@@ -10,7 +10,7 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
 
   useEffect(() => {
     if (slides.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % slides.length), 6500);
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % slides.length), 5000);
     return () => window.clearInterval(timer);
   }, [slides.length]);
 

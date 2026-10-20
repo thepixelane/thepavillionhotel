@@ -47,8 +47,8 @@ export const siteSettings: SiteSettings = {
 		},
 	],
 	stayHeroImage: {
-		src: "/images/stay/deluxe-room/deluxe-room-1.jpeg",
-		alt: "Deluxe room at The Pavillion Hotel in Kolhapur",
+		src: "/images/stay/suite-room/suite-room-1.JPG",
+		alt: "Suite room with television and bed at The Pavillion Hotel in Kolhapur",
 	},
 	// No direct booking engine — guests book via phone, email, or these OTA partners (source: hotelpavillion.co.in/contact).
 	bookingPartners: [

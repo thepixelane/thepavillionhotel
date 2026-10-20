@@ -16,7 +16,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default async function StayPage() {
   const [rooms, settings] = await Promise.all([getRooms(), getSiteSettings()]);
-  const stayHero = resolveStayHeroImage(settings) ?? (rooms[0]?.images[0] ? { src: rooms[0].images[0], alt: rooms[0].imageAlts[0] || "A room at The Pavillion Hotel" } : null);
+  const stayHero = resolveStayHeroImage(settings) ?? (rooms[2]?.images[1] ? { src: rooms[2].images[1], alt: rooms[2].imageAlts[1] || "Suite room with television and bed at The Pavillion Hotel" } : null);
   const email = settings?.contactEmail ?? "info@hotelpavillion.co.in";
   const reservationPhones = [
     { label: "+91 9607323737", href: "tel:+919607323737" },
