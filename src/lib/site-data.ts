@@ -107,7 +107,6 @@ export const rooms = [
 			"/images/stay/suite-room/suite-room-2.JPG",
 			"/images/stay/suite-room/suite-room-3.JPG",
 			"/images/stay/suite-room/suite-room-4.JPG",
-			"/images/stay/suite-room/suite-room-5.JPG",
 		],
 	},
 ] as const;
@@ -242,12 +241,6 @@ export const galleryImages = [
 		caption: "Suite room with seating area",
 		src: "/images/stay/suite-room/suite-room-4.JPG",
 		alt: "Suite room seating area and bedroom layout",
-	},
-	{
-		category: "Rooms",
-		caption: "Suite room details",
-		src: "/images/stay/suite-room/suite-room-5.JPG",
-		alt: "Suite room details and decor at The Pavillion Hotel",
 	},
 	{
 		category: "Property",
