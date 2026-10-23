@@ -43,7 +43,7 @@ export const siteSettings: SiteSettings = {
 		},
 		{
 			src: "/images/home-hero-2.jpg",
-			alt: "Palm-lined lawns and lit garden facade at The Pavillion Hotel at dusk",
+			alt: "Lobby seating area at The Pavillion Hotel",
 		},
 	],
 	stayHeroImage: {
@@ -105,7 +105,6 @@ export const rooms = [
 		images: [
 			"/images/stay/suite-room/suite-room-1.JPG",
 			"/images/stay/suite-room/suite-room-2.JPG",
-			"/images/stay/suite-room/suite-room-3.JPG",
 			"/images/stay/suite-room/suite-room-4.JPG",
 		],
 	},
@@ -222,25 +221,19 @@ export const galleryImages = [
 		category: "Rooms",
 		caption: "Suite room evening view",
 		src: "/images/stay/suite-room/suite-room-1.JPG",
-		alt: "Suite room interior at The Pavillion Hotel",
+		alt: "Suite bedroom with a cushioned headboard and bedside lighting",
 	},
 	{
 		category: "Rooms",
 		caption: "Suite room bedroom",
 		src: "/images/stay/suite-room/suite-room-2.JPG",
-		alt: "Suite room with king bed and lounge styling",
-	},
-	{
-		category: "Rooms",
-		caption: "Suite room with warm beige styling",
-		src: "/images/stay/suite-room/suite-room-3.JPG",
-		alt: "Suite room with warm beige styling and spacious layout",
+		alt: "Suite room with a king bed, television and lounge chair",
 	},
 	{
 		category: "Rooms",
 		caption: "Suite room with seating area",
 		src: "/images/stay/suite-room/suite-room-4.JPG",
-		alt: "Suite room seating area and bedroom layout",
+		alt: "Suite room seating area beside the bedroom",
 	},
 	{
 		category: "Property",
@@ -258,7 +251,7 @@ export const galleryImages = [
 		category: "Property",
 		caption: "The property lit up after dark",
 		src: "/images/property/ambience-06.jpg",
-		alt: "The Pavillion Hotel lit up after dark",
+		alt: "The Pavillion Hotel entrance framed by trees and landscaped gardens",
 	},
 	{
 		category: "Property",
@@ -318,19 +311,19 @@ export const galleryImages = [
 		category: "Dining",
 		caption: "Pakhtoon indoor dining",
 		src: "/images/dining/pakhtoon/pakhtoon-01.jpg",
-		alt: "Indoor dining at the Pakhtoon seating area",
+		alt: "Pakhtoon restaurant sign beside the dining area",
 	},
 	{
 		category: "Dining",
 		caption: "Table settings at Pakhtoon",
 		src: "/images/dining/pakhtoon/pakhtoon-03.jpg",
-		alt: "Table settings at the Pakhtoon seating area",
+		alt: "A plated curry dish served at Pakhtoon restaurant",
 	},
 	{
 		category: "Dining",
 		caption: "Walkway open-air seating",
 		src: "/images/dining/walkway/walkway-06.jpg",
-		alt: "Open-air seating along the Walkway at The Pavillion Hotel",
+		alt: "Walkway Restaurant sign beneath the covered timber roof",
 	},
 	{
 		category: "Dining",
