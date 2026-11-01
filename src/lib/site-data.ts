@@ -104,6 +104,7 @@ export const rooms = [
 		nightlyRate: 18900,
 		images: [
 			"/images/stay/suite-room/suite-room-1.JPG",
+			"/images/stay/suite-room/suite-room-5.jpg",
 			"/images/stay/suite-room/suite-room-2.JPG",
 			"/images/stay/suite-room/suite-room-4.JPG",
 		],
@@ -207,9 +208,9 @@ export const galleryImages = [
 	},
 	{
 		category: "Rooms",
-		caption: "Executive room bathroom at The Pavillion Hotel",
+		caption: "Executive room balcony at The Pavillion Hotel",
 		src: "/images/stay/executive-room/executive-room-2.jpeg",
-		alt: "Executive room bathroom at The Pavillion Hotel",
+		alt: "Executive room balcony at The Pavillion Hotel",
 	},
 	{
 		category: "Rooms",
@@ -234,6 +235,12 @@ export const galleryImages = [
 		caption: "Suite room seating area beside the bedroom",
 		src: "/images/stay/suite-room/suite-room-4.JPG",
 		alt: "Suite room seating area beside the bedroom",
+	},
+	{
+		category: "Rooms",
+		caption: "Suite sitting area with a sofa and lounge chairs at The Pavillion Hotel",
+		src: "/images/stay/suite-room/suite-room-5.jpg",
+		alt: "Sofa and lounge chairs in the suite sitting area at The Pavillion Hotel",
 	},
 	{
 		category: "Property",
