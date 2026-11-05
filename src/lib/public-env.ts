@@ -1,3 +1,1 @@
-export const siteUrl = (
-	process.env.NEXT_PUBLIC_SITE_URL ?? "https://thepavillionhotel.com"
-).replace(/\/+$/, "");
+export const siteUrl = "https://www.thepavillionhotel.com"
