@@ -1,9 +1,8 @@
-import fs from "node:fs";
-import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { isMenuFileAvailable } from "@/lib/menu-file";
 import { getMenuBySlug, getMenus } from "@/lib/sanity-content";
-import { siteUrl } from "@/lib/public-env";
+import { createPageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -19,18 +18,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const menu = await getMenuBySlug(slug);
   if (!menu) return {};
-  return {
+  const metadata = createPageMetadata({
     title: `${menu.title} Menu`,
-    alternates: { canonical: new URL(`/menu/${menu.slug}`, siteUrl).toString() },
-    robots: { index: false, follow: false },
+    description: `View the ${menu.title} menu at The Pavillion Hotel in Kolhapur.`,
+    path: `/menu/${menu.slug}`,
+  });
+  return {
+    ...metadata,
+    ...(!isMenuFileAvailable(menu.fileUrl) && {
+      robots: { index: false, follow: false },
+    }),
   };
-}
-
-// Bundled PDFs are served from /public, so confirm the file is actually there.
-function isAvailable(fileUrl: string | null): fileUrl is string {
-  if (!fileUrl) return false;
-  if (!fileUrl.startsWith("/")) return true;
-  return fs.existsSync(path.join(process.cwd(), "public", fileUrl));
 }
 
 export default async function MenuPage({ params }: PageProps) {
@@ -39,7 +37,7 @@ export default async function MenuPage({ params }: PageProps) {
   if (!menu) notFound();
 
   const fileUrl = menu.fileUrl;
-  const available = isAvailable(fileUrl);
+  const available = isMenuFileAvailable(fileUrl);
   // Fit-to-width so the first page isn't cropped in desktop PDF viewers.
   const viewerUrl = available ? `${fileUrl}#view=FitH&toolbar=1` : undefined;
 

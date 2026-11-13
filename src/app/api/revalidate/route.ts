@@ -13,6 +13,7 @@ const PATHS = [
   "/dining",
   "/gallery",
   "/contact",
+  "/sitemap.xml",
 ];
 
 function safeEqual(a: string, b: string): boolean {

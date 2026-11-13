@@ -8,10 +8,13 @@ import { siteNavItems } from "@/lib/site-data";
 import greenLogo from "@/assets/green_logo_hori.png";
 import whiteLogo from "@/assets/white_logo_hori.png";
 
-export function SiteHeader() {
+export function SiteHeader({ showRoomServiceMenu }: { showRoomServiceMenu: boolean }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navItems = showRoomServiceMenu
+    ? [...siteNavItems, { label: "Room Service", href: "/menu/room-service" }]
+    : siteNavItems;
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 20);
@@ -36,7 +39,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.3em] md:flex">
-          {siteNavItems.map((item) => {
+          {navItems.map((item) => {
             const active = isActive(item.href);
             return (
               <Link
@@ -90,7 +93,7 @@ export function SiteHeader() {
         } transition-[max-height] duration-300 ease-out`}
       >
         <nav className="mx-auto flex max-w-7xl 4xl:max-w-360 flex-col px-4 py-3 sm:px-5">
-          {siteNavItems.map((item) => {
+          {navItems.map((item) => {
             const active = isActive(item.href);
             return (
               <Link

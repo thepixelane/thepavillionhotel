@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
+import { isMenuFileAvailable } from "@/lib/menu-file";
 import { getMenus } from "@/lib/sanity-content";
 import { siteUrl } from "@/lib/public-env";
+
+export const revalidate = 3600;
 
 const staticRoutes: Array<{
   path: string;
@@ -26,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: route.priority,
     })),
     ...menus
-      .filter((menu) => menu.fileUrl)
+      .filter((menu) => isMenuFileAvailable(menu.fileUrl))
       .map((menu) => ({
         url: new URL(`/menu/${menu.slug}`, siteUrl).toString(),
         changeFrequency: "monthly" as const,

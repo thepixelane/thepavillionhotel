@@ -11,6 +11,14 @@ This repo is set up for a single production Sanity.io environment.
 
 The Studio schema lives under `sanity/`, and the app-level Sanity client lives in `src/lib/sanity.ts`.
 
+## Search indexing
+
+The canonical site URL is `https://www.thepavillionhotel.com`. Menu pages are
+indexable and included in the sitemap when they have a published PDF. Menus
+without an available PDF display a coming-soon message, remain `noindex`, and
+are excluded from the sitemap. Publish the PDF in Sanity to make the menu
+eligible for indexing; the sitemap and pages refresh on revalidation.
+
 ## Getting Started
 
 First, run the development server:
