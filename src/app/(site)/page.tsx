@@ -40,6 +40,7 @@ export default async function Home() {
 
   return (
     <main>
+      <h1 className="sr-only">The Pavillion Hotel in Kolhapur</h1>
       <HomeHero images={heroImages.length > 0 ? heroImages : [...FALLBACK_IMAGES.hero]} />
 
       <section className="mx-auto max-w-4xl px-5 py-8 text-center sm:py-12">
@@ -112,7 +113,7 @@ export default async function Home() {
       <section className="border-b border-line bg-offwhite">
         <div className="mx-auto max-w-7xl 4xl:max-w-[90rem] px-5 py-10 sm:py-12 lg:px-8">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.3em] text-emerald">Guest Stories</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-emerald dark:text-forest-deep">Guest Stories</p>
             <h2 className="mt-3 text-2xl leading-tight text-forest-deep sm:text-3xl">A stay worth remembering</h2>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-3">

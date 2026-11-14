@@ -23,6 +23,7 @@ export function HomeHero({ images }: { images: ContentImage[] }) {
           key={image.src}
           src={image.src}
           alt={image.alt}
+          aria-hidden={index !== active}
           fill
           priority={index === 0}
           loading="eager"

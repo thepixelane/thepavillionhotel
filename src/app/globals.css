@@ -8,6 +8,10 @@
 	--breakpoint-4xl: 2560px;
 }
 
+@theme inline {
+	--font-serif: var(--font-fraunces), serif;
+}
+
 /*
  * Brand hues (fixed in both themes) and light-mode defaults for the semantic
  * tokens live inside @theme so Tailwind generates matching utilities
@@ -144,7 +148,12 @@ h2,
 h3,
 h4,
 h5 {
-	font-family: var(--font-cormorant), serif;
+	--text-2xl: 1.35rem;
+	--text-3xl: 1.6875rem;
+	--text-4xl: 2.025rem;
+	--text-5xl: 2.7rem;
+	--text-6xl: 3.375rem;
+	font-family: var(--font-fraunces), serif;
 	text-wrap: balance;
 }
 

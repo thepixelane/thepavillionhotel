@@ -39,6 +39,7 @@ export function ImageCarouselStage({
             key={`${image.src}-${index}`}
             src={image.src}
             alt={image.alt}
+            aria-hidden={index !== activeIndex}
             fill
             loading="eager"
             sizes={sizes}

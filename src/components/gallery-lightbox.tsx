@@ -45,6 +45,10 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
     closeButtonRef.current?.focus();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeLightbox();
+      if (event.key === "Tab") {
+        event.preventDefault();
+        closeButtonRef.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
@@ -61,6 +65,7 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
           <button
             key={filter}
             type="button"
+            aria-pressed={filter === activeFilter}
             onClick={() => setActiveFilter(filter)}
             className={`rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition ${
               filter === activeFilter
@@ -78,6 +83,7 @@ export function GalleryLightbox({ images }: GalleryLightboxProps) {
           <button
             key={`${image.src}-${image.caption}`}
             type="button"
+            aria-label={`View ${image.caption}`}
             onClick={(event) => {
               previousTriggerRef.current = event.currentTarget;
               setSelectedIndex(index);

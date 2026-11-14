@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/public-env";
 import { defaultSocialImage } from "@/lib/seo";
@@ -10,11 +10,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-cormorant",
+  variable: "--font-fraunces",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -71,7 +70,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className={`${inter.variable} ${cormorant.variable} bg-bg text-fg antialiased`} suppressHydrationWarning>
+      <body className={`${inter.variable} ${fraunces.variable} bg-bg text-fg antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>

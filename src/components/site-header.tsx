@@ -83,6 +83,7 @@ export function SiteHeader() {
       {/* Mobile drawer */}
       <div
         id="mobile-menu"
+        inert={!menuOpen}
         className={`overflow-hidden border-t border-line bg-(--header-bg) backdrop-blur-xl md:hidden ${
           menuOpen
             ? "max-h-[min(85dvh,26rem)] overflow-y-auto"

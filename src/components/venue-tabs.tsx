@@ -50,6 +50,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
           <button
             key={venue.name}
             type="button"
+            aria-pressed={index === activeIndex}
             onClick={() => selectVenue(index)}
             className={`shrink-0 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition snap-center ${
               index === activeIndex
@@ -62,6 +63,7 @@ export function VenueTabs({ venues }: VenueTabsProps) {
         ))}
       </div>
 
+      <p role="status" className="sr-only">{activeVenue.name} details</p>
       <div className="grid gap-8 text-fg lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="relative min-h-88 overflow-hidden rounded-4xl">
           <ImageCarouselStage images={venueSlides} activeIndex={activeImageIndex} sizes="(max-width: 1024px) 100vw, 60vw" />
