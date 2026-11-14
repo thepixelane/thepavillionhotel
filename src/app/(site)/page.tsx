@@ -17,12 +17,17 @@ import {
 } from "@/lib/sanity-content";
 import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "The Pavillion Hotel | Kolhapur",
-  description:
-    "Stay at The Pavillion Hotel in Shahupuri, Kolhapur, with comfortable rooms, restaurants, gardens, and wedding venues opposite Kolhapur Railway Station.",
-  path: "/",
-});
+const homeTitle = "The Pavillion Hotel | Kolhapur";
+
+export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: homeTitle,
+    description:
+      "Stay at The Pavillion Hotel in Shahupuri, Kolhapur, with comfortable rooms, restaurants, gardens, and wedding venues opposite Kolhapur Railway Station.",
+    path: "/",
+  }),
+  title: { absolute: homeTitle },
+};
 
 export default async function Home() {
   const [settings, rooms, gallery, testimonials, venues, highlight] = await Promise.all([

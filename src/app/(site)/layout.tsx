@@ -1,13 +1,9 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { QuickActions } from "@/components/quick-actions";
-import { isMenuFileAvailable } from "@/lib/menu-file";
-import { getMenuBySlug } from "@/lib/sanity-content";
 import { hotelJsonLd, websiteJsonLd } from "@/lib/seo";
 
-export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const roomServiceMenu = await getMenuBySlug("room-service");
-
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a
@@ -20,7 +16,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify([hotelJsonLd, websiteJsonLd]).replace(/</g, "\\u003c") }}
       />
-      <SiteHeader showRoomServiceMenu={isMenuFileAvailable(roomServiceMenu?.fileUrl ?? null)} />
+      <SiteHeader />
       <div id="site-main">{children}</div>
       <SiteFooter />
       <QuickActions />
